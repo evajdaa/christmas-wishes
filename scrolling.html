@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>May we keep creating boldly — scroll version (phone)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,300;0,900;1,100;1,300&display=swap">
+<style>
+/* Follows Cavalry comp "Main" (1920×1080, cover-fit):
+   SC01 plays from frame 0, SC02 starts at Main frame 140 and fades in over 20 frames.
+   Checkpoints: click (SC01 frame 33) → scroll scrubs the zoom (100→140) → one scroll plays SC02 (140→519). */
+:root{
+  --cream:#EDD8C1;
+  --coral:#E57249;
+  --ink:rgba(150,70,40,.7);
+  --ui:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",sans-serif;
+  --type:#3F1411;
+  --display:"Acumin Pro","acumin-pro","Archivo",ui-sans-serif,system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:var(--cream);font-family:var(--ui);overscroll-behavior:none}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:pointer;touch-action:none}
+#c:focus-visible{outline:2px solid var(--coral);outline-offset:-4px}
+#sc2{position:fixed;inset:0;width:100%;height:100%;display:block;opacity:0;pointer-events:none;z-index:2}
+#s4w{position:fixed;inset:0;opacity:0;pointer-events:none;z-index:3}
+#s4w canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#s4G{mix-blend-mode:overlay;opacity:.36}
+.txt{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;pointer-events:none;z-index:4;overflow:visible}
+.txt text{font-family:var(--display);font-weight:300;font-style:normal;fill:#fff}
+.txt .t72{font-size:72px}.txt .t84{font-size:84px}.txt .t214{font-size:214px;letter-spacing:-4px}
+body{cursor:pointer}
+.hint{position:fixed;left:auto;right:calc(6vw + env(safe-area-inset-right,0px));bottom:calc(9vh + env(safe-area-inset-bottom,0px));margin:0;text-align:center;z-index:5;
+  font-size:17px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(63,20,17,.78);pointer-events:none;
+  transition:opacity .4s ease,color .6s ease;opacity:0}
+.hint.light{color:rgba(237,216,193,.85)}
+.hint.on{opacity:1}
+.hint .arr{display:block;margin:10px auto 0;width:1.5px;height:22px;background:currentColor;opacity:0;transform-origin:top}
+.hint.scroll .arr{opacity:1;animation:drip 1.6s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.hint.scroll .arr{animation:none}}
+#err{position:fixed;inset:auto 16px 50% 16px;text-align:center;color:var(--coral);z-index:4}
+.stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;pointer-events:none;z-index:1}
+.word{position:absolute;margin:0;white-space:nowrap;line-height:1;color:var(--type);
+  font-family:var(--display);font-style:italic;font-weight:300;will-change:transform,opacity,filter}
+#boldly{position:absolute;will-change:transform,filter;transform-origin:50% 50%}
+.line{position:absolute;top:492px;left:86px;margin:0;white-space:nowrap;line-height:1;font-family:var(--display);font-weight:100;font-size:72px;color:#3F1411;will-change:filter,opacity}
+.line span{display:inline-block;will-change:transform,opacity,filter}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+html,body{overscroll-behavior:none;touch-action:none}
+.port .line{white-space:normal;width:600px;text-align:center;top:250px;line-height:1.15}
+</style>
+</head><body>
+
+<canvas id="c" tabindex="0" aria-label="Animation: May we keep creating boldly. Click or press Enter to play, then scroll to continue."></canvas>
+<div class="stage" id="stage" aria-hidden="true">
+  <p class="line" id="w-line"><span>May</span> <span>we</span> <span>keep</span> <span>creating</span></p>
+  <canvas id="boldly"></canvas>
+</div>
+<canvas id="sc2" aria-hidden="true"></canvas>
+<div id="s4w" aria-hidden="true"><canvas id="s4bg"></canvas><canvas id="s4S"></canvas><canvas id="s4T"></canvas><canvas id="s4G"></canvas><canvas id="s4N"></canvas></div>
+<svg id="txt" class="txt" viewBox="0 0 1920 1080" width="1920" height="1080" aria-hidden="true">
+ <defs>
+  <filter id="fMy" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="0"/></filter>
+  <filter id="fLead" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="0"/></filter>
+  <filter id="fM" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0"/></filter>
+  <filter id="fO" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="0"/></filter>
+  <filter id="f3" x="-10%" y="-60%" width="120%" height="220%"><feGaussianBlur stdDeviation="0"/></filter>
+ </defs>
+ <g id="t2" style="opacity:0">
+  <g filter="url(#fMy)"><text class="t72" id="wMy" y="558">May</text><text class="t72" id="wUn" y="558">unexpected</text><text class="t72" id="wPa" y="558">paths</text></g>
+  <text class="t72" id="wSp" x="-500" y="-200">&#160;</text>
+  <g filter="url(#fLead)"><text class="t72" id="wLead" y="558">lead to</text></g>
+  <g filter="url(#fM)"><g id="tM"></g></g>
+  <g filter="url(#fO)"><g id="tO"></g></g>
+ </g>
+ <g id="t3g" style="opacity:0"><g id="t3z"><g id="t3c"><g filter="url(#f3)" id="t3"></g></g></g></g>
+</svg>
+<p class="hint" id="hint"><span id="hintT">Click or scroll</span><span class="arr"></span></p>
+<p id="err" hidden>WebGL isn't available in this browser, so the animation can't run.</p>
+<p class="sr">May we keep creating boldly. My unexpected paths lead to meaningful opportunities. May visions keep finding new directions.</p>
+
+<script>
+/* Responsive fit. Landscape: the 1920×1080 comp covers the screen (as before). */
+/* Portrait (phones): the comp is shown 1150 px wide and the scenes are re-composed for the tall frame: positions are
+   spread vertically and drawn in horizontally (PORT.ax / PORT.ay), shapes keep their size, text breaks into lines. */
+window.PORT={on:false,ax:1,ay:1,hc:540};
+window.FITK=(w,h)=>{
+  if(h>w*1.05){const k=w/1150,hc=h/k/2;PORT.on=true;PORT.ax=.56;PORT.ay=Math.max(1,Math.min(2.1,(hc-150)/540));PORT.hc=hc;return k;}
+  PORT.on=false;PORT.ax=PORT.ay=1;PORT.hc=540;return Math.max(w/1920,h/1080);};
+FITK(innerWidth,innerHeight);
+const setPortCls=()=>{FITK(innerWidth,innerHeight);document.documentElement.classList.toggle('port',PORT.on);};
+addEventListener('resize',setPortCls);document.addEventListener('DOMContentLoaded',setPortCls);
+</script>
+<script>
+/* ============================== Timeline controller ==============================
+   One gesture (click, scroll, swipe, key) starts each section; each section then rests in a gentle loop
+   until the next gesture.
+   SC01 waits at frame 33 → [gesture] the line leaves, burst, "boldly" settles → rests on "boldly"
+   → [gesture] zoom and SC02 play straight through → SC02 loops (once its text has settled)
+   → SC03 runs at 12 fps
+   → [gesture] SC03: the shapes peel off into the wave string, camera pans and zooms out → SC03 drifts on the wave
+   → [gesture] SC04 part 1: zoom into the asterisk → rests → [gesture] SC04 part 2 (tree) → rests. */
+// Shared wave path (Cavalry "Wave path (string)": amplitude 330, wavelength 2800), as a fine polyline with arc lengths
+window.WAVE=(()=>{
+  const A=330, LAM=2800, X0=367-Math.asin(-118/330)*LAM/(2*Math.PI), XMIN=-9000, XMAX=25860, STEP=20;
+  const n=Math.round((XMAX-XMIN)/STEP)+1, X=new Float64Array(n), Y=new Float64Array(n), S=new Float64Array(n);
+  for(let i=0;i<n;i++){X[i]=XMIN+i*STEP;Y[i]=A*Math.sin(2*Math.PI*(X[i]-X0)/LAM);if(i)S[i]=S[i-1]+Math.hypot(X[i]-X[i-1],Y[i]-Y[i-1]);}
+  const len=S[n-1];
+  function at(s){                      // point and tangent angle at arc length s
+    s=Math.max(0,Math.min(len,s));
+    let lo=0,hi=n-1;while(hi-lo>1){const m=(lo+hi)>>1;if(S[m]<s)lo=m;else hi=m;}
+    const t=(s-S[lo])/Math.max(1e-6,S[hi]-S[lo]);
+    return {x:X[lo]+(X[hi]-X[lo])*t,y:Y[lo]+(Y[hi]-Y[lo])*t};
+  }
+  let d='M'+X[0]+' '+(-Y[0]).toFixed(1);for(let i=1;i<n;i++)d+='L'+X[i]+' '+(-Y[i]).toFixed(1);   // SVG (y down)
+  function arcAtX(x){const i=Math.max(0,Math.min(n-1,Math.round((x-XMIN)/STEP)));return S[i];}
+  return {len,at,d,arcAtX};
+})();
+
+window.SCN=(()=>{
+  /* SCRUB VERSION — after the first click (which plays the burst), the whole card is one timeline driven by scrolling:
+     scroll down = forward, up = back; the faster you scroll, the more you see. Timeline (frames, 25 fps):
+       59–342   SC01 burst → zoom → SC02 (main)          342–622  SC03 (L 190 → 470)
+       622–722  SC03 string drifting on its own (4 s)     722–807  zoom into the asterisk (p4 0 → 1)
+       807–1081 SC04 (its quiet star drift 80–186 runs 3× so nothing stalls)                                   */
+  const FPS=25, IDLE=59, B1=128, SC2_START=152, SC2_HOLD=190, SC3_HOLD=470;
+  const T3=SC2_START+SC3_HOLD, TA=T3+100, TZ=TA+85, TEND=TZ+274;
+  const S={main:0,state:'intro',sc2Alpha:0,renderers:[],FPS,SC2_START,SC2_HOLD,SC3_HOLD,
+           L:0,fr:0,amb:0,p4:0,m4:0,t:0,hold1:0,rate:1,txt2Done:true,scrub:false,F4:0,R4:0,entT:0};
+  const hint=document.getElementById('hint'), hintT=document.getElementById('hintT');
+  function setHint(text,on){hintT.textContent=text;hint.classList.toggle('on',on);hint.classList.toggle('scroll',on);}
+  S.setHint=setHint;
+  let T=IDLE, target=IDLE, lastInput=0;
+  function apply(T){
+    S.main=Math.min(T,SC2_START+SC2_HOLD);
+    S.L=T<=SC2_START+SC2_HOLD?Math.max(0,T-SC2_START):Math.min(SC3_HOLD,T-SC2_START);
+    S.amb=T<=T3?0:Math.min(4,(T-T3)/FPS);
+    S.p4=T<=TA?0:Math.min(1,(T-TA)/85);
+    S.fr=Math.max(0,T-SC2_START);
+    const u=Math.max(0,T-TZ);
+    S.F4=u<=80?u:u<=115?80+(u-80)*106/35:Math.min(345,186+(u-115));
+    S.R4=u;
+    S.entT=S.p4<.15?0:(T-TA-.15*85)/FPS;
+    S.sc2Alpha=Math.max(0,Math.min(1,(S.main-SC2_START)/20));
+  }
+  function nudge(frames){
+    if(!S.scrub)return;
+    target=Math.max(IDLE,Math.min(TEND,target+frames));lastInput=performance.now();setHint('',false);
+  }
+  function replay(){S.state='replaying';setHint('',false);document.body.style.transition='opacity .45s ease';document.body.style.opacity='0';
+    setTimeout(()=>location.reload(),480);}
+  // the first interaction is a click on the orange shape only; after the burst, scrolling drives everything
+  addEventListener('click',e=>{if(e.button!==0)return;
+    if(S.state==='idle'){S.state='play1';setHint('',false);}
+    else if(S.scrub&&T>=TEND-.5)replay();});
+  addEventListener('wheel',e=>{e.preventDefault();
+    const k=e.deltaMode===1?16:e.deltaMode===2?innerHeight:1;
+    nudge((e.deltaY+e.deltaX)*k/24);          // ~24 px of scrolling = one frame
+  },{passive:false});
+  let ty=null;
+  addEventListener('touchstart',e=>{ty=e.touches[0].clientY;},{passive:true});
+  addEventListener('touchmove',e=>{e.preventDefault();const y=e.touches[0].clientY;if(ty!==null)nudge((ty-y)/10);ty=y;},{passive:false});
+  addEventListener('keydown',e=>{
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();nudge(e.key==='PageDown'||e.key===' '?50:10);}
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();nudge(e.key==='PageUp'?-50:-10);}
+    if(e.key==='Enter'&&S.state==='idle'){S.state='play1';setHint('',false);}
+  });
+  let last=performance.now();
+  function tick(now){
+    const dt=Math.min((now-last)/1000,0.1);last=now;S.t+=dt;
+    const st=S.state;
+    if(st==='intro'){S.main+=dt*FPS;if(S.main>=IDLE){S.main=IDLE;S.state='idle';setHint('Click',true);}apply(Math.min(S.main,IDLE));S.main=Math.min(S.main,IDLE);}
+    else if(st==='idle'){apply(IDLE);}
+    else if(st==='play1'){T+=dt*FPS;if(T>=B1){T=B1;target=B1;S.state='scrub';S.scrub=true;lastInput=0;}apply(T);}
+    else if(st==='scrub'){
+      T+=(target-T)*(1-Math.exp(-dt*9));if(Math.abs(target-T)<.02)T=target;
+      apply(T);
+      if(T>=TEND-.5)setHint('Click to replay',true);
+      else if(now-lastInput>1300&&Math.abs(target-T)<.5&&!hint.classList.contains('on'))setHint('Scroll',true);
+    }
+    hint.classList.toggle('light',S.main>=SC2_START&&S.L>272&&S.p4<.6);
+    for(const r of S.renderers)r(dt,now);
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+  return S;
+})();
+</script>
+
+<script>
+/* ============================== SC01 — Pixel Burst + zoom ============================== */
+(() => {
+// Sampled from Cavalry comp "SC01", every 2 frames from frame 0 to 156 (comp units, origin centre, +y up)
+const D1={
+scale:[0,0.01,0.04,0.11,0.26,0.73,0.97,1,0.99,0.97,0.94,0.91,0.88,0.85,0.82,0.8,0.79,0.77,0.77,0.78,0.97,1.71,2.72,3.21,3.47,3.63,3.72,3.76,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.8,3.84,3.91,4,4.13,4.31,4.56,4.91,5.41,6.16,7.15,7.98,8.48,8.77,8.94],
+wave:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18.43,99.28,185.43,235.83,266.19,284.98,296.23,302.13,304],
+travel:[65,65,65,65,68.1,71.21,74.31,77.42,80.52,83.62,86.73,89.83,92.94,96.04,99.14,102.25,105.35,108.46,111.56,114.66,117.77,120.87,123.98,127.08,130.18,133.29,136.39,139.5,142.6,145.7,148.81,151.91,155.02,158.12,161.22,164.33,167.43,170.54,173.64,176.74,179.85,182.95,186.06,189.16,192.26,195.37,198.47,201.58,204.68,207.78,210.89,213.99,217.1,220.2,223.3,226.41,229.51,232.62,235.72,238.82,241.93,245.03,248.14,251.24,254.34,257.45,259],
+blur:[54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.9,54.37,51.62,48.31,45.2,42.53,40.37,38.74,37.6,36.95,36.8],
+pix:[324,324,324,324,324,324,324,324,324,324,324,324,324,324,324,324,214,132,87,57,38,26,20,18],
+blockX:[54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.41,54.37,56.1,59.78,65.67,74.08,85.39,100.06,118.75,142.28,171.82,209.09,256.77,319.45,406.36,542.2,1018.4],
+may:{
+ x:[252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.29,252.84,258.01,270.97,295.08,326.73,350.62,362.2,365.29],
+ y:[314.59,314.59,315.19,319.64,327.07,335.55,343.71,350.85,356.76,361.44,364.97,367.46,369.03,369.78,369.87],
+ o:[0,0,0,0,0,3.84,21.5,41.01,58.42,72.78,83.94,92.02,97.2,99.7,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,99.83,98.98,97.25,94.36,89.8,82.7,71.22,51.45,25.31,9.48,2.04,0],
+ b:[17.72,17.72,16.44,14.5,12.46,10.5,8.69,7.06,5.62,4.36,3.28,2.36,1.61,1.01,0.56,0.24,0.06,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.04,0.25,0.69,1.44,2.69,4.85,8.83,13.97,16.62,17.72]},
+keep:{
+ x:[397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.29,397.55,398.75,402.48,407.71,410.01,411.02,411.29],
+ y:[202.59,202.59,202.59,202.59,202.59,203.38,209.28,219.13,230.38,241.19,250.66,258.49,264.69,269.37,272.68,274.76,275.75,275.87],
+ o:[0,0,0,0,0,0,0,0,3.84,21.5,41.01,58.42,72.78,83.94,92.02,97.2,99.7,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,99.83,98.98,97.25,94.36,89.8,82.7,71.22,51.45,25.31,9.48,2.04,0],
+ b:[17.72,17.72,17.72,17.72,17.72,16.44,14.5,12.46,10.5,8.69,7.06,5.62,4.36,3.28,2.36,1.61,1.01,0.56,0.24,0.06,0]},
+creating:{
+ x:[318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,318.29,320.69,330.72,358.83,408.6,431.66,438.63,439.29],
+ y:[159.59,159.59,159.59,159.59,159.59,159.59,159.59,159.9,162.26,166.2,170.69,175.01,178.79,181.92,184.4,186.27,187.59,188.43,188.82,188.87],
+ o:[0,0,0,0,0,0,0,0,0,0,3.84,21.5,41.01,58.42,72.78,83.94,92.02,97.2,99.7,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,99.81,98.86,96.93,93.67,88.46,80.12,66.07,41.71,17.38,5.41,0],
+ b:[17.72,17.72,17.72,17.72,17.72,17.72,17.72,16.44,14.5,12.46,10.5,8.69,7.06,5.62,4.36,3.28,2.36,1.61,1.01,0.56,0.24,0.06,0]},
+boldly:{
+ x:[258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,258.4,263.76,299.28,382.45,413.25,427.92,435.64,439.35,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.4,440.42,441.64,444.22,448.35,454.26,462.24,472.68,486.11,503.23,525.11,553.38,590.89,643.3,725.82,1018.4],
+ o:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,66.67,100],
+ b:[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,9.71,7.75,3.18,1.49,0.69,0.26,0.06,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.09,0.32,0.75,1.52,2.92,5.67,8.53,9.72,10],
+ v:[19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,19.5,18.93,15.12,6.21,2.91,1.34,0.51,0.11,0]}
+};
+
+const RADIUS=200, WAVE_AMP=15, WAVES=7;
+// sample an array recorded every 2 frames (holds its last value)
+const sample=(a,f)=>{f=Math.max(0,Math.min((a.length-1)*2,f));const i=f/2,i0=Math.floor(i),i1=Math.min(a.length-1,i0+1);return a[i0]+(a[i1]-a[i0])*(i-i0);};
+const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
+
+const canvas=document.getElementById('c');
+const gl=canvas.getContext('webgl',{antialias:true});
+if(!gl){document.getElementById('err').hidden=false;return;}
+
+const vs='attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
+const fs=`
+precision highp float;
+uniform vec2 uRes; uniform float uFit;
+uniform float uR, uAmp, uBlur, uCell, uPix, uPhase;
+uniform float uRamp, uWob, uTime, uSeed;
+uniform vec3 uBg, uCol, uRed, uYel;
+const float WAVES=${WAVES}.0;
+vec3 ramp(float t){
+  vec3 c=mix(uYel,uCol,smoothstep(0.15,0.6,t));
+  c=mix(c,uRed,smoothstep(0.55,1.0,t));
+  return mix(uCol,c,uRamp);
+}
+vec4 blob(vec2 p){
+  float d=length(p);
+  float a=atan(p.y,p.x);
+  float wob=0.6*sin(3.0*a+uTime*0.55)+0.4*sin(2.0*a-uTime*0.37+1.7);
+  float r=uR*(1.0+uWob*wob)+uAmp*sin(WAVES*a+1.13+uPhase);
+  float w=max(uBlur,1.0);
+  float cov=1.0-smoothstep(r-w,r+w,d);
+  float depth=clamp(1.0-d/(r+w*0.6),0.0,1.0);
+  return vec4(ramp(depth)*cov,cov);
+}
+float hash(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+// Cavalry noise layer, measured from a render: per comp pixel, per frame —
+// 82% mid grey, 11% white, 7% in between; laid over the scene with Overlay at 26%
+float grain(vec2 cp){
+  float r=hash(cp+vec2(mod(uSeed*37.,1013.),mod(uSeed*71.,1019.)));
+  return r<0.93?0.0:(r<0.957?(r-0.93)/0.027:1.0);   // 0 = no speck, 1 = full white speck
+}
+float ovl(float b,float s){return b<.5?2.*b*s:1.-2.*(1.-b)*(1.-s);}
+const float NOISE_K=1.0, SAT=1.2;
+void main(){
+  vec2 p=(gl_FragCoord.xy-0.5*uRes)/uFit;
+  vec4 sm=blob(p);
+  vec4 px=sm;
+  if(uPix>0.001){
+    vec2 c=(floor(p/uCell)+0.5)*uCell;
+    vec4 acc=vec4(0.0);
+    for(int i=0;i<3;i++)for(int j=0;j<3;j++){
+      acc+=blob(c+(vec2(float(i),float(j))-1.0)*uCell/3.0);
+    }
+    px=acc/9.0;
+  }
+  float edge=smoothstep(0.2*uR,1.05*uR,length(p));
+  vec4 b=mix(sm,px,uPix*mix(0.12,1.0,edge));
+  vec3 col=uBg*(1.0-b.a)+b.rgb;
+  float s=grain(floor(p));
+  // white specks in Soft Light (keeps the colour underneath), then a gentle saturation lift
+  col=mix(col,sqrt(col),s*NOISE_K);
+  float lum=dot(col,vec3(.2126,.7152,.0722));
+  col=clamp(mix(vec3(lum),col,SAT),0.,1.);
+  gl_FragColor=vec4(col,1.0);
+}`;
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+  if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+const prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));
+gl.linkProgram(prog);gl.useProgram(prog);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const U={};['uRes','uFit','uR','uAmp','uBlur','uCell','uPix','uPhase','uBg','uCol','uRed','uYel','uRamp','uWob','uTime','uSeed'].forEach(k=>U[k]=gl.getUniformLocation(prog,k));
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
+const BG=hex('#EDD8C1'), COL_A=hex('#E57249'), COL_B=hex('#FA7E51');
+const RED=hex('#D8341E'), YEL=hex('#F4B04E');
+const IDLE_SIZE=0.55;
+
+function resize(){const d=Math.min(devicePixelRatio||1,2);
+  canvas.width=Math.round(canvas.clientWidth*d);canvas.height=Math.round(canvas.clientHeight*d);
+  gl.viewport(0,0,canvas.width,canvas.height);}
+addEventListener('resize',resize);resize();
+
+let idleT=0, textT=0, clock=0;
+function render(dt){
+  const frame=Math.floor(Math.max(0,SCN.main-26)*12/25+1e-6)*25/12;   // Posterize Time 12 fps on Ellipse 3            // Cavalry SC01 now runs the burst 26 frames later
+  idleT+=dt; clock+=dt;
+  textT=Math.min(textT+dt*SCN.FPS,140);
+  if(SCN.sc2Alpha>=0.999){hideText();return;}       // SC02 fully covers SC01
+  const calm=1-smooth(33,48,frame);
+  const s=sample(D1.scale,frame);
+  const it=Math.floor(idleT*12)/12, breathe=1+calm*(0.06*Math.sin(it*1.55)+0.025*Math.sin(it*0.63+1.2));
+  const pixAmt=smooth(34,41,frame);
+  const sizeK=IDLE_SIZE+(1-IDLE_SIZE)*smooth(35,48,frame);
+  const scale=s*breathe*sizeK;
+  const col=COL_A.map((c,i)=>c+(COL_B[i]-c)*pixAmt);
+  const fit=FITK(canvas.width,canvas.height);
+  gl.uniform2f(U.uRes,canvas.width,canvas.height);
+  gl.uniform1f(U.uFit,fit);
+  gl.uniform1f(U.uR,RADIUS*scale);
+  gl.uniform1f(U.uAmp,WAVE_AMP*sample(D1.wave,frame)/100*scale*0.45);
+  gl.uniform1f(U.uPhase,-WAVES*(sample(D1.travel,frame)-65)*0.5*Math.PI/180-0.35*SCN.hold1);
+  gl.uniform1f(U.uBlur,sample(D1.blur,frame)*Math.max(scale,0.05)*(1+1.3*pixAmt));
+  gl.uniform1f(U.uCell,Math.max(4,sample(D1.pix,frame)*Math.max(scale,0.05)));
+  gl.uniform1f(U.uPix,pixAmt);
+  gl.uniform3fv(U.uBg,BG);gl.uniform3fv(U.uCol,col);gl.uniform3fv(U.uRed,RED);gl.uniform3fv(U.uYel,YEL);
+  gl.uniform1f(U.uRamp,smooth(36,52,frame));
+  gl.uniform1f(U.uWob,0.015+0.075*calm);
+  gl.uniform1f(U.uTime,Math.floor(idleT*12)/12);
+  gl.uniform1f(U.uSeed,Math.floor(clock*SCN.FPS/4)%997);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+  drawText(SCN.main,textT);
+}
+
+// ---- SC01 text (Cavalry "Text Block" + "boldly"), stepped at 12 fps ----
+// "May we keep creating": one Thin line; the words rise in one after another, then slide out left when the burst starts.
+// "boldly": heavy cream word over the burst; arrives out of big pixels, breathes in its letter spacing, grows away with the zoom.
+const stage=document.getElementById('stage');
+function fitStage(){const f=FITK(innerWidth,innerHeight);
+  stage.style.transform=`translate(${-960*f}px,${-540*f}px) scale(${f})`;}
+addEventListener('resize',fitStage);fitStage();
+const POST=25/12, post=f=>Math.floor(f/POST)*POST;               // 12 fps steps
+const eo=x=>1-Math.pow(1-Math.max(0,Math.min(1,x)),3);
+const eio=x=>{x=Math.max(0,Math.min(1,x));return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;};
+const lineEl=document.getElementById('w-line'), wordEls=[...lineEl.querySelectorAll('span')];
+// boldly: sampled every 2 frames from SC01 frame 66 (entrance) and 136 (exit)
+const BIN={s:[.45,.58,1.16,1.77,2.12,2.34,2.47,2.55,2.6,2.64,2.68,2.7,2.72,2.71,2.68,2.59,2.43,2.28,2.2,2.17,2.16,2.16],
+  ls:[-3,-1.95,3.34,6.16,7.54,8.33,8.78,9,9.06,9.04,8.94,8.73,8.41,7.93,7.26,6.34,5.06,3.28,.8,-1.94,-3.35,-3.49],
+  v:[28.3,27.44,19.83,6.68,3.02,1.27,.39,.04,0],b:[10,9.76,8.92,7.37,5.46,3.74,2.42,1.47,.82,.39,.13,.01,0],o:[0,66.67,100]};
+const BOUT={s:[2.17,2.24,2.37,2.53,2.71,2.89,3.05,3.18,3.25,3.26],o:[100,100,100,100,81.82,63.64,45.45,27.27,9.09,0],b:[.05,1.2,4,9,17,30,50,70,80,85]};
+const bc=document.getElementById('boldly'), bctx=bc.getContext('2d'), off=document.createElement('canvas'), octx=off.getContext('2d',{willReadFrequently:true});
+const BW=760, BH=260, K=2, BSIZE=144, BFONT=`900 ${BSIZE}px Archivo, ui-sans-serif, sans-serif`;
+bc.width=BW*K; bc.height=BH*K; bc.style.width=BW+'px'; bc.style.height=BH+'px';
+bc.style.left=(960-BW/2)+'px'; bc.style.top=(540-BH/2)+'px';
+let bW0=418, lastKey='', lineL=86.2;
+function layoutBoldly(ctx,ls){
+  ctx.font=BFONT;const ws=[...'boldly'].map(c=>ctx.measureText(c).width);
+  const tot=ws.reduce((a,b)=>a+b,0)+5*ls;let x=BW/2-tot/2;const y=BH/2+0.36*BSIZE;
+  [...'boldly'].forEach((c,i)=>{ctx.fillText(c,x,y);x+=ws[i]+ls;});
+}
+function drawBoldly(v,ls){
+  bctx.setTransform(1,0,0,1,0,0);bctx.clearRect(0,0,bc.width,bc.height);bctx.fillStyle='#EDD8C1';
+  if(v<1){bctx.setTransform(K,0,0,K,0,0);bctx.fillStyle='#EDD8C1';layoutBoldly(bctx,ls);return;}
+  const sw=Math.max(1,Math.ceil(BW/v)), sh=Math.max(1,Math.ceil(BH/v));
+  off.width=sw;off.height=sh;octx.setTransform(1/v,0,0,1/v,0,0);octx.fillStyle='#EDD8C1';layoutBoldly(octx,ls);
+  const img=octx.getImageData(0,0,sw,sh),d=img.data;for(let i=3;i<d.length;i+=4)d[i]=d[i]>90?255:0;
+  octx.putImageData(img,0,0);bctx.imageSmoothingEnabled=false;bctx.drawImage(off,0,0,sw*v*K,sh*v*K);
+}
+function measureB(){octx.font=BFONT;bW0=Math.max(1,octx.measureText('boldly').width);lastKey='';
+  lineL=Math.max(86.2,830-lineEl.offsetWidth);}   // line ends just left of the orange blob (blob edge ≈ x 855)
+const S2b=(a,f)=>{f=Math.max(0,f);const i=Math.min(a.length-1,f/2),i0=Math.floor(i),i1=Math.min(a.length-1,i0+1);return a[i0]+(a[i1]-a[i0])*(i-i0);};
+function hideText(){lineEl.style.opacity=0;bc.style.opacity=0;}
+function drawText(main,tt){
+  // line: intro on its own clock (so it is ready while SC01 waits), exit with the burst; slower than Cavalry and stepped
+  const ti=post(tt), te=post(main);
+  wordEls.forEach((w,i)=>{const k=eo((ti-4-i*3.5)/36);
+    w.style.transform=`translateY(${(100*(1-k)).toFixed(1)}px)`;w.style.opacity=k.toFixed(3);
+    const b=17.7*(1-k)*.5;w.style.filter=b>.05?`blur(${b.toFixed(2)}px)`:'none';});
+  const xo=eio((te-62)/24);
+  lineEl.style.left=((PORT.on?660:lineL)-394*xo)+'px';
+  lineEl.style.opacity=(1-eo((te-62)/20)).toFixed(3);
+  const lb=17.7*eio((te-62)/22)*.5;lineEl.style.filter=lb>.05?`blur(${lb.toFixed(2)}px)`:'none';
+  // boldly
+  if(te<66){bc.style.opacity=0;return;}
+  const fi=(te-66)/1.4;                                   // entrance stretched 1.4× for a gentler arrival
+  let s=S2b(BIN.s,fi), ls=S2b(BIN.ls,fi), v=S2b(BIN.v,fi), b=S2b(BIN.b,fi), o=S2b(BIN.o,fi)/100;
+  if(te>=136){const fx=te-136;s=S2b(BOUT.s,fx);o*=S2b(BOUT.o,fx)/100;b=Math.max(b,S2b(BOUT.b,fx));}
+  bc.style.opacity=o.toFixed(3);
+  const bsc=418*s/bW0*(PORT.on?.8:1);
+  bc.style.transform=`scale(${bsc.toFixed(4)})`;
+  bc.style.filter=b>.05?`blur(${(b*.5/bsc).toFixed(2)}px)`:'none';
+  const vq=v<1?0:Math.round(v*2)/2, lq=Math.round(ls*1.4*2)/2, key=vq+'|'+lq;
+  if(key!==lastKey){drawBoldly(vq,lq);lastKey=key;}
+}
+(document.fonts?document.fonts.ready:Promise.resolve()).then(measureB);
+(document.fonts?document.fonts.load(BFONT).catch(()=>{}):Promise.resolve()).then(measureB);
+measureB();
+
+SCN.renderers.push(render);
+})();
+</script>
+
+<script>
+/* ============================== SC02 — plays in real time from Main frame 140 ==============================
+   Cavalry SC02, bottom → top:
+   BG 2 (cream) · "Composition 5" (ghost copy, ×0.974, blur 61.9, pixelate 60 through the Mask matte, 60%)
+   · "Composition 4" (same ghost copy, blur 50, 44%) · BG frame · Astrix · All shapes (inside Blur mask) · Star · Noise */
+(() => {
+const D={"M":{"star":{"x":[-519.5,-519.5,-519.5,-519.4,-519.1,-518.4,-517.1,-515,-511.6,-506.7,-499.6,-489.7,-477.1,-462.7,-448.5,-435.5,-424.1,-414.2,-405.6,-398,-391.3,-385.3,-380,-375.2,-370.8,-366.9,-363.3,-360,-357,-354.2,-351.7,-349.4,-347.3,-345.4,-343.6,-342,-340.5,-339.2,-338,-336.9,-335.9,-335,-334.2,-333.5,-332.9,-332.4,-331.9,-331.6,-331.3,-331.1,-330.9,-330.9,-330.9,-330.9,-331,-331.2,-331.3,-331.3,-331.4],"y":[666.1,665.8,664.9,663.3,660.7,657,652,645.5,636.9,625.8,611.3,592.9,570.9,547.1,524.2,503.7,486.1,470.9,457.7,446.1,435.9,426.8,418.6,411.2,404.5,398.4,392.8,387.6,382.9,378.5,374.4,370.7,367.2,364,361,358.2,355.6,353.2,351,349,347,345.3,343.6,342.1,340.7,339.5,338.3,337.3,336.3,335.4,334.7,334,333.5,333,332.6,332.4,332.2,332.1],"s":[2.6363,2.6337,2.6257,2.612,2.5924,2.5669,2.5357,2.4992,2.4578,2.4124,2.3639,2.313,2.2607,2.2078,2.155,2.1029,2.052,2.0025,1.9546,1.9087,1.8646,1.8225,1.7824,1.7443,1.7081,1.6738,1.6412,1.6104,1.5813,1.5539,1.5279,1.5035,1.4805,1.4588,1.4385,1.4194,1.4015,1.3848,1.3692,1.3546,1.3411,1.3285,1.3169,1.3062,1.2964,1.2874,1.2792,1.2718,1.2652,1.2593,1.2541,1.2496,1.2458,1.2426,1.24,1.2381,1.2367,1.2359,1.2356],"o":[0,5.9,11.8,17.6,23.5,29.4,35.3,41.2,47.1,52.9,58.8,64.7,70.6,76.5,82.4,88.2,94.1,100],"r":[-106,-106,-105.9,-105.7,-105.5,-105.1,-104.7,-104.3,-103.7,-103.1,-102.3,-101.5,-100.6,-99.5,-98.4,-97.2,-95.9,-94.5,-93,-91.5,-89.8,-88.1,-86.4,-84.5,-82.7,-80.8,-78.8,-76.9,-74.9,-73,-71,-69,-67.1,-65.2,-63.3,-61.4,-59.6,-57.8,-56,-54.3,-52.6,-51,-49.4,-47.8,-46.2,-44.7,-43.3,-41.9,-40.5,-39.1,-37.8,-36.5,-35.3,-34.1,-32.9,-31.8,-30.7,-29.6,-28.5,-27.5,-26.5,-25.6,-24.6,-23.7,-22.8,-22,-21.1,-20.3,-19.5,-18.8,-18,-17.3,-16.6,-15.9,-15.2,-14.6,-14,-13.4,-12.8,-12.2,-11.7,-11.1,-10.6,-10.1,-9.6,-9.2,-8.7,-8.3,-7.8,-7.4,-7,-6.6,-6.3,-5.9,-5.6,-5.2,-4.9,-4.6,-4.3,-4,-3.7,-3.5,-3.2,-3,-2.8,-2.5,-2.3,-2.1,-1.9,-1.8,-1.6,-1.4,-1.3,-1.1,-1,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.3,-0.2,-0.1,-0.1,-0.1,0],"b":[27.9,27.9,27.9,27.8,27.7,27.6,27.4,27.3,27.1,26.8,26.6,26.3,26,25.7,25.4,25,24.7,24.3,24,23.6,23.3,22.9,22.6,22.3,21.9,21.6,21.3,21,20.8,20.5,20.3,20,19.8,19.6,19.4,19.2,19,18.8,18.7,18.5,18.4,18.3,18.1,18,17.9,17.8,17.8,17.7,17.6,17.5,17.5,17.4,17.4,17.4,17.3]},"pink":{"x":[-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291,-290.2,-288.2,-285,-280.2,-273.6,-265.5,-256.4,-247.7,-240.3,-234.4,-230.1,-227,-225.1,-223.9,-223.7,-224.2,-225.4,-227.1,-229,-230.9,-232.5,-233.9,-235.6,-238.5,-245,-256.5,-270.2,-283.8,-296.2,-307.1,-315.9,-313.6,-303.1,-291.1,-279.1,-268.1,-259.1,-252,-246.9,-243.4,-241.3,-240.2,-239.9],"y":[-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.5,-223.8,-222.7,-221,-218.6,-215.7,-212.6,-209.6,-207.2,-205.4,-204.1,-203.3,-202.8,-202.6,-202.6,-202.4,-201.1,-198.5,-194.3,-188.5,-180.7,-171.2,-159.9,-147.5,-135.2,-126.6,-122,-119.6,-118.1,-117,-115.8,-109.3,-104.5,-100,-95.6,-91.5,-87.7,-84.5,-81.7,-79.5,-77.8,-76.8,-76.4],"s":[2.119,2.119,2.119,2.119,2.119,2.119,2.119,2.119,2.119,2.119,2.119,2.1187,2.1157,2.1096,2.1,2.0863,2.0683,2.0455,2.0172,1.9831,1.9428,1.896,1.8429,1.7842,1.721,1.6553,1.5892,1.5251,1.4648,1.4095,1.3598,1.316,1.2779,1.2451,1.2174,1.1942,1.1751,1.1598,1.1479,1.1391,1.1331,1.1296,1.1285,1.1245,1.1101,1.0813,1.0374,0.9901,0.9544,0.9328,0.922,0.9189],"o":[0,0,0,0,0,0,0,0,0,0,0,2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62,66,70,74,78,82,86,90,94,98,100],"r":[-68,-68,-68,-68,-68,-68,-68,-68,-68,-68,-68,-67.9,-67,-65,-61.5,-56.4,-49.4,-40.8,-31.6,-23.1,-16,-10.7,-6.9,-4.3,-2.8,-2.1,-1.9,-1.6,-0.7,0.7,2.8,5.8,9.4,13.6,17.7,21.3,24.2,26.4,28,29,29.7,30,30.1,31.1,33.6,38,43.9,49.7,53.8,56.4,57.6,58]},"halfRed":{"x":[-1013.5,-1012.6,-1009.6,-1004.3,-996.3,-985.3,-970.9,-952.7,-930.4,-903.9,-873.5,-840,-805.1,-770.4,-737.7,-708.1,-682.2,-660,-641.4,-626.2,-613.9,-604.3,-597,-591.9,-588.9,-587.5,-587.1,-584.7,-579.6,-576.6,-589.5,-609.1,-628.5,-643.8,-654.4,-660.9,-664.3,-665.3,-665,-661.1,-652.6,-639.7,-627.1,-618.4,-613.7,-611.8,-611.5],"y":[-42.9,-43.1,-43.6,-44.6,-46,-48.1,-50.9,-54.5,-59,-64.5,-70.8,-77.7,-85,-92.2,-99,-104.9,-109.9,-114,-117.1,-119.4,-120.8,-121.4,-121.3,-120.7,-119.7,-119.1,-118.8,-117.3,-113.1,-102.9,-92.5,-85.7,-81,-78,-76,-74.9,-74.5,-74.5,-75.9,-80.1,-88.1,-99.5,-110.6,-118.3,-122.6,-124.4,-124.6],"s":[2.8608,2.8286,2.7967,2.7651,2.7338,2.7026,2.6715,2.6406,2.6097,2.5788,2.548,2.517,2.486,2.4548,2.4234,2.3918,2.3599,2.3277,2.2952,2.2622,2.2289,2.195,2.1606,2.1257,2.0902,2.054,2.016,1.9713,1.9205,1.8655,1.8083,1.7505,1.6941,1.6407,1.5923,1.5505,1.5174,1.4949,1.4876,1.4964,1.5176,1.5478,1.5835,1.6215,1.6585,1.691,1.7045],"o":[0,3.2,6.5,9.7,12.9,16.1,19.4,22.6,25.8,29,32.3,35.5,38.7,41.9,45.2,48.4,51.6,54.8,58.1,61.3,64.5,67.7,71,74.2,77.4,80.6,83.9,87.1,90.3,93.5,96.8,100],"r":[29.3,27.4,25.3,22.8,20.2,17.4,14.5,11.5,8.4,5.3,2.3,-0.7,-3.7,-6.5,-9.2,-11.7,-14,-16,-17.7,-19,-19.9,-20.4,-20.4,-19.7,-18.4,-16.4,-13.5,-10.5,-7.3,-3.9,-0.3,3.7,8.2,13.4,19.4,25.9,32.3,38.4,45.1,53,61.6,70.6,79.5,87.7,95,100.7,104.1,104.1,101.5,97.6,93.5,90.4]},"halfCream":{"x":[4],"y":[-8.5],"s":[2.96,2.96,2.96,2.96,2.96,2.96,2.96,2.96,2.96,2.96,2.96,2.9597,2.957,2.9513,2.9421,2.9287,2.9105,2.8865,2.8553,2.8152,2.7635,2.6966,2.6091,2.4932,2.3404,2.1513,1.9525,1.7776,1.6368,1.5248,1.4347,1.361,1.2998,1.2485,1.2052,1.1683,1.137,1.1102,1.0875,1.0682,1.052,1.0384,1.0273,1.0184,1.0114,1.0062,1.0027,1.0007,1],"o":[0,0,0,0,0,0,0,0.2,0.8,1.9,3.6,5.8,8.8,12.6,17.2,22.8,29.3,36.6,44.5,52.5,60.3,67.5,74,79.7,84.4,88.4,91.7,94.3,96.3,97.9,99,99.6,100],"r":[90,90,90,90,90,90,90,89.9,89.4,88.3,86.8,84.8,82.5,79.8,76.8,73.5,70,66.4,62.6,58.7,54.7,50.7,46.7,42.8,38.9,35,31.3,27.7,24.3,21.1,18,15.1,12.5,10.1,7.9,6,4.3,2.9,1.7,0.9,0.3,0]},"ell":{"x":[931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.1,929.4,927.4,924.4,920.6,915.7,909.6,901.8,892.1,880,864.9,846.1,822.8,795.1,764.4,733.7,705.7,681.6,661.2,644,629.5,617.1,606.6,597.5,589.6,582.9,577,571.9,567.6,563.8,560.7,557.9,555.7,553.8,552.4,551.1,550.1,549.8,549.7],"y":[761,761,761,761,761,761,761,761,761,761,761,760.9,760.2,758.2,755.8,752.3,747.7,741.9,734.6,725.3,713.7,699.3,681.2,658.7,630.9,597.8,561.2,524.6,491.2,462.4,438,417.5,400.2,385.4,372.8,362,352.6,344.6,337.6,331.5,326.3,321.8,318.1,314.8,312.2,309.8,308.2,306.6,305.5,305.1,305],"s":[2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.7186,2.7141,2.7062,2.6945,2.6784,2.6573,2.6304,2.5971,2.5562,2.5066,2.4471,2.3767,2.2947,2.2012,2.0982,1.9892,1.8793,1.7731,1.6742,1.5844,1.5041,1.4329,1.3702,1.3151,1.2667,1.2243,1.1872,1.1548,1.1265,1.102,1.0809,1.0628,1.0475,1.0347,1.0241,1.0157,1.0093,1.0046,1.0016,1.0002,1],"o":[0,0,0,0,0,0,0,0,0,0,0,0.1,0.6,1.4,2.6,4.3,6.6,9.5,13.3,17.9,23.6,30.2,37.7,45.6,53.4,60.6,67.1,72.8,77.7,81.9,85.4,88.4,90.9,93.1,94.8,96.2,97.4,98.3,99,99.5,99.8,100],"r":[0]},"astrix":{"x":[576.7,576.6,576.5,576.4,576.3,576.1,576,575.7,575.4,575.1,574.7,574.3,573.8,573.2,572.4,571.6,570.6,569.4,567.9,566,563.6,560.4,556,550.4,544.5,539.3,534.8,531,527.9,525.3,523.4,522.2,521.8,521.7,521.4,520.9,520,518.6,516.5,513.3,508.4,500.9,489.5,473.4,454.4,436.9,423.4,413.4,401.1,385,374.7,369.8,367.7,367.1],"y":[-892.8,-891.7,-890,-887.7,-884.8,-881.3,-876.9,-871.7,-865.6,-858.6,-850.3,-840.7,-829.7,-816.8,-802,-784.8,-764.5,-740.6,-711.9,-677.1,-633.9,-579.5,-511.8,-436.3,-369.7,-321.3,-288.3,-265.9,-250.9,-241,-235,-231.9,-231,-230.8,-230.1,-228.9,-227,-224.3,-220.7,-216,-210,-202.7,-194.4,-186.3,-180.9,-178.9,-178.4,-177.8,-164.3,-142.9,-128.8,-122,-119,-118.2],"s":[100,99.9231,99.6778,99.2389,98.5764,97.6541,96.4294,94.8538,92.8752,90.4464,87.5407,84.1786,80.4541,76.5375,72.6353,68.9272,65.526,62.4784,59.7859,57.4262,55.3678,53.5778,52.0253,50.6826,49.5258,48.5341,47.6899,46.9779,46.385,45.9,45.513,45.2155,45,44.8132,44.5972,44.3474,44.058,43.7219,43.3292,42.8669,42.3166,41.6521,40.8349,39.8107,38.5212,36.9981,35.5262,34.4028,33.6337,33.1176,32.7732,32.5488,32.4119,32.341],"o":[100],"r":[-119,-118.9,-118.6,-118.1,-117.4,-116.4,-115.1,-113.5,-111.6,-109.2,-106.3,-102.8,-98.6,-93.6,-87.6,-80.4,-71.7,-61.2,-48.7,-34.5,-19.8,-6.1,5.5,15,22.5,28.4,33.1,36.7,39.5,41.7,43.2,44.3,45,45.6,46.5,47.6,49.1,51.1,53.6,56.9,60.9,66.1,72.6,80.2,88.4,96.1,102.6,108,112.3,115.8,118.6,120.8,122.6,124.1,125.5,127.1,129,131.2,133.9,136.9,140.5,144.7,149.2,153.7,158,161.6,164.6,167.1,169,170.6,171.8,172.8,173.6,174.1,174.5,174.8,175,175,175.4,176.7,178.7,181.4,184.7,188.6,192.9,197.7,202.9,208.3,214,219.9,225.9,232,238.1,244.1,250,255.7,261.1,266.3,271.1,275.4,279.3,282.6,285.3,287.3,288.6,289],"b":[3,3.1,2.6,2.4,2.3,2.2,2.1,2,1.9,1.9,1.8,1.7,1.7,1.6,1.6,1.5,1.5,1.5,1.4,1.4,1.4,1.3,1.3,1.3,1.2,1.2,1.2,1.2,1.1,1.1,1.1,1.1,1,1,1,1,1,0.9,0.9,0.9,0.9,0.9,0.9,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.7,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.5]},"clover":{"x":[81,82.4,83.8,85.2,86.6,88,89.4,90.8,92.2,93.6,95,96.4,97.8,99.2,100.6,102,103.4,104.8,106.2,107.6,108.9,110.3,111.7,113.1,114.5,115.9,117.3,118.7,120.1,121.5,122.9,124.3,125.7,127.1,128.5,129.9,131.3,132.7,134.1,135.5,136.9,138.3,139.6,141],"y":[474,468.2,462.4,456.6,450.8,444.9,439.1,433.3,427.5,421.7,415.9,410.1,404.2,398.4,392.6,386.8,381,375.2,369.4,363.5,357.7,351.9,346.1,340.3,334.5,328.7,322.8,317,311.2,305.4,299.6,293.8,288,282.1,276.3,270.5,264.7,258.9,253.1,247.3,241.5,235.6,229.8,224],"s":[0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8277,0.8032,0.7788,0.7543,0.7298],"o":[0,2.3,4.7,7,9.3,11.6,14,16.3,18.6,20.9,23.3,25.6,27.9,30.2,32.6,34.9,37.2,39.5,41.9,44.2,46.5,48.8,51.2,53.5,55.8,58.1,60.5,62.8,65.1,67.4,69.8,72.1,74.4,76.7,79.1,81.4,83.7,86,88.4,90.7,93,95.3,97.7,100],"r":[203.9,203.9,203.8,203.6,203.3,203,202.5,202,201.4,200.6,199.8,198.8,197.7,196.4,195,193.5,191.7,189.8,187.7,185.4,182.8,180.1,177.1,173.8,170.4,166.6,162.7,158.6,154.4,150.1,145.7,141.4,137.1,133,129,125.2,121.7,118.4,115.3,112.5,109.9,107.5,105.3,103.3,101.5,99.9,98.4,97.1,95.9,94.8,93.9,93.1,92.4,91.8,91.3,90.9,90.6,90.3,90.1,90,90,89.9,89.7,89.3,88.7,87.9,86.9,85.6,84.1,82.2,80,77.5,74.5,71.2,67.4,63.3,58.9,54.3,49.7,45.2,40.9,37,33.4,30.2,27.4,25,22.9,21.2,19.7,18.5,17.5,16.8,16.2,15.8,15.6,15.5,15.5,15.5,15.4,15.2,15.1,14.8,14.5,14.1,13.7,13.1,12.5,11.8,10.9,10,8.9,7.9,6.8,5.8,4.8,4,3.2,2.6,2,1.5,1.1,0.8,0.6,0.4,0.2,0.1,0,0,0,0.1,0.3,0.5,0.9,1.4,2,2.8,3.8,4.9,6.3,7.9,9.8,11.9,14.1,16.4,18.6,20.7,22.6,24.2,25.7,26.9,27.9,28.7,29.4,29.9,30.3,30.6,30.8,30.9,30.9,31,31.1,31.3,31.6,32,32.4,33,33.7,34.6,35.6,36.7,38,39.5,41.2,43.1,45.2,47.5,50.1,52.9,55.9,59.1,62.5,65.9,69.3,72.7,76,79.1,82,84.7,87.1,89.3,91.3,93.1,94.7,96.1,97.3,98.4,99.3,100.1,100.8,101.4,101.8,102.2,102.5,102.6,102.8,102.8,102.8,102.8,102.9,103,103.2,103.4,103.6,104,104.3,104.8,105.3,105.9,106.6,107.4,108.2,109.1,110.1,111.1,112,112.8,113.6,114.3,114.9,115.5,115.9,116.3,116.6,116.9,117.1,117.3,117.4,117.5,117.5,117.6],"b":[88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.4,88.3,88.1,87.9,87.7,87.3,86.9,86.4,85.9,85.2,84.3,83.3,82,80.5,78.6,76.1,72.9,68.9,64,58.9,54.5,50.8,47.7,45.2,43,41.1,39.4,38,36.6,35.5,34.4,33.4,32.5,31.7,30.9,30.2,29.6,29,28.4,27.9,27.4,27,26.6,26.2,25.8,25.5,25.2,24.9,24.7,24.4,24.2,24,23.8,23.7,23.5,23.4,23.3,23.2,23.1,23,22.9,22.8,22.8,22.8,22.7]},"wave":{"x":[-247.7,-247.7,-247.7,-247.7,-247.7,-247.7,-239.1,-222.8,-203.5,-182.7,-161,-138.9,-116.7,-94.7,-73.1,-52.1,-32.2,-13.5,3.4,17.7,28.4,32.9,32.3,30.5,27.7,24.1,19.8,15,10,5.2,1.6,-1.4,-13.8,-31.5,-51.9,-73.6,-95.5,-116.3,-133.2,-137],"y":[-745,-745,-745,-745,-745,-745,-734.1,-714.7,-692.1,-668,-642.8,-617.1,-591.1,-565.1,-539.1,-513.3,-487.9,-463.1,-439,-415.9,-394.1,-374.1,-356.7,-343.3,-337.3,-337.5,-338,-339,-340.3,-342,-343.8,-345.5,-346.3,-343.8,-340.4,-336.7,-333,-329.3,-325.7,-322.3,-319.1,-316.4,-314.4,-313.9,-313.1,-310.6,-290.7,-288],"s":[1.2011,1.2011,1.2011,1.2011,1.2011,1.2011,1.2002,1.1972,1.192,1.1843,1.1741,1.161,1.1449,1.1254,1.1022,1.0753,1.0443,1.0093,0.9703,0.9277,0.8824,0.8356,0.7889,0.7442,0.7031,0.6669,0.6366,0.6125,0.5944,0.582,0.575,0.5727,0.5727,0.5725,0.572,0.571,0.5694,0.5684,0.5678,0.5674,0.5672,0.5671,0.567],"o":[0,0,0,0,0,0,0,0.2,0.4,0.7,1.2,1.7,2.4,3.2,4.2,5.4,6.8,8.4,10.2,12.4,14.9,17.8,21.1,25,29.5,34.7,40.7,47.5,55,62.6,69.8,76.2,81.6,86,89.6,92.4,94.6,96.4,97.7,98.7,99.4,99.8,100],"r":[88.2,88.2,88.2,88.2,88.2,88.2,87.6,84.3,79.3,73.4,67,60.2,53.3,46.4,39.4,32.6,26,19.7,13.9,8.7,4.4,1.3,0],"b":[42.3,42.3,42.3,42.3,42.3,42.3,42.4,42.5,42.7,42.8,42.9,43,43.1,43.3,43.4,43.5,43.6,43.7,43.9,44,44.1,44.2,44.3,44.5,44.6,44.7,44.8,44.9,45.1,45.2,45.3,45.4,45.5,45.7,45.8,45.9,46,46.1,46.3,46.4,46.5]},"frame":{"w":[442,441.6,440.5,438.6,436,432.6,428.6,423.8,418.5,412.5,406.1,399.2,391.9,384.3,376.5,368.6,360.6,352.6,344.6,336.7,329,321.5,314.3,307.3,300.5,294.1,288,282.2,276.7,271.6,266.8,262.3,258.2,254.3,250.8,247.6,244.7,242.1,239.8,237.8,236.1,234.6,233.4,232.4,231.7,231.3,231],"h":[360,359.6,358.3,356.2,353.2,349.4,344.7,339.3,333.2,326.5,319.1,311.3,303,294.4,285.5,276.5,267.4,258.3,249.2,240.3,231.5,223,214.7,206.7,199.1,191.8,184.8,178.2,172,166.2,160.7,155.6,150.9,146.5,142.5,138.9,135.6,132.7,130,127.7,125.8,124.1,122.7,121.6,120.8,120.3,120],"b":[36.8,36.8,36.8,36.7,36.7,36.6,36.4,36.2,36,35.7,35.3,34.7,33.9,32.8,31.3,29.3,27.5,26.1,25.1,24.2,23.5,23,22.5,22,21.7,21.4,21.1,20.8,20.6,20.4,20.2,20,19.9,19.8,19.7,19.6,19.5,19.4,19.3,19.3,19.2,19.2,19.2,19.1]},"mask":{"w":[442,442,442,442,442,442,442,442,442,442,442,442,442,442,442,442,442,441.6,440.4,438.3,435.5,431.9,427.6,422.7,417.1,411,404.4,397.5,390.3,382.9,375.4,367.8,360.2,352.8,345.4,338.3,331.3,324.6,318.1,311.9,306.1,300.5,295.2,290.2,285.6,281.2,277.2,273.4,270,266.8,263.9,261.3,259,256.9,255.1,253.5,252.2,251.1,250.3,249.6,249.2,249],"h":[360,360,360,360,360,360,360,360,360,360,360,360,360,360,360,360,360,359.5,357.9,355.3,351.7,347.1,341.5,335.1,328,320.1,311.7,302.8,293.6,284,274.4,264.6,254.9,245.3,235.9,226.7,217.8,209.1,200.8,192.9,185.3,178.1,171.4,165,159,153.4,148.2,143.4,138.9,134.9,131.2,127.8,124.8,122.2,119.8,117.8,116.1,114.7,113.6,112.8,112.3,112]},"small":{"b":[50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,49.9,49.8,49.5,49.1,48.7,48.2,47.7,47.3,46.9,46.6,46.2,45.9,45.7,45.4,45.2,45,44.8,44.6,44.5,44.3,44.2,44,43.9,43.8,43.7,43.6,43.5,43.5,43.4,43.3,43.3,43.2,43.2,43.1,43.1,43.1,43.1,43]}},"G":{"star":{"x":[-519.5,-519.5,-519.5,-519.5,-519.3,-518.9,-518.1,-516.8,-514.7,-511.6,-507,-500.6,-492.4,-482.9,-473.4,-464.8,-457.3,-450.7,-445,-440,-435.5,-431.6,-428.1,-424.9,-422.1,-419.5,-417.2,-415.1,-413.1,-411.4,-409.8,-408.3,-407,-405.8,-404.7,-403.7,-402.8,-402,-401.3,-400.6,-400.1,-399.6,-399.1,-398.8,-398.5,-398.2,-398,-397.9,-397.8,-397.8,-397.8,-397.8,-397.9,-398,-398.2,-398.3,-398.4,-398.5],"y":[666.1,665.8,665,663.5,661,657.6,653,646.7,638.4,627.6,613.4,595.2,573.2,549.3,526.2,505.6,487.7,472.2,458.8,447,436.7,427.4,419.1,411.5,404.7,398.5,392.8,387.5,382.7,378.3,374.1,370.3,366.8,363.6,360.5,357.7,355.1,352.7,350.5,348.4,346.5,344.8,343.1,341.6,340.3,339,337.9,336.9,336,335.1,334.4,333.8,333.3,332.9,332.6,332.3,332.2,332.1],"s":[2.6363,2.6337,2.6254,2.6114,2.5913,2.5652,2.5333,2.4959,2.4536,2.4071,2.3573,2.3052,2.2517,2.1975,2.1435,2.0901,2.038,1.9873,1.9383,1.8912,1.8461,1.803,1.762,1.7229,1.6858,1.6507,1.6174,1.5858,1.556,1.5279,1.5013,1.4763,1.4527,1.4306,1.4097,1.3902,1.3719,1.3548,1.3388,1.3239,1.31,1.2971,1.2852,1.2743,1.2642,1.255,1.2467,1.2391,1.2323,1.2263,1.221,1.2164,1.2125,1.2092,1.2065,1.2045,1.2031,1.2023,1.202],"o":[0,3,6.1,9.1,12.1,15.2,18.2,21.2,24.2,27.3,30.3,33.3,36.4,39.4,42.4,45.5,48.5,51.5,54.5,57.6,60.6,63.6,66.7,69.7,72.7,75.8,78.8,81.8,84.8,87.9,90.9,93.9,97,100],"r":[-106,-106,-105.9,-105.7,-105.5,-105.1,-104.7,-104.3,-103.7,-103.1,-102.3,-101.5,-100.6,-99.5,-98.4,-97.2,-95.9,-94.5,-93,-91.5,-89.8,-88.1,-86.4,-84.5,-82.7,-80.8,-78.8,-76.9,-74.9,-73,-71,-69,-67.1,-65.2,-63.3,-61.4,-59.6,-57.8,-56,-54.3,-52.6,-51,-49.4,-47.8,-46.2,-44.7,-43.3,-41.9,-40.5,-39.1,-37.8,-36.5,-35.3,-34.1,-32.9,-31.8,-30.7,-29.6,-28.5,-27.5,-26.5,-25.6,-24.6,-23.7,-22.8,-22,-21.1,-20.3,-19.5,-18.8,-18,-17.3,-16.6,-15.9,-15.2,-14.6,-14,-13.4,-12.8,-12.2,-11.7,-11.1,-10.6,-10.1,-9.6,-9.2,-8.7,-8.3,-7.8,-7.4,-7,-6.6,-6.3,-5.9,-5.6,-5.2,-4.9,-4.6,-4.3,-4,-3.7,-3.5,-3.2,-3,-2.8,-2.5,-2.3,-2.1,-1.9,-1.8,-1.6,-1.4,-1.3,-1.1,-1,-0.9,-0.8,-0.7,-0.6,-0.5,-0.4,-0.3,-0.3,-0.2,-0.1,-0.1,-0.1,0],"b":[27.9,27.9,27.9,27.8,27.7,27.6,27.4,27.3,27.1,26.8,26.6,26.3,26,25.7,25.4,25,24.7,24.3,24,23.6,23.3,22.9,22.6,22.3,21.9,21.6,21.3,21,20.8,20.5,20.3,20,19.8,19.6,19.4,19.2,19,18.8,18.7,18.5,18.4,18.3,18.1,18,17.9,17.8,17.8,17.7,17.6,17.5,17.5,17.4,17.4,17.4,17.3]},"pink":{"x":[-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291.1,-291,-290.2,-288.2,-285,-280.2,-273.6,-265.5,-256.4,-247.7,-240.3,-234.4,-230.1,-227,-225.1,-223.9,-223.7,-224.2,-225.4,-227.1,-229,-230.9,-232.5,-233.9,-235.6,-238.5,-245,-256.5,-270.2,-283.8,-296.2,-307.1,-314.2,-319.6,-318.6,-312,-305.2,-298.9,-293.7,-289.7,-286.7,-284.8,-283.5,-282.9,-282.8],"y":[-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.8,-224.5,-223.8,-222.7,-221,-218.6,-215.7,-212.6,-209.6,-207.2,-205.4,-204.1,-203.3,-202.8,-202.6,-202.6,-202.4,-201.1,-198.5,-194.3,-188.5,-180.7,-171.2,-159.9,-147.5,-135.2,-126.6,-122,-119.6,-118.1,-117,-116.3,-114.8,-109.9,-106.4,-103.5,-100.8,-98.4,-96.4,-94.7,-93.4,-92.4,-91.8,-91.6],"s":[2.119,2.119,2.119,2.119,2.119,2.119,2.119,2.1187,2.1157,2.1096,2.1,2.0863,2.0683,2.0455,2.0172,1.9831,1.9428,1.896,1.8429,1.7842,1.721,1.6553,1.5892,1.5251,1.4648,1.4095,1.3598,1.316,1.2779,1.2451,1.2174,1.1942,1.1751,1.1598,1.1479,1.1391,1.1331,1.1296,1.1285,1.1245,1.1101,1.0813,1.0374,0.9901,0.9544,0.9328,0.922,0.9189],"o":[0,0,0,0,0,0,0,2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62,66,70,74,78,82,86,90,94,98,100],"r":[-68,-68,-68,-68,-68,-68,-68,-67.9,-67,-65,-61.5,-56.4,-49.4,-40.8,-31.6,-23.1,-16,-10.7,-6.9,-4.3,-2.8,-2.1,-1.9,-1.6,-0.7,0.7,2.8,5.8,9.4,13.6,17.7,21.3,24.2,26.4,28,29,29.7,30,30.1,31.1,33.6,38,43.9,49.7,53.8,56.4,57.6,58]},"halfRed":{"x":[-1013.5,-1012.6,-1009.6,-1004.3,-996.3,-985.3,-970.9,-952.7,-930.4,-903.9,-873.5,-840,-805.1,-770.4,-737.7,-708.1,-682.2,-660,-641.4,-626.2,-613.9,-604.3,-597,-591.9,-588.9,-587.5,-587.1,-584.6,-579.6,-576.3,-588.1,-607.9,-627.7,-643.5,-654.4,-661.2,-664.6,-665.3,-665.4,-663,-655.9,-644.2,-631.6,-622.4,-616.7,-614,-611.8,-608.3,-604.8,-601.5,-598.2,-595,-591.9,-588.8,-585.8,-582.9,-580,-577.2,-574.4,-571.6,-568.9,-566.2,-563.5,-560.8,-558.1,-555.5,-552.8,-550.1,-547.4,-544.6,-541.9,-539.1,-536.2,-533.3],"y":[-42.9,-43.1,-43.6,-44.6,-46,-48.1,-50.9,-54.5,-59,-64.5,-70.8,-77.7,-85,-92.2,-99,-104.9,-109.9,-114,-117.1,-119.4,-120.8,-121.4,-121.3,-120.7,-119.7,-119.1,-118.8,-117.2,-112.8,-102.1,-90,-82.1,-77.1,-74.2,-73,-72.9,-73.7,-74.5,-76.9,-85.3,-101.6,-124.9,-147.3,-162.2,-170,-173,-174.6,-176.9,-178.9,-180.5,-181.8,-182.8,-183.6,-184,-184.3,-184.3,-184.2,-183.8,-183.4,-182.8,-182.1,-181.3,-180.4,-179.6,-178.7,-177.8,-176.9,-176.1,-175.3,-174.6,-174.1,-173.6,-173.4,-173.3],"s":[2.8608,2.8283,2.7955,2.7624,2.7292,2.6958,2.6622,2.6286,2.5949,2.5612,2.5275,2.4939,2.4603,2.4269,2.3937,2.3607,2.3279,2.2953,2.2631,2.2313,2.1998,2.1688,2.1382,2.1082,2.0787,2.0498,2.0218,1.9966,1.9738,1.9532,1.9343,1.9166,1.8998,1.8835,1.8673,1.8508,1.8335,1.815],"o":[0,0,0,0,0,0,0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60,64,68,72,76,80,84,88,92,96,100],"r":[29.3,27.4,25.3,22.8,20.2,17.4,14.5,11.5,8.4,5.3,2.3,-0.7,-3.7,-6.5,-9.2,-11.7,-14,-16,-17.7,-19,-19.9,-20.4,-20.4,-19.7,-18.4,-16.4,-13.5,-10.5,-7.3,-3.9,-0.3,3.7,8.2,13.4,19.4,25.9,32.3,38.4,45.1,53,61.6,70.6,79.5,87.7,95,100.7,104.1,104.1,101.5,97.6,93.5,90.4]},"halfCream":{"x":[4],"y":[-8.5],"s":[2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.4987,2.4943,2.4862,2.4733,2.454,2.4254,2.3823,2.312,2.1615,1.4819,1.3237,1.2382,1.1802,1.1374,1.1046,1.0788,1.0584,1.0421,1.0294,1.0194,1.0119,1.0064,1.0027,1.0007,1],"o":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.2,0.8,1.9,3.5,5.9,9.1,13.4,18.8,25.5,33.5,42.2,51.1,59.4,66.8,73.1,78.5,82.9,86.7,89.7,92.3,94.4,96,97.4,98.4,99.1,99.6,99.9,100],"r":[90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,90,89.9,89,86.7,82.6,75.6,64.4,49.1,34.4,23.5,15.9,10.5,6.6,3.9,2,0.8,0.2,0]},"ell":{"x":[931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.7,931.1,929.4,927.4,924.4,920.6,915.7,909.6,901.8,892.1,880,864.9,846.1,822.8,795.1,764.4,733.7,705.7,681.6,661.2,644,629.5,617.1,606.6,597.5,589.6,582.9,577,571.9,567.6,563.8,560.7,557.9,555.7,553.8,552.4,551.1,550.1,549.8,549.7],"y":[761,761,761,761,761,761,761,761,761,761,761,760.9,760.2,758.2,755.8,752.3,747.7,741.9,734.6,725.3,713.7,699.3,681.2,658.7,630.9,597.8,561.2,524.6,491.2,462.4,438,417.5,400.2,385.4,372.8,362,352.6,344.6,337.6,331.5,326.3,321.8,318.1,314.8,312.2,309.8,308.2,306.6,305.5,305.1,305],"s":[2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.72,2.7186,2.7141,2.7062,2.6945,2.6784,2.6573,2.6304,2.5971,2.5562,2.5066,2.4471,2.3767,2.2947,2.2012,2.0982,1.9892,1.8793,1.7731,1.6742,1.5844,1.5041,1.4329,1.3702,1.3151,1.2667,1.2243,1.1872,1.1548,1.1265,1.102,1.0809,1.0628,1.0475,1.0347,1.0241,1.0157,1.0093,1.0046,1.0016,1.0002,1],"o":[0,0,0,0,0,0,0,0,0,0,0,0.1,0.6,1.4,2.6,4.3,6.6,9.5,13.3,17.9,23.6,30.2,37.7,45.6,53.4,60.6,67.1,72.8,77.7,81.9,85.4,88.4,90.9,93.1,94.8,96.2,97.4,98.3,99,99.5,99.8,100],"r":[0]},"astrix":{"x":[576.7,576.6,576.5,576.4,576.3,576.1,576,575.7,575.4,575.1,574.7,574.3,573.8,573.2,572.4,571.6,570.6,569.4,567.9,566,563.6,560.4,556,550.4,544.5,539.3,534.8,531,527.9,525.3,523.4,522.2,521.8,521.7,521.4,520.9,520,518.6,516.5,513.3,508.4,500.9,489.5,473.4,454.4,436.9,423.4,413.4,406.1,396.7,390.7,387.9,386.6,386.3],"y":[-892.8,-891.7,-890,-887.7,-884.8,-881.3,-876.9,-871.7,-865.6,-858.6,-850.3,-840.7,-829.7,-816.8,-802,-784.8,-764.5,-740.6,-711.9,-677.1,-633.9,-579.5,-511.8,-436.3,-369.7,-321.3,-288.3,-265.9,-250.9,-241,-235,-231.9,-231,-230.8,-230.1,-228.9,-227,-224.3,-220.7,-216,-210,-202.7,-194.4,-186.3,-180.9,-178.9,-178.4,-177.8,-173.2,-164.9,-159.3,-156.6,-155.4,-155.1],"s":[100,99.9231,99.6778,99.2389,98.5764,97.6541,96.4294,94.8538,92.8752,90.4464,87.5407,84.1786,80.4541,76.5375,72.6353,68.9272,65.526,62.4784,59.7859,57.4262,55.3678,53.5778,52.0253,50.6826,49.5258,48.5341,47.6899,46.9779,46.385,45.9,45.513,45.2155,45,44.8175,44.615,44.3895,44.1371,43.853,43.5306,43.1611,42.7325,42.2272,41.62,40.8759,39.9587,38.8958,37.8828,37.1144,36.5878,36.2312,35.9893,35.8269,35.7222,35.6609],"o":[100],"r":[-119,-118.9,-118.6,-118.1,-117.4,-116.4,-115.1,-113.5,-111.6,-109.2,-106.3,-102.8,-98.6,-93.6,-87.6,-80.4,-71.7,-61.2,-48.7,-34.5,-19.8,-6.1,5.5,15,22.5,28.4,33.1,36.7,39.5,41.7,43.2,44.3,45,45.6,46.5,47.6,49.1,51.1,53.6,56.8,60.9,66.1,72.6,80.2,88.3,96,102.6,107.9,112.2,115.7,118.5,120.7,122.5,124,125.4,127,128.9,131.2,133.8,136.9,140.5,144.6,149.1,153.7,157.9,161.6,164.6,167.1,169,170.6,171.8,172.8,173.6,174.1,174.5,174.8,175,175,175.4,176.7,178.7,181.4,184.7,188.6,192.9,197.7,202.9,208.3,214,219.9,225.9,232,238.1,244.1,250,255.7,261.1,266.3,271.1,275.4,279.3,282.6,285.3,287.3,288.6,289]},"clover":{"x":[81,82.4,83.8,85.2,86.6,88,89.4,90.8,92.2,93.6,95,96.4,97.8,99.2,100.6,102,103.4,104.8,106.2,107.6,108.9,110.3,111.7,113.1,114.5,115.9,117.3,118.7,120.1,121.5,122.9,124.3,125.7,127.1,128.5,129.9,131.3,132.7,134.1,135.5,136.9,138.3,139.6,141],"y":[474,468.2,462.4,456.6,450.8,444.9,439.1,433.3,427.5,421.7,415.9,410.1,404.2,398.4,392.6,386.8,381,375.2,369.4,363.5,357.7,351.9,346.1,340.3,334.5,328.7,322.8,317,311.2,305.4,299.6,293.8,288,282.1,276.3,270.5,264.7,258.9,253.1,247.3,241.5,235.6,229.8,224],"s":[0.8277,0.8576,0.8875,0.9174,0.9474,0.9773,1.0072,1.0371,1.067,1.0969,1.1268,1.1567,1.1867,1.2166,1.2465,1.2764,1.3063,1.3362,1.3661,1.396,1.4259,1.4559,1.4858,1.5157,1.5456,1.5755,1.6054,1.6353,1.6652,1.6952,1.7251,1.755,1.7849,1.8148,1.8447,1.8746,1.9045,1.9345,1.9644,1.9943,2.0242,2.0541,2.084,2.1139,2.1438,2.1737,2.2037,2.2336,2.2635,2.2934,2.3233,2.3532,2.3831,2.413,2.428],"o":[0,2.3,4.7,7,9.3,11.6,14,16.3,18.6,20.9,23.3,25.6,27.9,30.2,32.6,34.9,37.2,39.5,41.9,44.2,46.5,48.8,51.2,53.5,55.8,58.1,60.5,62.8,65.1,67.4,69.8,72.1,74.4,76.7,79.1,81.4,83.7,86,88.4,90.7,93,95.3,97.7,100],"r":[203.9,203.9,203.8,203.6,203.3,203,202.5,202,201.4,200.6,199.8,198.8,197.7,196.4,195,193.5,191.7,189.8,187.7,185.4,182.8,180.1,177.1,173.8,170.4,166.6,162.7,158.6,154.4,150.1,145.7,141.4,137.1,133,129,125.2,121.7,118.4,115.3,112.5,109.9,107.5,105.3,103.3,101.5,99.9,98.4,97.1,95.9,94.8,93.9,93.1,92.4,91.8,91.3,90.9,90.6,90.3,90.1,90,90,89.9,89.7,89.3,88.7,87.9,86.9,85.6,84.1,82.2,80,77.5,74.5,71.2,67.4,63.3,58.9,54.3,49.7,45.2,40.9,37,33.4,30.2,27.4,25,22.9,21.2,19.7,18.5,17.5,16.8,16.2,15.8,15.6,15.5,15.5,15.5,15.4,15.2,15.1,14.8,14.5,14.1,13.7,13.1,12.5,11.8,10.9,10,8.9,7.9,6.8,5.8,4.8,4,3.2,2.6,2,1.5,1.1,0.8,0.6,0.4,0.2,0.1,0,0,0,0.1,0.3,0.5,0.9,1.4,2,2.8,3.8,4.9,6.3,7.9,9.8,11.9,14.1,16.4,18.6,20.7,22.6,24.2,25.7,26.9,27.9,28.7,29.4,29.9,30.3,30.6,30.8,30.9,30.9,31,31.1,31.3,31.6,32,32.4,33,33.7,34.6,35.6,36.7,38,39.5,41.2,43.1,45.2,47.5,50.1,52.9,55.9,59.1,62.5,65.9,69.3,72.7,76,79.1,82,84.7,87.1,89.3,91.3,93.1,94.7,96.1,97.3,98.4,99.3,100.1,100.8,101.4,101.8,102.2,102.5,102.6,102.8,102.8,102.8,102.8,102.9,103,103.2,103.4,103.6,104,104.3,104.8,105.3,105.9,106.6,107.4,108.2,109.1,110.1,111.1,112,112.8,113.6,114.3,114.9,115.5,115.9,116.3,116.6,116.9,117.1,117.3,117.4,117.5,117.5,117.6],"b":[88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.5,88.4,88.3,88.1,87.9,87.7,87.3,86.9,86.4,85.9,85.2,84.3,83.3,82,80.5,78.6,76.1,72.9,68.9,64,58.9,54.5,50.8,47.7,45.2,43,41.1,39.4,38,36.6,35.5,34.4,33.4,32.5,31.7,30.9,30.2,29.6,29,28.4,27.9,27.4,27,26.6,26.2,25.8,25.5,25.2,24.9,24.7,24.4,24.2,24,23.8,23.7,23.5,23.4,23.3,23.2,23.1,23,22.9,22.8,22.8,22.8,22.7]},"wave":{"x":[-247.7,-247.7,-247.7,-247.7,-247.7,-247.7,-239.1,-222.8,-203.5,-182.7,-161,-138.9,-116.7,-94.7,-73.1,-52.1,-32.2,-13.5,3.4,17.7,28.4,32.9,32.3,30.5,27.7,24.1,19.8,15,10,5.2,1.6,-1.4,-13.8,-31.5,-51.9,-73.6,-95.5,-116.3,-133.2,-137],"y":[-745,-745,-745,-745,-745,-745,-734.1,-714.7,-692.1,-668,-642.8,-617.1,-591.1,-565.1,-539.1,-513.3,-487.9,-463.1,-439,-415.9,-394.1,-374.1,-356.7,-343.3,-337.3,-337.5,-338,-339,-340.3,-342,-343.8,-345.5,-346.3,-343.8,-340.4,-336.7,-333,-329.3,-325.7,-322.3,-319.1,-316.4,-314.4,-313.9,-313.1,-310.6,-290.7,-288],"s":[1.2011,1.2011,1.2011,1.2011,1.2011,1.2011,1.2002,1.1972,1.192,1.1843,1.1741,1.161,1.1449,1.1254,1.1022,1.0753,1.0443,1.0093,0.9703,0.9277,0.8824,0.8356,0.7889,0.7442,0.7031,0.6669,0.6366,0.6125,0.5944,0.582,0.575,0.5727,0.5727,0.5725,0.572,0.571,0.5694,0.5684,0.5678,0.5674,0.5672,0.5671,0.567],"o":[0,0,0,0,0,0,0,0.2,0.4,0.7,1.2,1.7,2.4,3.2,4.2,5.4,6.8,8.4,10.2,12.4,14.9,17.8,21.1,25,29.5,34.7,40.7,47.5,55,62.6,69.8,76.2,81.6,86,89.6,92.4,94.6,96.4,97.7,98.7,99.4,99.8,100],"r":[88.2,88.2,88.2,88.2,88.2,88.2,87.6,84.3,79.3,73.4,67,60.2,53.3,46.4,39.4,32.6,26,19.7,13.9,8.7,4.4,1.3,0],"b":[42.3,42.3,42.3,42.3,42.3,42.3,42.4,42.5,42.7,42.8,42.9,43,43.1,43.3,43.4,43.5,43.6,43.7,43.9,44,44.1,44.2,44.3,44.5,44.6,44.7,44.8,44.9,45.1,45.2,45.3,45.4,45.5,45.7,45.8,45.9,46,46.1,46.3,46.4,46.5]},"small":{"b":[50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,49.9,49.8,49.5,49.1,48.7,48.2,47.7,47.3,46.9,46.6,46.2,45.9,45.7,45.4,45.2,45,44.8,44.6,44.5,44.3,44.2,44,43.9,43.8,43.7,43.6,43.5,43.5,43.4,43.3,43.3,43.2,43.2,43.1,43.1,43.1,43.1,43]}}};
+const M=D.M, G=D.G;
+const S2=(a,f)=>{if(!a)return 0;if(a.length===1)return a[0];const i=Math.max(0,Math.min(a.length-1,f/2)),i0=Math.floor(i),i1=Math.min(a.length-1,i0+1);return a[i0]+(a[i1]-a[i0])*(i-i0);};
+// Cavalry "cycle with offset" on the star and clover rotations: each pass repeats the keys and adds the total change
+function cyc(a,P,f){const d=a[a.length-1]-a[0],n=Math.floor(f/P);return S2(a,f-n*P)+d*n;}
+// Asterisk: after its last key (frame 210) it keeps turning very slowly, opposite to the clover and at about half its speed
+const AST_END=210, AST_RATE=0.08, AST_EASE=60;   // degrees per frame; frames to ease in
+function astrixExtra(f){const d=f-AST_END;if(d<=0)return 0;return AST_RATE*(d<AST_EASE?d*d/(2*AST_EASE):d-AST_EASE/2);}
+// Cavalry Posterize Time per shape: Star + Clover 8 fps, wave + Pink shape 10 fps, Astrix + Half circle red 12 fps;
+// Ellipse, cream half circle and the small-shapes group are not posterized
+const PR={star:8,clover:8,wave:10,pink:10,astrix:12,halfRed:12};
+const pq=(k,f)=>{const r=PR[k];return r?Math.floor(f*r/25+1e-6)*25/r:f;};
+const q12=f=>Math.floor(f*12/25+1e-6)*25/12;   // BG frame and Blur mask: 12 fps
+function rot(set,k,f){
+  f=pq(k,f);
+  const t=set[k];
+  if(k==='star')return cyc(t.r,261,f);
+  if(k==='clover')return cyc(t.r,479,f);
+  if(k==='astrix')return S2(t.r,f)+astrixExtra(f);
+  return S2(t.r,f);
+}
+// Look-match to the SC02 reference still: where the framed shapes settle (dx,dy in comp px, +y up) and their size (ks).
+// Added for the whole move, so each shape still travels its Cavalry path and just lands in the reference spot.
+const ADJ={star:{dx:-10,dy:-80,ks:1.05},ell:{dx:-60,dy:0,ks:.9},wave:{dx:60,dy:10,ks:1},halfRed:{dx:30,dy:-100,ks:1},
+  pink:{dx:10,dy:-40,ks:1},halfCream:{dx:20,dy:0,ks:1.25},clover:{dx:0,dy:-15,ks:1},astrix:{dx:-20,dy:-25,ks:.92}};
+function st(set,k,f,fr){f=pq(k,f);const t=set[k];const o={x:S2(t.x,f),y:S2(t.y,f),s:S2(t.s,f),o:S2(t.o,f)/100,r:rot(set,k,fr===undefined?f:fr),b:t.b?S2(t.b,f):0};
+  const a=set===M&&ADJ[k];if(a){o.x+=a.dx;o.y+=a.dy;o.s*=a.ks;}return o;}
+
+// ---- geometry (local units, +y up), from the Cavalry paths ----
+function bez(ctx,pts,closed){
+  ctx.moveTo(pts[0][0],pts[0][1]);
+  const n=pts.length, m=closed?n:n-1;
+  for(let i=0;i<m;i++){const a=pts[i],b=pts[(i+1)%n];ctx.bezierCurveTo(a[4],a[5],b[2],b[3],b[0],b[1]);}
+  if(closed)ctx.closePath();
+}
+const HALF=[[-114.1,0,-43.3,0,-114.1,-64.6],[0,-117,-63,-117,63,-117],[114.1,0,114.1,-64.6,3.1,0]];
+const WAVEP=[[187.7,-124.8,187.7,-124.8,148.9,-124.8],[80.4,-80.4,110,-110,60.2,-60.2],[7.1,-80.4,27.3,-60.2,-52.1,-139.6],[-207.6,-80.4,-148.4,-139.6,-227.8,-60.2],[-280.9,-80.4,-260.7,-60.2,-280.9,-80.4],[-291.7,-93.5,-291.7,-93.5,-308.1,-113.6],[-340.3,-75.8,-340.6,-101.7,-340.3,-75.8],[-338.4,58,-338.4,58,-319.7,80.9],[-243.4,124.8,-282.6,124.8,-204.1,124.8],[-136.9,80.3,-165.4,108.8,-116.7,60.1],[-63.6,80.3,-83.8,60.1,-4.4,139.5],[151.1,80.3,91.9,139.5,160.9,70.5],[187.7,65.1,173.9,65.1,201.6,65.1],[224.4,80.3,214.6,70.5,224.4,80.3],[264.5,108.7,264.5,108.7,296.4,131.2],[340.3,69.3,340.4,108.3,340.3,69.3],[340.1,-35.4,340.1,-35.4,340.1,-35.4],[295.1,-80.4,295.1,-80.4,265.5,-110],[187.7,-124.8,226.6,-124.8,187.7,-124.8]];
+const CLOVER=[[0,0,-249.6,-273,-303.1,-250],[0,0,-286.3,253.5,-234.7,290.5],[0,0,255.4,284.9,286.8,246.8],[0,0,282.3,-242.2,218.5,-319.4]];
+const GEO={
+  star(ctx){const R=283.109,r=129;for(let i=0;i<24;i++){const a=Math.PI/2+i*Math.PI/12,rr=i%2?r:R;i?ctx.lineTo(rr*Math.cos(a),rr*Math.sin(a)):ctx.moveTo(rr*Math.cos(a),rr*Math.sin(a));}ctx.closePath();},
+  pink(ctx){ctx.arc(0,0,130.3,0,Math.PI*2);},
+  ell(ctx){ctx.arc(0,0,203,0,Math.PI*2);},
+  halfRed(ctx){bez(ctx,HALF,true);},
+  halfCream(ctx){bez(ctx,HALF,true);},
+  wave(ctx){bez(ctx,WAVEP,true);},
+  clover(ctx){bez(ctx,CLOVER,true);},
+  astrix(ctx){ctx.moveTo(0,7);ctx.lineTo(0,-7);ctx.moveTo(-6.1,-3.5);ctx.lineTo(6.1,3.5);ctx.moveTo(-6.1,3.5);ctx.lineTo(6.1,-3.5);}
+};
+window.SCGEO=GEO;
+const COL={wave:'#FF523D',clover:'#15806E',astrix:'#E57249',ell:'#FF523D',halfCream:'#EDD8C1',halfRed:'#AA302D',pink:'#ED8787',star:'#EDD8C1'};
+const SMALL=['ell','halfCream','halfRed','pink'];               // bottom → top inside "small shapes"
+const rgba=(h,a)=>`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`;
+const FRAME_SCALE=5.065, GX=-88, GY=-48, GS=1.4;               // "All shapes 1" offset/scale inside Composition 4
+const SMALL_K=0.75, WAVE_K=0.6;   // less blur on the small shapes and the wave, per Mo;   // the group blur on "small shapes" reads about twice as strong in Cavalry as a per-shape blur of the same amount
+const FRAME_COL='#F2A766';   // deeper orange, sampled from the reference still
+const C5_SCALE=0.9741, C5_BLUR=61.9, C4_BLUR=50, GROUP_BLUR=77;
+
+// ---- canvases ----
+const out=document.getElementById('sc2');
+const gl=out.getContext('webgl',{antialias:false,premultipliedAlpha:false});
+if(!gl)return;
+const g4=document.createElement('canvas'), g4x=g4.getContext('2d');
+const g5=document.createElement('canvas'), g5x=g5.getContext('2d');
+const inner=document.createElement('canvas'), ictx=inner.getContext('2d');
+const shp=document.createElement('canvas'), sctx=shp.getContext('2d');
+const mcv=document.createElement('canvas'), mctx=mcv.getContext('2d');
+const mctx2=document.createElement('canvas').getContext('2d');
+const MASK_SOFT=63, GHOST_FEATHER=104;   // mask feather on "All shapes" and on "All shapes 1"
+let W=1,H=1,fitCss=1,gq=.25,iq=.5;
+
+// Draw one shape as a blurred shadow of itself. T0=[k,cx,cy] maps comp units to canvas; xf = nested transforms.
+let RMX=1,RMY=1,OFFY=0;   // portrait re-composition of positions (1 / 0 = as in Cavalry)
+function blurShape(ctx,T0,xf,k,alpha,sigma,stroke,col){
+  if(alpha<=0.002)return;
+  const kk=T0[0], OFF=ctx.canvas.width+4*sigma*kk+400;
+  ctx.save();
+  ctx.setTransform(kk,0,0,-kk,T0[1]-OFF,T0[2]);
+  for(const t of xf){ctx.translate(t.x,t.y);ctx.rotate(t.r*Math.PI/180);ctx.scale(t.s,t.s);}
+  if(RMX!==1||RMY!==1||OFFY){const m=ctx.getTransform(),wx=(m.e-(T0[1]-OFF))/kk,wy=(T0[2]-m.f)/kk;
+    ctx.setTransform(m.a,m.b,m.c,m.d,m.e+wx*(RMX-1)*kk,m.f-(wy*(RMY-1)+OFFY)*kk);}
+  ctx.shadowOffsetX=OFF;ctx.shadowOffsetY=0;
+  ctx.shadowBlur=Math.max(0,2*sigma*kk);
+  ctx.shadowColor=rgba(col||COL[k],Math.min(1,alpha));
+  ctx.beginPath();GEO[k](ctx);
+  if(stroke){ctx.lineWidth=stroke;ctx.lineCap='butt';ctx.strokeStyle='#000';ctx.stroke();}
+  else{ctx.fillStyle='#000';ctx.fill();}
+  ctx.restore();
+}
+
+// ===================== SC03 data (Cavalry "wave shapes" comp, local frames = SC02 frames) =====================
+// head travel (% of the wave path) and camera pan / zoom, every 4 frames from 196 to 564
+const TRAV_V=[26.684,26.684,26.689,26.704,26.729,26.765,26.81,26.866,26.932,27.008,27.095,27.191,27.297,27.414,27.541,27.678,27.825,27.982,28.147,28.347,28.571,28.806,29.047,29.293,29.542,29.793,30.047,30.302,30.558,30.816,31.075,31.335,31.596,31.857,32.12,32.383,32.646,32.91,33.175,33.44,33.705,33.971,34.237,34.503,34.77,35.038,35.305,35.573,35.841,36.109,36.378,36.647,36.916,37.185,37.454,37.724,37.994,38.264,38.534,38.804,39.075,39.346,39.616,39.887,40.159,40.43,40.701,40.973,41.245,41.516,41.788,42.06,42.333,42.605,42.877,43.15,43.422,43.695,43.968,44.241,44.514,44.787,45.06,45.334,45.607,45.88,46.154,46.428,46.701,46.975,47.249,47.523,47.797];
+const CAM_X=[0,0,-1.05,-4.164,-9.294,-16.389,-25.402,-36.287,-48.999,-63.495,-79.732,-97.668,-117.263,-138.479,-161.275,-185.615,-211.461,-238.779,-267.531,-297.685,-329.204,-362.057,-396.211,-431.633,-468.29,-506.153,-545.19,-585.37,-626.662,-669.038,-712.468,-756.921,-802.37,-848.784,-896.135,-944.394,-993.532,-1043.52,-1094.331,-1145.934,-1198.301,-1251.404,-1305.212,-1359.697,-1414.828,-1470.577,-1526.911,-1583.801,-1641.215,-1699.122,-1757.489,-1816.282,-1875.468,-1935.012,-1994.878,-2055.03,-2115.429,-2176.037,-2236.812,-2297.713,-2358.696,-2419.715,-2480.722,-2541.667,-2602.497,-2663.158,-2723.591,-2783.733,-2843.52,-2902.881,-2961.741,-3020.021,-3077.635,-3134.49,-3190.485,-3245.513,-3299.454,-3352.178,-3403.542,-3453.389,-3501.544,-3547.81,-3591.968,-3633.77,-3672.933,-3709.134,-3741.997,-3771.086,-3795.884,-3815.775,-3830.012,-3837.677,-3838.695];
+const CAM_S=[1,1,1,.999,.999,.998,.996,.994,.992,.989,.985,.981,.976,.97,.963,.955,.946,.935,.923,.91,.895,.878,.862,.845,.828,.812,.796,.782,.768,.756,.745,.734,.724,.715,.707,.699,.692,.685,.679,.673,.667,.662,.657,.653,.649,.645,.641,.638,.635,.632,.629,.626,.624,.621,.619,.617,.615,.614,.612,.611,.609,.608,.607,.606,.605,.604,.603,.603,.602,.601,.601,.601];
+while(CAM_S.length<TRAV_V.length)CAM_S.push(.6);
+const S4=(a,L)=>{const i=Math.max(0,Math.min(a.length-1,(L-196)/4)),i0=Math.floor(i),i1=Math.min(a.length-1,i0+1);return a[i0]+(a[i1]-a[i0])*(i-i0);};
+const trav=L=>L>564?47.797+(L-564)*0.068675:S4(TRAV_V,L);
+// background frame, the two ghost strings ("wave shapes 1"), every 10 frames from 200
+const F3={
+ w:[231,234.3,262.7,309.3,367.1,432.1,500.3,534],h:[120,121.7,136.4,160.6,190.5,224.2,259.6,277],
+ x:[0,0,0,0,0,-16.1,-120.1,-242.4,-371.7,-505.1,-641.2,-779.2,-918.8,-1059.5,-1201.3,-1343.9,-1487.2,-1631.1,-1775.5,-1920.3,-2065.6,-2211.1,-2357,-2503,-2649.3,-2795.6,-2941.8,-3088,-3233.7,-3378.4,-3519.2,-3543],
+ b:[19.1,19.4,24.8,40.6,40.6,40.6,40.6,43,48.7,55,60.7,65,66.6],
+ o16:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22.7,45.5,50],y16:[-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-70,-48.9,51.7,110,139.3,154.5,161.3,163],b16:[22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,22.7,24.1,25.5,26.9,28.3,29.7,31,31.6],
+ o17:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5.6,24.5,43.3,62.1,64],y17:[68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,68.2,57.5,21.8,-13.8,-49.5,-70.8],b17:[101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,101.4,98.8,90.2,81.6,73,64.4,55.8,47.3,38.7,37.8]
+};
+const S10=(a,L)=>{const i=Math.max(0,Math.min(a.length-1,(L-200)/10)),i0=Math.floor(i),i1=Math.min(a.length-1,i0+1);return a[i0]+(a[i1]-a[i0])*(i-i0);};
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const eio=x=>{x=clamp(x);return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;};
+const sstep=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t);};
+const hexv=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)/255);
+const SMALL_B=43*SMALL_K;   // "small shapes" group blur on the string
+// The 24 shapes on the string: 8 originals peel off from their SC02 spot (blend frames), 16 copies are on the wave from the start.
+// off = gap behind the asterisk in % of the path, rs = rig scale (keyed 1 → rs over sk), cs = the copy's own scale, amt = its blur
+const RIG=[
+ {k:'astrix',off:0,rs:.8,sk:[200,319],blk:[235,250],amt:16},
+ {k:'ell',off:-0.71176,rs:.6,sk:[206,289],blk:[238,258],amt:56.2},
+ {k:'clover',off:-1.42352,rs:.95,sk:[212,304],blk:[242,269],amt:24.5},
+ {k:'star',off:-2.13528,rs:.45,sk:[218,298],blk:[237,264],amt:21.3},
+ {k:'wave',off:-2.84704,rs:.8,sk:[224,348],blk:[228,276],amt:46.5},
+ {k:'pink',off:-3.5588,rs:1,sk:[230,275],blk:[233,260]},
+ {k:'halfRed',off:-4.27056,rs:.8,sk:[236,281],blk:[220,263]},
+ {k:'halfCream',off:-4.98232,rs:1,sk:[242,287],blk:[229,267]}];
+const CS={astrix:32.341,ell:1,clover:.73,star:1.236,wave:.567,pink:.919,halfRed:1.704,halfCream:1};
+const RS={astrix:.8,ell:.75,clover:.95,star:.45,wave:.8,pink:1,halfRed:.8,halfCream:1.2};
+const AMT={astrix:15,clover:22.7,star:17.3,wave:46.5};
+['clover','pink','star','ell','wave','halfCream','astrix','halfRed','clover','star','pink','wave','ell','halfCream','halfRed','astrix']
+  .forEach((k,j)=>RIG.push({k,off:-(8+j)*0.71176,rs:RS[k],dup:true,amt:(j===9?65:AMT[k])}));
+const isSmall=k=>SMALL.includes(k);
+const LTOT=WAVE.len;
+// head position along the wave (arc length) — after SC03 settles it keeps drifting forward, slowing to a gentle pace
+const V0=0.068675*LTOT/100*25, VA=95, TAU=1.6;
+function headArc(L,amb){return trav(L)/100*LTOT+(amb>0?VA*amb+(V0-VA)*TAU*(1-Math.exp(-amb/TAU)):0);}
+const HOLD_ARC=trav(SCN.SC3_HOLD)/100*LTOT, HOLD_X=WAVE.at(HOLD_ARC).x;
+function camera(L,amb,arc){
+  const s=S4(CAM_S,L);let x=S4(CAM_X,L);
+  if(amb>0)x-=s*(WAVE.at(arc).x-HOLD_X);       // the camera follows the head, so the string keeps flowing through the frame
+  if(PORT.on)x-=250*sstep(200,290,L);
+  return {x,s};
+}
+const ROT=(k,fr)=>rot(M,k,fr)+(k==='astrix'?(SCN.astSpin||0):0);
+function sc02Sig(k,s,fL){
+  if(isSmall(k))return S2(M.small.b,fL)*SMALL_K;
+  return s.b*s.s*(k==='wave'?WAVE_K:1);
+}
+function stringSig(R,childS,rs){
+  if(R.k==='astrix')return R.amt*rs;
+  if(isSmall(R.k))return R.amt?Math.hypot(R.amt*childS*rs,SMALL_B):SMALL_B;
+  return R.amt*childS*rs;
+}
+// world state of one string shape (comp units, +y up) at SC02/03 local frame L
+function rigState(R,L,fr,arc,cam){
+  const fL=Math.min(L,SCN.SC2_HOLD);
+  if(!R.dup){
+    const s=st(M,R.k,fL,fr), sig0=sc02Sig(R.k,s,fL);
+    if(R.k==='astrix')s.r+=SCN.astSpin||0;
+    if(L<=200)return {x:s.x,y:s.y,s:s.s,r:s.r,o:s.o,sig:sig0};
+    const b=eio((L-R.blk[0])/(R.blk[1]-R.blk[0])), rs=1+(R.rs-1)*eio((L-R.sk[0])/(R.sk[1]-R.sk[0]));
+    const P=WAVE.at(arc+R.off*LTOT/100);
+    const lx=s.x+(P.x-s.x)*b, ly=s.y+(P.y-s.y)*b;
+    return {x:cam.x+cam.s*lx,y:cam.s*ly,s:cam.s*rs*s.s,r:s.r,o:s.o,sig:(sig0+(stringSig(R,s.s,rs)-sig0)*b)*cam.s};
+  }
+  const P=WAVE.at(arc+R.off*LTOT/100), cs=CS[R.k];
+  return {x:cam.x+cam.s*P.x,y:cam.s*P.y,s:cam.s*R.rs*cs,r:ROT(R.k,fr),o:1,sig:stringSig(R,cs,R.rs)*cam.s};
+}
+
+// ---------------- drawing ----------------
+const fcv=document.createElement('canvas'), fctx=fcv.getContext('2d');   // background frame (very soft, low res)
+const gsc=document.createElement('canvas'), gsx=gsc.getContext('2d');   // the two ghost strings (low res)
+
+// Ghost copy of SC02 ("Composition 4/5"), unchanged apart from the rotation clock
+function drawGhost(ctx,f,fr,outer,refBlur){
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+  const k=fitCss*gq, T0=[k,ctx.canvas.width/2,ctx.canvas.height/2];
+  const smallB=S2(G.small.b,f)*GS*SMALL_K;
+  const O={x:0,y:0,r:0,s:outer}, GT={x:GX,y:GY,r:0,s:GS};
+  const sig=b=>Math.hypot(b*outer,refBlur);
+  const one=(key,xf,base,stroke)=>{const s=st(G,key,f,fr);blurShape(ctx,T0,[O,...xf,s],key,s.o,sig(base(s)),stroke);};
+  one('wave',[],s=>Math.hypot(s.b*s.s,GROUP_BLUR));
+  one('clover',[],s=>Math.hypot(s.b*s.s,GROUP_BLUR));
+  for(const key of SMALL) one(key,[GT],()=>Math.hypot(smallB,GROUP_BLUR));
+  one('star',[],s=>Math.hypot(s.b*s.s,GROUP_BLUR));
+  one('astrix',[GT],s=>40*s.s*GS,3);
+  const mw=S2(M.mask.w,f)*FRAME_SCALE*GS*outer*RMX, mh=S2(M.mask.h,f)*FRAME_SCALE*GS*outer*RMY;
+  const mx=GX*outer*RMX, my=GY*outer*RMY;
+  const sg=Math.hypot(GHOST_FEATHER*GS,refBlur)*outer*k, cv=ctx.canvas, OFF=cv.width+4*sg+400;
+  mctx2.canvas.width=cv.width;mctx2.canvas.height=cv.height;
+  mctx2.shadowOffsetX=OFF;mctx2.shadowBlur=2*sg;mctx2.shadowColor='#000';mctx2.fillStyle='#000';
+  mctx2.beginPath();mctx2.rect(T0[1]+(mx-mw/2)*k-OFF,T0[2]-(my+mh/2)*k,mw*k,mh*k);mctx2.fill();
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalCompositeOperation='destination-in';ctx.drawImage(mctx2.canvas,0,0);ctx.restore();
+}
+
+function drawFrame(L){
+  fctx.setTransform(1,0,0,1,0,0);fctx.clearRect(0,0,fcv.width,fcv.height);
+  const k=fitCss*gq, cx=fcv.width/2, cy=fcv.height/2;
+  const fL=Math.min(L,SCN.SC2_HOLD);
+  let fw,fh,fb,fx=0;
+  if(L<=200){fw=S2(M.frame.w,fL);fh=S2(M.frame.h,fL);fb=S2(M.frame.b,fL);}
+  else{fw=S10(F3.w,L);fh=S10(F3.h,L);fb=S10(F3.b,L);fx=S10(F3.x,L);}
+  fw*=FRAME_SCALE*RMX;fh*=FRAME_SCALE*RMY;fb*=FRAME_SCALE;fx*=RMX;
+  const OFF=fcv.width+4*fb*k+400;
+  fctx.shadowOffsetX=OFF;fctx.shadowBlur=2*fb*k;fctx.shadowColor=FRAME_COL;fctx.fillStyle='#000';
+  fctx.beginPath();fctx.rect(cx+(fx-fw/2)*k-OFF,cy-fh/2*k,fw*k,fh*k);fctx.fill();
+}
+
+// Blurred single-colour copies of the string scattered behind it: smaller, softer and slower ones read as further away.
+// Each one flows along its own wave and drifts with the camera at its own depth (parallax); endless in both directions.
+const GL=[
+ {y:-330,r:16,k:.8,c:'#ED8787',b:20,o:.5,par:.45,v:30,t0:330},
+ {y:300,r:-13,k:.7,c:'#DA8D46',b:23,o:.46,par:.4,v:22,t0:340},
+ {y:470,r:7,k:.45,c:'#AA302D',b:16,o:.5,par:.2,v:40,t0:350},
+ {y:-470,r:-22,k:.5,c:'#E57249',b:19,o:.4,par:.25,v:-26,t0:360},
+ {y:380,r:-5,k:1.2,c:'#ED8787',b:52,o:.26,par:.7,v:15,t0:370},
+ {y:-430,r:30,k:.36,c:'#15806E',b:14,o:.38,par:.12,v:35,t0:380},
+ {y:560,r:-26,k:.55,c:'#DA8D46',b:28,o:.32,par:.3,v:-18,t0:390}];
+const GAP=0.71176/100*LTOT;
+const Q12={k:-1,L:0,fr:0,amb:0,spin:0};
+// Each one starts exactly on the main string — same shapes at the same places, moving with it — and invisible.
+// As it parts (own height, angle, depth, and its own flow along the wave) it fades in, then settles further away.
+function drawGhostStrings(L,fr,amb,cam,arc){
+  gsx.setTransform(1,0,0,1,0,0);gsx.clearRect(0,0,gsc.width,gsc.height);
+  if(L<320)return;
+  const gt=L/25+amb;
+  const k0=fitCss*gq, T0=[k0,gsc.width/2,gsc.height/2], fade=1-sstep(.05,.45,SCN.p4);
+  GL.forEach((g,gi)=>{
+    const u=Math.max(0,L-g.t0)+amb*25, d=1-Math.exp(-u/230), dd=d*d*(3-2*d);
+    const op=g.o*dd*fade;if(op<=0.003)return;
+    const par=1+(g.par-1)*dd, gk=cam.s+(g.k-cam.s)*dd;
+    const ox=cam.x*par+80*Math.sin(gt*.05+gi)*dd, oy=g.y*(PORT.on?1.9:1)*dd+14*Math.sin(gt*.13+gi*1.7)*dd;
+    const rd=g.r*dd, rr=rd*Math.PI/180, c=Math.cos(rr), sn=Math.sin(rr);
+    const lx=((0-ox)*c+(0-oy)*sn)/gk;
+    const base=arc+g.v*(u/25)*dd, sc=WAVE.arcAtX(lx);        // shape j sits where the main string's shape j sits, plus its own drift
+    const n=Math.ceil(1500/(GAP*gk))+1, j0=Math.round((base-sc)/GAP);
+    const T={x:ox,y:oy,r:rd,s:gk}, bl=g.b*dd;
+    for(let j=j0-n;j<=j0+n;j++){
+      const sArc=base-j*GAP;if(sArc<0||sArc>LTOT)continue;
+      const R=RIG[((j%24)+24)%24], P=WAVE.at(sArc), cs=CS[R.k];
+      const wx=ox+gk*(c*P.x-sn*P.y), wy=oy+gk*(sn*P.x+c*P.y);
+      if(Math.abs(wx)>1250||Math.abs(wy)>850)continue;
+      // copies of the 24 string shapes come first; the endless continuation only once the copy has clearly parted
+      const oj=(j>=0&&j<24)?op:op*sstep(.45,.9,dd);if(oj<=0.003)continue;
+      blurShape(gsx,T0,[T,{x:P.x,y:P.y,r:ROT(R.k,fr),s:R.rs*cs}],R.k,oj,Math.hypot(stringSig(R,cs,R.rs)*gk,bl),R.k==='astrix'?1.8:0,g.c);
+    }
+  });
+}
+
+function drawShapes(L,fr,arc,cam){
+  ictx.setTransform(1,0,0,1,0,0);ictx.clearRect(0,0,inner.width,inner.height);
+  const ki=fitCss*iq, Ti=[ki,inner.width/2,inner.height/2];
+  const S=RIG.map(R=>({R,s:rigState(R,L,fr,arc,cam)}));
+  const fade=1-sstep(.05,.45,SCN.p4);
+  const one=(ctx,e)=>{const s=e.s, o=(e.R.dup||e.R.k!=='astrix')?s.o*fade:s.o;blurShape(ctx,Ti,[s],e.R.k,o,Math.max(.3,s.sig),e.R.k==='astrix'?1.8:0);};
+  const orig=k=>S.find(e=>!e.R.dup&&e.R.k===k);
+  // asterisk under the framed shapes, as in SC02
+  one(ictx,orig('astrix'));
+  // "All shapes": wave, clover, small shapes (+ their copies), kept inside the Blur mask until it opens up at frame 200
+  const grow=1+0.004929*Math.pow(Math.max(0,L-200),2);
+  const clip=grow<160;
+  const tctx=clip?sctx:ictx;
+  if(clip){sctx.setTransform(1,0,0,1,0,0);sctx.clearRect(0,0,shp.width,shp.height);}
+  const group=['wave','clover'];
+  for(const k of group)one(tctx,orig(k));
+  for(const k of SMALL)one(tctx,orig(k));
+  for(const e of S)if(e.R.dup&&(group.includes(e.R.k)||isSmall(e.R.k)))one(tctx,e);
+  if(clip){
+    const fL=q12(Math.min(L,SCN.SC2_HOLD));
+    const cs=L>200?cam.s:1, cx=L>200?cam.x:0;
+    const mw=S2(M.mask.w,fL)*FRAME_SCALE*grow*cs*RMX, mh=S2(M.mask.h,fL)*FRAME_SCALE*grow*cs*RMY;
+    const sg=MASK_SOFT*cs*ki, OFF=shp.width+4*sg+400;
+    mctx.setTransform(1,0,0,1,0,0);mctx.clearRect(0,0,mcv.width,mcv.height);
+    mctx.shadowOffsetX=OFF;mctx.shadowBlur=2*sg;mctx.shadowColor='#000';mctx.fillStyle='#000';
+    mctx.beginPath();mctx.rect(Ti[1]+(cx-mw/2)*ki-OFF,Ti[2]-mh/2*ki,mw*ki,mh*ki);mctx.fill();
+    sctx.save();sctx.globalCompositeOperation='destination-in';sctx.drawImage(mcv,0,0);sctx.restore();
+    ictx.drawImage(shp,0,0);
+  }
+  one(ictx,orig('star'));
+  for(const e of S)if(e.R.dup&&(e.R.k==='star'||e.R.k==='astrix'))one(ictx,e);
+  return orig('astrix').s;
+}
+
+// ---- WebGL compositor ----
+// The mouse bends the ghost copies; the pixel grid is laid on after the bend, so the grid itself never warps.
+// For SC04 the whole picture is magnified around the head asterisk (uZ*), the grain stays put.
+const vs='attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0.,1.);}';
+const fs=`
+precision highp float;
+varying vec2 v;
+uniform sampler2D u4,u5,uF,uS,uI;
+uniform vec2 uRes; uniform float uFit;
+uniform vec2 uM; uniform float uMs; uniform vec2 uMv; uniform float uT;
+uniform float uCell, uSeed, uGA;
+uniform vec3 uBg;
+uniform vec2 uZA, uZH; uniform float uZk;
+float hash(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+vec2 toUV(vec2 c){return (c*uFit+.5*uRes)/uRes;}
+vec4 A(vec2 c){return texture2D(u4,toUV(c));}
+vec4 B(vec2 c){return texture2D(u5,toUV(c));}
+const float NOISE_K=1.0, SAT=1.2;
+float infl(vec2 x){vec2 dm=x-uM;return exp(-dot(dm,dm)/(2.*230.*230.))*uMs;}
+vec2 warp(vec2 x){
+  vec2 dm=x-uM; float inf=infl(x);
+  float ang=.12*inf;
+  return uM+mat2(cos(ang),-sin(ang),sin(ang),cos(ang))*dm*(1.-.04*inf)-uMv*inf*.55;
+}
+float grain(vec2 cp){
+  float r=hash(cp+vec2(mod(uSeed*37.,1013.),mod(uSeed*71.,1019.)));
+  return r<0.93?0.0:(r<0.957?(r-0.93)/0.027:1.0);
+}
+void main(){
+  vec2 frag=v*uRes;
+  vec2 p0=(frag-.5*uRes)/uFit;                        // screen, comp units, +y up
+  vec2 p=uZH+(p0-uZA)/uZk;                            // scene point under this pixel (SC04 zoom)
+  float inf=infl(p);
+  vec2 q=warp(p);
+  vec3 col=uBg;
+  if(uGA>0.001){
+    vec4 g=A(q);
+    if(inf>.01){
+      float rb=22.*inf; vec4 acc=g;
+      for(int i=0;i<6;i++){float a=float(i)*1.0472+uT*.3;acc+=A(q+rb*vec2(cos(a),sin(a)));}
+      g=acc/7.;
+    }
+    col=col*(1.-.44*uGA*g.a)+.44*uGA*g.rgb;
+    float circ=1.-smoothstep(293.-75.5,293.+75.5,length(p));
+    float matte=1.-.392*circ;
+    vec2 cc=(floor(p/uCell)+.5)*uCell;
+    vec4 px=(B(warp(cc+vec2(-.25,-.25)*uCell))+B(warp(cc+vec2(.25,-.25)*uCell))+B(warp(cc+vec2(-.25,.25)*uCell))+B(warp(cc+vec2(.25,.25)*uCell)))*.25;
+    vec4 l5=mix(B(q),px,matte);
+    col=col*(1.-.6*uGA*l5.a)+.6*uGA*l5.rgb;
+  }
+  vec4 fr=texture2D(uF,toUV(p)); col=col*(1.-fr.a)+fr.rgb;
+  vec4 gs=texture2D(uS,toUV(p)); col=col*(1.-gs.a)+gs.rgb;
+  vec4 fi=texture2D(uI,toUV(p)); col=col*(1.-fi.a)+fi.rgb;
+  float s=grain(floor(p0));
+  col=mix(col,sqrt(col),s*NOISE_K);
+  float lum=dot(col,vec3(.2126,.7152,.0722));
+  col=clamp(mix(vec3(lum),col,SAT),0.,1.);
+  gl_FragColor=vec4(col,1.);
+}`;
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);
+  if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+const prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));
+gl.linkProgram(prog);gl.useProgram(prog);
+gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const U={};['u4','u5','uF','uS','uI','uRes','uFit','uM','uMs','uMv','uT','uCell','uSeed','uGA','uBg','uZA','uZH','uZk'].forEach(k=>U[k]=gl.getUniformLocation(prog,k));
+function mkTex(unit){const t=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);return t;}
+const tex4=mkTex(0), tex5=mkTex(1), texF=mkTex(2), texS=mkTex(3), texI=mkTex(4);
+gl.uniform1i(U.u4,0);gl.uniform1i(U.u5,1);gl.uniform1i(U.uF,2);gl.uniform1i(U.uS,3);gl.uniform1i(U.uI,4);
+gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,true);
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+
+function resize(){
+  const d=Math.min(devicePixelRatio||1,2);
+  W=innerWidth;H=innerHeight;
+  out.width=Math.round(W*d);out.height=Math.round(H*d);
+  gl.viewport(0,0,out.width,out.height);
+  fitCss=FITK(W,H);
+  iq=Math.min(1,1100/Math.max(W,H)); gq=iq*.5;
+  inner.width=Math.max(2,Math.round(W*iq));inner.height=Math.max(2,Math.round(H*iq));shp.width=mcv.width=inner.width;shp.height=mcv.height=inner.height;
+  g4.width=g5.width=fcv.width=gsc.width=Math.max(2,Math.round(W*gq));g4.height=g5.height=fcv.height=gsc.height=Math.max(2,Math.round(H*gq));
+}
+addEventListener('resize',resize);resize();
+
+let mouse={x:0,y:0,tx:0,ty:0,vx:0,vy:0,s:0,act:0,seen:false};
+SCN.mouse={x:0,y:0,s:0,vx:0,vy:0};
+addEventListener('pointermove',e=>{
+  const cx=(e.clientX-W/2)/fitCss, cy=-(e.clientY-H/2)/fitCss;
+  if(mouse.seen){mouse.vx+=(cx-mouse.tx);mouse.vy+=(cy-mouse.ty);}else{mouse.x=cx;mouse.y=cy;}
+  mouse.tx=cx;mouse.ty=cy;mouse.seen=true;mouse.act=1;
+},{passive:true});
+document.documentElement.addEventListener('pointerleave',()=>{mouse.act=0;});
+
+function upload(tex,unit,cv){gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,cv);}
+const CREAM=hexv('#EDD8C1'), MAROON=hexv('#3F1411');
+const P4=[-623.95,-285.47], R4=7*44.7074;   // the SC04 asterisk at its frame 0 (Cavalry): position and arm length (7 × scale)
+const easeZ=x=>{x=clamp(x);return x*x*x*(x*(x*6-15)+10);};
+let t=0, clock=0;
+function render(dt){
+  t+=dt; clock+=dt;
+  mouse.x+=(mouse.tx-mouse.x)*(1-Math.exp(-dt*8));mouse.y+=(mouse.ty-mouse.y)*(1-Math.exp(-dt*8));
+  const speed=Math.hypot(mouse.vx,mouse.vy);
+  const want=mouse.act*clamp(.35+speed/60);
+  mouse.s+=(want-mouse.s)*(1-Math.exp(-dt*(want>mouse.s?6:1.6)));
+  const dvx=clamp(mouse.vx,-40,40), dvy=clamp(mouse.vy,-40,40);
+  mouse.vx*=Math.exp(-dt*5);mouse.vy*=Math.exp(-dt*5);
+  Object.assign(SCN.mouse,{x:mouse.x,y:mouse.y,s:mouse.s,vx:dvx,vy:dvy});
+  const alpha=SCN.sc2Alpha;
+  SCN.spinRaw=(SCN.spinRaw||0)+dt*25*0.35*sstep(250,300,SCN.L);   // slow looping turn of the asterisk on the string
+  // SC03 runs at 12 fps (shapes, camera, ghost strings, text): values are sampled on 12 fps ticks and held
+  const k12=Math.floor(SCN.t*12);
+  if(k12!==Q12.k){Q12.k=k12;Q12.L=SCN.L;Q12.fr=SCN.fr;Q12.amb=SCN.amb;Q12.spin=SCN.spinRaw;}
+  const sc3=SCN.L>SCN.SC2_HOLD+.01&&Q12.L>SCN.SC2_HOLD;
+  const L=sc3?Q12.L:SCN.L, fr=sc3?Q12.fr:SCN.fr, amb=sc3?Q12.amb:SCN.amb;
+  SCN.astSpin=sc3?Q12.spin:SCN.spinRaw;SCN.Lq=L;SCN.ambq=amb;
+  // string, camera and head, shared with the text overlay and SC04
+  {const s3=sstep(205,285,L);RMX=PORT.ax+(1-PORT.ax)*s3;RMY=PORT.ay+(1-PORT.ay)*s3;OFFY=PORT.on?-200*s3:0;SCN.offY=OFFY;}
+  const arc=headArc(L,amb), cam=camera(L,amb,arc);
+  const hp=WAVE.at(arc), head=rigState(RIG[0],L,fr,arc,cam);
+  SCN.cam=cam;SCN.arc=arc;SCN.astRot=head.r;
+  // SC04 zoom: magnify around the head asterisk until it is the big asterisk of SC04
+  const e=easeZ(SCN.p4), kEnd=R4/(7*Math.max(.01,head.s));
+  const P4p=PORT.on?[P4[0]*PORT.ax,P4[1]*PORT.ay]:P4;
+  const zk=Math.exp(Math.log(kEnd)*e), hy=head.y+OFFY, zH=[head.x,hy], zA=[head.x+(P4p[0]-head.x)*e,hy+(P4p[1]-hy)*e];
+  SCN.zoom={k:zk,H:zH,A:zA};SCN.headS=head.s*zk;
+  const vis=SCN.p4>=1?0:alpha;
+  out.style.opacity=vis.toFixed(3);
+  if(vis<=0.001)return;
+  const fL=Math.min(L,SCN.SC2_HOLD);
+  const ga=1-sstep(230,300,L);
+  if(ga>0.001){drawGhost(g4x,fL,fr,1,C4_BLUR); drawGhost(g5x,fL,fr,C5_SCALE,C5_BLUR); upload(tex4,0,g4);upload(tex5,1,g5);}
+  drawFrame(q12(L)); upload(texF,2,fcv);
+  drawGhostStrings(L,fr,amb,cam,arc); upload(texS,3,gsc);
+  drawShapes(L,fr,arc,cam); upload(texI,4,inner);
+  const bk=clamp((L-263)/27), bg=CREAM.map((c,i)=>c+(MAROON[i]-c)*bk);
+  const fitPx=FITK(out.width,out.height);
+  gl.uniform2f(U.uRes,out.width,out.height);gl.uniform1f(U.uFit,fitPx);
+  gl.uniform2f(U.uM,mouse.x,mouse.y);gl.uniform1f(U.uMs,mouse.s);gl.uniform2f(U.uMv,dvx,dvy);gl.uniform1f(U.uT,t);
+  gl.uniform1f(U.uCell,60);gl.uniform1f(U.uGA,ga);gl.uniform3fv(U.uBg,bg);
+  gl.uniform2f(U.uZA,zA[0],zA[1]);gl.uniform2f(U.uZH,zH[0],zH[1]);gl.uniform1f(U.uZk,zk);
+  gl.uniform1f(U.uSeed,Math.floor(clock*SCN.FPS/4)%997);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+}
+
+SCN.renderers.push(render);
+})();
+</script>
+<script>
+/* ============================== SC04 — from the Cavalry comp "SC04" ============================== */
+(() => {
+
+/* SC04 — built from the Cavalry comp "SC04" (frames 0–500, 25 fps).
+   Every animated value below was sampled frame by frame from Cavalry, including the background shapes, which are
+   drawn live here (no image files).
+   Flow: plays in; from frame 80 (part 1 settled) "Scroll" shows and a click / scroll plays part 2; rests at 345;
+   click again replays. Text steps at 12 fps. The pixel grid stays straight: the mouse swirl and the right-to-left
+   blurred shift of the background (frames 187–313) happen underneath it.
+   The asterisk and star keep turning while resting (same rhythm as in Cavalry: asterisk +27° every 33 frames,
+   star −30° every 52 frames). */
+const K={"t27op":[288,[0,25.93,38.1,47.11,54.37,60.43,65.62,70.13,74.07,77.56,80.65,83.39,85.83,88,89.92,91.63,93.13,94.46,95.61,96.6,97.45,98.17,98.75,99.22,99.57,99.81,99.95,100]],"t27x":[0,[493.28]],"t27y":[288,[-342.36,-279.36,-248.09,-224.11,-204.21,-187.04,-171.89,-158.31,-146.03,-134.81,-124.52,-115.01,-106.21,-98.03,-90.41,-83.3,-76.65,-70.43,-64.59,-59.12,-53.99,-49.17,-44.65,-40.4,-36.42,-32.68,-29.18,-25.89,-22.82,-19.96,-17.28,-14.79,-12.47,-10.32,-8.33,-6.5,-4.81,-3.27,-1.87,-0.6,0.53,1.55,2.44,3.21,3.88,4.43,4.87,5.21,5.45,5.6,5.64]],"sm14y":[288,[-438,-356.76,-316.57,-285.81,-260.31,-238.35,-219,-201.7,-186.05,-171.79,-158.72,-146.68,-135.54,-125.21,-115.6,-106.65,-98.29,-90.49,-83.19,-76.36,-69.97,-63.99,-58.38,-53.14,-48.23,-43.65,-39.36,-35.36,-31.64,-28.18,-24.96,-21.98,-19.23,-16.7,-14.37,-12.25,-10.32,-8.57,-7.01,-5.61,-4.39,-3.33,-2.42,-1.66,-1.05,-0.59,-0.26,-0.06,0]],"b108":[287,[15,11.81,10.26,9.09,8.13,7.31,6.59,5.96,5.39,4.88,4.42,3.99,3.61,3.25,2.93,2.63,2.35,2.1,1.87,1.65,1.46,1.27,1.11,0.96,0.82,0.7,0.59,0.48,0.39,0.31,0.25,0.19,0.13,0.09,0.06,0.03,0.01,0]],"vx4":[289,[44.1,32.42,26.96,22.92,19.68,16.98,14.68,12.68,10.94,9.41,8.05,6.86,5.79,4.86,4.03,3.3,2.66,2.1,1.63,1.22,0.88,0.6,0.37,0.21,0.09,0.02,0]],"t26op":[257,[0,26.49,38.88,48.03,55.37,61.49,66.71,71.24,75.19,78.67,81.74,84.45,86.86,88.99,90.87,92.52,93.97,95.23,96.31,97.24,98.01,98.65,99.15,99.53,99.8,99.95,100]],"t26x":[257,[1350.97,1237.06,1179.16,1134.13,1096.28,1063.26,1033.81,1007.15,982.75,960.25,939.36,919.88,901.63,884.48,868.33,853.06,838.62,824.92,811.91,799.55,787.77,776.56,765.87,755.66,745.92,736.61,727.72,719.22,711.09,703.31,695.88,688.77,681.96,675.46,669.24,663.29,657.61,652.18,647,642.05,637.33,632.84,628.55,624.47,620.59,616.91,613.42,610.1,606.97,604.01,601.21,598.59,596.12,593.8,591.64,589.62,587.75,586.02,584.43,582.97,581.65,580.45,579.38,578.43,577.6,576.89,576.29,575.81,575.44,575.18,575.02,574.97]],"sm13op":[257,[0,44.63,62.6,74.44,82.87,88.99,93.41,96.51,98.53,99.65,100]],"sm13x":[0,[0]],"sm13y":[258,[-116,-92.69,-65.96,-49.13,-37.2,-28.21,-21.23,-15.72,-11.36,-7.91,-5.24,-3.2,-1.73,-0.74,-0.18,0]],"b106":[259,[24.12,23.54,22.56,21.38,20.11,18.8,17.49,16.19,14.93,13.71,12.53,11.41,10.34,9.33,8.37,7.46,6.61,5.82,5.08,4.4,3.77,3.19,2.66,2.18,1.76,1.38,1.05,0.77,0.53,0.34,0.19,0.08,0.02,0]],"g86y":[250,[-822.73,-819.86,-809.55,-789.57,-760.65,-727.71,-695.54,-666.16,-639.82,-616.24,-595.01,-575.78,-558.25,-542.17,-527.35,-513.63,-500.88,-489,-477.88,-467.46,-457.68,-448.47,-439.79,-431.59,-423.85,-416.52,-409.59,-403.02,-396.78,-390.87,-385.26,-379.93,-374.87,-370.07,-365.51,-361.18,-357.07,-353.16,-349.46,-345.95,-342.62,-339.46,-336.47,-333.65,-330.98,-328.46,-326.09,-323.85,-321.75,-319.78,-317.94,-316.22,-314.61,-313.12,-311.74,-310.47,-309.31,-308.24,-307.27,-306.4,-305.62,-304.94,-304.34,-303.83,-303.4,-303.05,-302.79,-302.6,-302.49,-302.45]],"g86sx":[250,[1.34,1.35,1.35,1.37,1.39,1.41,1.43,1.46,1.47,1.49,1.51,1.52,1.53,1.54,1.55,1.56,1.57,1.58,1.59,1.6,1.6,1.61,1.62,1.62,1.63,1.63,1.64,1.64,1.65,1.65,1.66,1.66,1.66,1.67,1.67,1.67,1.68,1.68,1.68,1.68,1.69,1.69,1.69,1.69,1.69,1.7,1.7,1.7,1.7,1.7,1.7,1.7,1.71]],"g86sy":[252,[0.94,0.95,0.97,0.99,1,1.02,1.03,1.05,1.06,1.07,1.08,1.09,1.09,1.1,1.11,1.12,1.12,1.13,1.13,1.14,1.14,1.15,1.15,1.15,1.16,1.16,1.16,1.17,1.17,1.17,1.18,1.18,1.18,1.18,1.19,1.19,1.19,1.19,1.19,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.21,1.22]],"b102":[250,[56.9,56.72,56.08,54.86,52.98,50.63,48.09,45.63,43.34,41.24,39.34,37.6,36.01,34.54,33.18,31.92,30.75,29.65,28.62,27.65,26.73,25.87,25.05,24.28,23.54,22.84,22.18,21.54,20.94,20.36,19.81,19.29,18.78,18.3,17.84,17.4,16.98,16.58,16.19,15.82,15.47,15.13,14.81,14.5,14.2,13.92,13.65,13.39,13.14,12.9,12.67,12.46,12.25,12.06,11.87,11.69,11.52,11.36,11.21,11.07,10.93,10.8,10.68,10.57,10.46,10.36,10.27,10.19,10.11,10.03,9.97,9.91,9.85,9.8,9.76,9.72,9.69,9.66,9.64,9.62,9.61,9.6]],"g85op":[201,[100,99.98,99.91,99.8,99.63,99.42,99.15,98.83,98.45,98.01,97.51,96.95,96.31,95.61,94.83,93.97,93.03,91.99,90.87,89.64,88.31,86.86,85.29,83.59,81.74,79.73,77.56,75.19,72.61,69.8,66.71,63.32,59.56,55.37,50.64,45.22,38.88,31.15,20.96,0]],"g85y":[201,[0,0.08,0.32,0.73,1.32,2.09,3.05,4.2,5.56,7.13,8.93,10.96,13.23,15.76,18.56,21.65,25.04,28.74,32.79,37.19,41.98,47.17,52.81,58.93,65.56,72.75,80.57,89.06,98.31,108.42,119.49,131.68,145.18,160.24,177.22,196.66,219.43,247.16,283.76,359]],"b101":[197,[0,0.01,0.06,0.13,0.24,0.38,0.56,0.77,1.02,1.31,1.64,2.02,2.45,2.92,3.44,4.02,4.66,5.36,6.13,6.97,7.89,8.9,9.99,11.19,12.5,13.93,15.51,17.24,19.15,21.28,23.66,26.36,29.46,33.1,37.56,43.47,55.7]],"vx3":[43,[18,17.78,17.14,16.17,14.97,13.65,12.29,10.95,9.67,8.46,7.34,6.31,5.38,4.54,3.78,3.11,2.52,2,1.54,1.16,0.83,0.57,0.36,0.2,0.09,0.02,0]],"sm9op":[43,[0,44.63,62.6,74.44,82.87,88.99,93.41,96.51,98.53,99.65,100]],"sm9x":[44,[131,83.85,63.36,49,38.05,29.4,22.45,16.82,12.27,8.63,5.75,3.54,1.92,0.83,0.2,0]],"t22op":[43,[0,26.49,38.88,48.03,55.37,61.49,66.71,71.24,75.19,78.67,81.74,84.45,86.86,88.99,90.87,92.52,93.97,95.23,96.31,97.24,98.01,98.65,99.15,99.53,99.8,99.95,100]],"t22x":[43,[964.97,914.74,890.54,872.32,857.43,844.79,833.81,824.12,815.49,807.73,800.73,794.37,788.6,783.33,778.52,774.13,770.12,766.46,763.11,760.07,757.3,754.79,752.52,750.48,748.65,747.03,745.6,744.35,743.27,742.36,741.61,741,740.54,740.22,740.03,739.97]],"b97":[45,[24.12,23.28,20.9,17.28,13.85,11.12,8.96,7.24,5.84,4.68,3.73,2.93,2.27,1.71,1.26,0.89,0.6,0.37,0.2,0.09,0.02,0]],"sm8op":[0,[0,44.63,62.6,74.44,82.87,88.99,93.41,96.51,98.53,99.65,100]],"sm8x":[1,[131,83.85,63.36,49,38.05,29.4,22.45,16.82,12.27,8.63,5.75,3.54,1.92,0.83,0.2,0]],"t21op":[0,[0,26.49,38.88,48.03,55.37,61.49,66.71,71.24,75.19,78.67,81.74,84.45,86.86,88.99,90.87,92.52,93.97,95.23,96.31,97.24,98.01,98.65,99.15,99.53,99.8,99.95,100]],"t21ws":[21,[72,55.65,47.8,41.9,37.08,33,29.45,26.33,23.56,21.07,18.82,16.79,14.95,13.27,11.74,10.35,9.08,7.93,6.88,5.93,5.06,4.29,3.59,2.96,2.41,1.92,1.49,1.12,0.81,0.56,0.35,0.19,0.09,0.02,0]],"t21x":[0,[1350.97,1254.23,1205.07,1166.82,1134.68,1106.64,1081.63,1058.99,1038.27,1019.16,1001.42,984.88,969.38,954.82,941.1,928.13,915.86,904.23,893.19,882.68,872.69,863.16,854.08,845.42,837.14,829.24,821.69,814.47,807.56,800.96,794.65,788.61,782.83,777.31,772.03,766.98,762.15,757.54,753.14,748.94,744.93,741.11,737.47,734.01,730.72,727.59,724.62,721.81,719.14,716.63,714.26,712.02,709.93,707.96,706.13,704.41,702.83,701.36,700.01,698.77,697.64,696.62,695.71,694.91,694.2,693.6,693.09,692.68,692.37,692.15,692.01,691.97]],"t21s":[0,[1]],"b96":[2,[24.12,23.71,23.2,22.65,22.09,21.51,20.92,20.34,19.75,19.16,18.57,17.99,17.4,16.82,16.25,15.68,15.11,14.54,13.98,13.43,12.88,12.34,11.8,11.27,10.74,10.23,9.71,9.21,8.71,8.23,7.75,7.28,6.81,6.36,5.92,5.48,5.06,4.65,4.25,3.86,3.49,3.13,2.78,2.45,2.13,1.83,1.55,1.28,1.04,0.82,0.61,0.44,0.29,0.17,0.08,0.02,0]],"stOp":[0,[100]],"stX":[44,[622.68,622.08,620.2,616.95,612.39,606.7,600.16,593.09,585.79,578.45,571.22,564.18,557.4,550.88,544.63,538.65,532.93,527.46,522.23,517.21,512.41,507.8,503.38,499.13,495.05,491.13,487.35,483.7,480.19,476.81,473.54,470.39,467.34,464.4,461.55,458.8,456.14,453.56,451.06,448.64,446.3,444.03,441.84,439.7,437.64,435.64,433.69,431.81,429.98,428.21,426.5,424.83,423.21,421.65,420.13,418.65,417.22,415.83,414.49,413.19,411.92,410.7,409.51,408.36,407.25,406.17,405.13,404.12,403.15,402.2,401.29,400.41,399.55,398.73,397.94,397.17,396.44,395.73,395.04,394.38,393.75,393.14,392.56,392,391.47,390.96,390.47,390,389.56,389.14,388.74,388.36,388,387.66,387.34,387.04,386.76,386.5,386.26,386.03,385.83,385.64,385.47,385.32,385.18,385.06,384.96,384.87,384.8,384.75,384.71,384.69,384.68,384.5,383.95,382.98,381.56,379.66,377.23,374.23,370.65,366.49,361.77,356.63,351.27,346.02,341.29,337.49,334.94,333.77,333.98,335.47,338.1,341.71,346.16,351.32,357.09,363.37,370.11,377.23,384.68,384.91,385.19,385.51,385.88,386.3,386.77,387.3,387.87,388.5,389.19,389.93,390.73,391.59,392.5,393.48,394.52,395.63,397.25,399.18,401.2,403.32,405.53,408.19,411.07,414.06,417.41,421.04,424.89,429.14,433.66,438.54,443.85,449.52,455.63,462.21,469.3,476.94,485.15,494.01,503.55,513.83,524.88,536.76,549.48,563.07,577.5,592.75,608.74,625.33,642.41,659.77,677.23,694.61,711.73,728.44,744.56,760.09,774.85,788.9,802.2,814.75,826.57,837.74,848.14,857.89,867.18,875.65,883.81,891.29,898.32,905.13,911.16,916.89,922.39,927.68,932.21,936.51,940.61,944.52,948.23,951.75,954.69,957.39,959.93,962.3,964.51,966.56,968.46,970.2,971.79,973.24,974.55,975.71,976.74,977.64,978.4,979.04,979.55,979.94,980.22,980.38,980.43]],"stY":[184,[-43.28,-42.4,-41.42,-40.34,-39.18,-37.95,-36.66,-35.32,-33.92,-32.48,-31,-29.48,-27.92,-26.32,-24.69,-23.02,-21.32,-19.58,-17.13,-14.35,-11.58,-8.81,-6.02,-2.79,0.58,3.95,7.6,11.43,15.37,19.59,23.95,28.52,33.35,38.37,43.61,49.09,54.81,60.75,66.92,73.31,79.89,86.64,93.51,100.45,107.41,114.3,121.05,127.56,133.77,139.58,144.94,149.81,154.17,158.01,161.36,164.24,166.69,168.77,170.5,171.95,173.15,174.13,174.93,175.58,176.09,176.49,176.81,177.03,177.2,177.3,177.35,177.36,177.34,177.28,177.2,177.09,176.97,176.84,176.69,176.52,176.34,176.14,175.96,175.77,175.58,175.38,175.18,174.98,174.77,174.56,174.36,174.15,173.95,173.76,173.57,173.4,173.24,173.09,172.97,172.87,172.79,172.75,172.73]],"stR":[44,[0,0.06,-0.06,-0.28,-0.6,-0.98,-1.41,-1.88,-2.39,-2.94,-3.51,-4.1,-4.71,-5.34,-5.98,-6.64,-7.31,-7.99,-8.67,-9.37,-10.07,-10.78,-11.5,-12.22,-12.94,-13.67,-14.39,-15.12,-15.85,-16.58,-17.31,-18.03,-18.76,-19.47,-20.19,-20.9,-21.6,-22.3,-22.99,-23.67,-24.33,-24.99,-25.62,-26.24,-26.84,-27.41,-27.95,-28.46,-28.92,-29.33,-29.67,-29.9,-30,-29.94,-30.06,-30.28,-30.6,-30.98,-31.41,-31.88,-32.39,-32.94,-33.51,-34.1,-34.71,-35.34,-35.98,-36.64,-37.31,-37.99,-38.67,-39.37,-40.07,-40.78,-41.5,-42.22,-42.94,-43.67,-44.39,-45.12,-45.85,-46.58,-47.31,-48.03,-48.76,-49.47,-50.19,-50.9,-51.6,-52.3,-52.99,-53.67,-54.33,-54.99,-55.62,-56.24,-56.84,-57.41,-57.95,-58.46,-58.92,-59.33,-59.67,-59.9,-60,-59.94,-60.06,-60.28,-60.6,-60.98,-61.41,-61.88,-62.39,-62.94,-63.51,-64.1,-64.71,-65.34,-65.98,-66.64,-67.31,-67.99,-68.67,-69.37,-70.07,-70.78,-71.5,-72.22,-72.94,-73.67,-74.39,-75.12,-75.85,-76.58,-77.31,-78.03,-78.76,-79.47,-80.19,-80.9,-81.6,-82.3,-82.99,-83.67,-84.33,-84.99,-85.62,-86.24,-86.84,-87.41,-87.95,-88.46,-88.92,-89.33,-89.67,-89.9,-90,-89.94,-90.06,-90.28,-90.6,-90.98,-91.41,-91.88,-92.39,-92.94,-93.51,-94.1,-94.71,-95.34,-95.98,-96.64,-97.31,-97.99,-98.67,-99.37,-100.07,-100.78,-101.5,-102.22,-102.94,-103.67,-104.39,-105.12,-105.85,-106.58,-107.31,-108.03,-108.76,-109.47,-110.19,-110.9,-111.6,-112.3,-112.99,-113.67,-114.33,-114.99,-115.62,-116.24,-116.84,-117.41,-117.95,-118.46,-118.92,-119.33,-119.67,-119.9,-120,-119.94,-120.06,-120.28,-120.6,-120.98,-121.41,-121.88,-122.39,-122.94,-123.51,-124.1,-124.71,-125.34,-125.98,-126.64,-127.31,-127.99,-128.67,-129.37,-130.07,-130.78,-131.5,-132.22,-132.94,-133.67,-134.39,-135.12,-135.85,-136.58,-137.31,-138.03,-138.76,-139.47,-140.19,-140.9,-141.6,-142.3,-142.99,-143.67,-144.33,-144.99,-145.62,-146.24,-146.84,-147.41,-147.95,-148.46,-148.92,-149.33,-149.67,-149.9,-150,-149.94,-150.06,-150.28,-150.6,-150.98,-151.41,-151.88,-152.39,-152.94,-153.51,-154.1,-154.71,-155.34,-155.98,-156.64,-157.31,-157.99,-158.67,-159.37,-160.07,-160.78,-161.5,-162.22,-162.94,-163.67,-164.39,-165.12,-165.85,-166.58,-167.31,-168.03,-168.76,-169.47,-170.19,-170.9,-171.6,-172.3,-172.99,-173.67,-174.33,-174.99,-175.62,-176.24,-176.84,-177.41,-177.95,-178.46,-178.92,-179.33,-179.67,-179.9,-180,-179.94,-180.06,-180.28,-180.6,-180.98,-181.41,-181.88,-182.39,-182.94,-183.51,-184.1,-184.71,-185.34,-185.98,-186.64,-187.31,-187.99,-188.67,-189.37,-190.07,-190.78,-191.5,-192.22,-192.94,-193.67,-194.39,-195.12,-195.85,-196.58,-197.31,-198.03,-198.76,-199.47,-200.19,-200.9,-201.6,-202.3,-202.99,-203.67,-204.33,-204.99,-205.62,-206.24,-206.84,-207.41,-207.95,-208.46,-208.92,-209.33,-209.67,-209.9,-210,-209.94,-210.06,-210.28,-210.6,-210.98,-211.41,-211.88,-212.39,-212.94,-213.51,-214.1,-214.71,-215.34,-215.98,-216.64,-217.31,-217.99,-218.67,-219.37,-220.07,-220.78,-221.5,-222.22,-222.94,-223.67,-224.39,-225.12,-225.85,-226.58,-227.31,-228.03,-228.76,-229.47,-230.19,-230.9,-231.6,-232.3,-232.99,-233.67,-234.33,-234.99,-235.62,-236.24,-236.84,-237.41,-237.95,-238.46,-238.92,-239.33,-239.67,-239.9,-240,-239.94,-240.06,-240.28,-240.6,-240.98,-241.41,-241.88,-242.39,-242.94,-243.51,-244.1,-244.71,-245.34,-245.98,-246.64,-247.31,-247.99,-248.67,-249.37,-250.07,-250.78,-251.5,-252.22,-252.94,-253.67,-254.39,-255.12,-255.85,-256.58,-257.31,-258.03,-258.76,-259.47,-260.19,-260.9,-261.6,-262.3,-262.99,-263.67,-264.33]],"stS":[45,[0,0.01,0.03,0.07,0.13,0.23,0.38,0.53,0.64,0.72,0.78,0.83,0.87,0.9,0.93,0.96,0.98,1,1.01,1.02,1.03,1.04,1.05,1.06,1.06,1.06,1.07]],"asX":[0,[-623.95]],"asY":[190,[-285.47,-285.35,-285.01,-284.47,-283.73,-282.79,-281.65,-280.29,-278.88,-277.63,-276.23,-274.67,-272.95,-271.05,-269.08,-266.99,-264.71,-262.25,-259.64,-256.88,-253.92,-250.74,-247.42,-243.85,-240.06,-236.07,-231.8,-227.3,-222.52,-217.46,-212.1,-206.43,-200.41,-194.06,-187.31,-180.19,-172.64,-164.65,-156.18,-147.23,-137.75,-127.72,-117.1,-105.89,-94.04,-81.55,-68.39,-54.57,-40.1,-24.99,-9.31,6.9,23.53,40.48,57.62,74.8,91.88,108.72,125.2,141.2,156.64,171.46,185.61,199.08,211.86,223.96,235.39,246.18,256.35,265.93,274.94,283.44,291.42,298.94,306,312.65,318.89,324.78,330.29,335.49,340.35,344.94,349.22,353.25,357.02,360.53,363.86,366.94,369.79,372.49,374.99,377.29,379.38,381.4,383.25,384.92,386.41,387.73,388.97,390.39,391.59,392.58,393.36,393.96,394.4,394.68,394.84,394.91,394.93]],"asR":[0,[129,129.08,129.2,129.37,129.59,129.88,130.24,130.67,131.21,131.86,132.64,133.59,134.73,136.1,137.75,139.68,141.84,144.08,146.22,148.11,149.7,151.02,152.1,152.98,153.7,154.28,154.75,155.13,155.43,155.65,155.81,155.92,155.98,156,156.08,156.2,156.37,156.59,156.88,157.24,157.67,158.21,158.86,159.64,160.59,161.73,163.1,164.75,166.68,168.84,171.08,173.22,175.1,176.7,178.02,179.1,179.98,180.7,181.28,181.75,182.13,182.42,182.65,182.81,182.92,182.98,183,183.08,183.2,183.37,183.59,183.88,184.24,184.67,185.21,185.86,186.64,187.59,188.73,190.1,191.75,193.68,195.84,198.08,200.22,202.1,203.7,205.02,206.1,206.98,207.7,208.28,208.75,209.13,209.42,209.65,209.81,209.92,209.98,210,210.08,210.2,210.37,210.59,210.88,211.23,211.67,212.21,212.86,213.64,214.58,215.73,217.1,218.75,220.68,222.84,225.08,227.22,229.1,230.7,232.02,233.1,233.98,234.7,235.28,235.75,236.13,236.42,236.65,236.81,236.92,236.98,237,237.08,237.2,237.37,237.59,237.88,238.23,238.67,239.21,239.86,240.64,241.58,242.73,244.1,245.75,247.68,249.84,252.08,254.22,256.1,257.7,259.02,260.1,260.98,261.7,262.28,262.75,263.13,263.42,263.65,263.81,263.92,263.98,264,264.08,264.2,264.37,264.59,264.88,265.23,265.67,266.21,266.86,267.64,268.58,269.73,271.1,272.75,274.68,276.84,279.08,281.22,283.1,284.7,286.02,287.1,287.98,288.7,289.28,289.75,290.13,290.42,290.65,290.81,290.92,290.98,291,291.08,291.2,291.37,291.59,291.88,292.23,292.67,293.21,293.86,294.64,295.58,296.73,298.1,299.75,301.68,303.84,306.08,308.22,310.1,311.7,313.02,314.1,314.98,315.7,316.28,316.75,317.13,317.42,317.65,317.81,317.92,317.98,318,318.08,318.2,318.37,318.59,318.88,319.23,319.67,320.21,320.86,321.64,322.58,323.73,325.1,326.75,328.68,330.84,333.08,335.22,337.1,338.7,340.02,341.1,341.98,342.7,343.28,343.75,344.13,344.42,344.65,344.81,344.92,344.98,345,345.08,345.2,345.37,345.59,345.88,346.23,346.67,347.21,347.86,348.64,349.58,350.73,352.1,353.75,355.68,357.83,360.08,362.22,364.1,365.7,367.02,368.1,368.98,369.7,370.28,370.75,371.13,371.42,371.65,371.81,371.92,371.98,372,372.08,372.2,372.37,372.59,372.88,373.23,373.67,374.21,374.86,375.64,376.58,377.73,379.1,380.75,382.68,384.83,387.08,389.22,391.1,392.7,394.02,395.1,395.98,396.7,397.28,397.75,398.13,398.42,398.65,398.81,398.92,398.98,399,399.08,399.2,399.37,399.59,399.88,400.23,400.67,401.21,401.86,402.64,403.58,404.73,406.1,407.75,409.68,411.83,414.08,416.22,418.1,419.7,421.02,422.1,422.98,423.7,424.28,424.75,425.13,425.42,425.65,425.81,425.92,425.98,426,426.08,426.2,426.37,426.59,426.88,427.23,427.67,428.21,428.85,429.64,430.58,431.73,433.1,434.75,436.68,438.83,441.08,443.22,445.1,446.7,448.02,449.1,449.98,450.7,451.28,451.75,452.13,452.42,452.65,452.81,452.92,452.98,453,453.08,453.2,453.37,453.59,453.88,454.23,454.67,455.21,455.85,456.64,457.58,458.73,460.1,461.75,463.68,465.83,468.08,470.21,472.1,473.7,475.02,476.1,476.98,477.7,478.28,478.75,479.13,479.42,479.65,479.81,479.92,479.98,480,480.08,480.2,480.37,480.59,480.88,481.23,481.67,482.21,482.85,483.64,484.58,485.72,487.1,488.75,490.68,492.83,495.08,497.21,499.1,500.7,502.02,503.1,503.98,504.7,505.28,505.75,506.13,506.42,506.65,506.81,506.92,506.98,507,507.08,507.2,507.37,507.59,507.88,508.23,508.67,509.21,509.85,510.64,511.58,512.72,514.1,515.75,517.68,519.83,522.08,524.21,526.1,527.7,529.02,530.09,530.98,531.7,532.28,532.75,533.13,533.42,533.65,533.81,533.92,533.98,534,534.08,534.2,534.37,534.59,534.88]],"asS":[190,[44.71,44.7,44.68,44.67,44.65,44.63,44.61,44.59,44.56,44.54,44.5,44.47,44.43,44.4,44.35,44.31,44.26,44.2,44.15,44.09,44.02,43.96,43.88,43.81,43.73,43.64,43.55,43.45,43.35,43.24,43.12,43,42.87,42.73,42.59,42.43,42.27,42.1,41.91,41.72,41.51,41.3,41.07,40.83,40.57,40.3,40.01,39.72,39.4,39.08,38.74,38.39,38.03,37.66,37.29,36.92,36.55,36.19,35.83,35.48,35.15,34.83,34.52,34.23,33.96,33.7,33.45,33.22,33,32.79,32.59,32.41,32.24,32.08,31.92,31.78,31.64,31.52,31.4,31.29,31.18,31.08,30.99,30.9,30.82,30.74,30.67,30.61,30.54,30.49,30.43,30.38,30.34,30.29,30.25,30.22,30.19,30.16,30.13,30.11,30.08,30.07,30.05,30.04,30.03,30.02,30.01,30]],"hrOp":[10,[0,0.12,0.51,1.23,2.39,4.1,6.53,9.93,14.53,20.46,27.41,34.59,41.3,47.25,52.44,56.97,60.95,64.48,67.62,70.45,73,75.32,77.43,79.36,81.14,82.77,84.28,85.67,86.95,88.14,89.24,90.27,91.21,92.09,92.9,93.65,94.34,94.98,95.58,96.12,96.62,97.07,97.49,97.87,98.21,98.52,98.79,99.04,99.25,99.43,99.59,99.72,99.82,99.9,99.96,99.99,100]],"hrY":[10,[747.83,747.44,746.15,743.75,739.94,734.3,726.27,715.07,699.88,680.3,657.38,633.68,611.54,591.91,574.78,559.83,546.69,535.06,524.68,515.35,506.93,499.28,492.31,485.93,480.07,474.68,469.71,465.12,460.88,456.95,453.32,449.95,446.83,443.94,441.26,438.78,436.49,434.38,432.43,430.64,428.99,427.48,426.11,424.86,423.73,422.72,421.81,421.01,420.31,419.7,419.19,418.76,418.42,418.15,417.97,417.86,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.83,417.86,417.94,418.08,418.28,418.53,418.85,419.22,419.66,420.16,420.71,421.34,422.02,422.77,423.58,424.47,425.41,426.43,427.51,428.67,429.89,431.19,432.55,434,435.51,437.1,438.77,440.51,442.34,444.24,446.22,448.29,450.43,452.66,454.97,457.37,459.86,462.43,465.09,467.84,470.68,473.62,476.64,479.76,482.98,486.29,489.69,493.2,496.8,500.5,504.3,508.2,512.2,516.3,520.51,524.82,529.23,533.74,538.36,543.08,547.91,552.83,557.86,562.99,568.22,573.54,578.97,584.49,590.11,595.81,601.61,607.48,613.45,619.48,625.6,631.78,638.02,644.32,650.68,657.07,663.51,669.97,676.45,682.94,689.42,695.9,702.36,708.78,715.16,721.48,727.73,733.89,739.96,745.91,751.74,757.43,762.96,768.33,773.52,778.51,783.3,787.87,792.21,796.31,800.16,803.76,807.09,810.14,812.92,815.41,817.62,819.53,821.15,822.48,823.51,824.24,824.68,824.83]],"hrR":[10,[705.96,705.62,704.52,702.48,699.22,694.4,687.53,677.96,664.98,648.25,628.66,608.41,589.5,572.72,558.08,545.3,534.08,524.13,515.26,507.3,500.1,493.56,487.6,482.15,477.14,472.54,468.29,464.37,460.75,457.39,454.29,451.41,448.74,446.27,443.98,441.86,439.91,438.1,436.43,434.9,433.49,432.21,431.03,429.97,429,428.13,427.36,426.68,426.08,425.56,425.12,424.75,424.46,424.24,424.08,423.99,423.96]],"hrS":[11,[0,0.01,0.02,0.04,0.08,0.12,0.18,0.27,0.38,0.51,0.64,0.76,0.87,0.97,1.05,1.12,1.19,1.25,1.3,1.35,1.39,1.43,1.46,1.5,1.53,1.55,1.58,1.6,1.63,1.65,1.66,1.68,1.7,1.71,1.73,1.74,1.75,1.76,1.77,1.78,1.79,1.8,1.81,1.81,1.82,1.82,1.83,1.83,1.83,1.84]],"r22y":[0,[0]],"r21op":[0,[100]],"r21y":[0,[0]],"r21s":[0,[1]],"c67x":[0,[922.03]],"c67y":[0,[1151.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.66,601.67,601.72,601.81,601.99,602.28,602.68,603.21,603.9,604.74,605.75,606.79,607.73,608.79,610,611.35,612.85,614.44,616.14,618.01,620.07,622.27,624.64,627.22,630.01,633,636.26,639.77,643.57,647.68,652.14,656.97,662.23,667.95,674.21,681.06,688.6,696.91,706.14,716.42,727.95,740.98,755.78,772.7,792.1,814.21,838.93,865.43,892.21,917.61,940.62,960.96,978.79,994.44,1008.25,1020.5,1031.46,1041.32,1050.23,1058.32,1065.71,1072.48,1078.7,1084.44,1089.73,1094.64,1099.17,1103.41,1107.32,1110.98,1114.38,1117.55,1120.51,1123.25,1125.83,1128.23,1130.45,1132.51,1134.47,1136.28,1137.93,1139.44,1140.9,1142.26,1143.48,1144.59,1145.57,1146.45,1147.39,1148.36,1149.18,1149.87,1150.42,1150.86,1151.18,1151.4,1151.55,1151.62,1151.65,1151.66]],"e75y":[198,[-1878.21,-1878.08,-1877.69,-1877.02,-1876.08,-1874.86,-1873.34,-1871.52,-1869.39,-1866.95,-1864.19,-1861.09,-1857.65,-1853.85,-1849.7,-1845.18,-1840.27,-1834.98,-1829.29,-1823.18,-1816.66,-1809.7,-1802.3,-1794.44,-1786.12,-1777.33,-1768.05,-1758.27,-1747.99,-1737.19,-1725.87,-1714.01,-1701.62,-1688.67,-1675.18,-1661.13,-1646.52,-1631.36,-1615.64,-1599.36,-1582.55,-1565.2,-1547.33,-1528.95,-1510.09,-1490.77,-1471.02,-1450.87,-1430.35,-1409.5,-1388.37,-1367,-1345.44,-1323.73,-1301.93,-1280.08,-1258.26,-1236.49,-1214.84,-1193.35,-1172.07,-1151.05,-1130.32,-1109.93,-1089.91,-1070.28,-1051.08,-1032.34,-1014.06,-996.27,-978.97,-962.19,-945.93,-930.19,-914.97,-900.28,-886.12,-872.47,-859.35,-846.73,-834.62,-823.01,-811.89,-801.26,-791.09,-781.39,-772.15,-763.35,-754.98,-747.04,-739.51,-732.39,-725.67,-719.33,-713.36,-707.77,-702.53,-697.65,-693.1,-688.88,-684.99,-681.42,-678.15,-675.18,-672.51,-670.12,-668.01,-666.17,-664.6,-663.28,-662.22,-661.4,-660.82,-660.48,-660.37]],"e74x":[199,[416.51,416.52,416.54,416.6,416.7,416.86,417.09,417.4,417.79,418.27,418.84,419.44,419.97,420.58,421.27,422.04,422.9,423.8,424.77,425.84,427.02,428.27,429.62,431.1,432.69,434.4,436.26,438.26,440.42,442.77,445.31,448.07,451.07,454.34,457.91,461.82,466.12,470.87,476.13,481.99,488.58,496.01,504.46,514.11,525.18,537.8,551.9,567.03,582.31,596.8,609.93,621.54,631.72,640.65,648.52,655.52,661.77,667.39,672.48,677.1,681.31,685.18,688.73,692,695.02,697.82,700.41,702.83,705.06,707.15,709.09,710.9,712.59,714.15,715.62,716.99,718.26,719.43,720.55,721.58,722.52,723.39,724.22,725,725.7,726.33,726.89,727.39,727.93,728.48,728.95,729.34,729.65,729.9,730.09,730.21,730.3,730.34,730.36]],"e74y":[0,[407.01,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.7,-581.68,-581.61,-581.43,-581.11,-580.6,-579.88,-578.92,-577.69,-576.18,-574.36,-572.49,-570.8,-568.88,-566.72,-564.29,-561.59,-558.73,-555.68,-552.31,-548.62,-544.65,-540.4,-535.76,-530.74,-525.36,-519.5,-513.2,-506.37,-498.98,-490.97,-482.28,-472.82,-462.54,-451.29,-438.97,-425.42,-410.47,-393.89,-375.41,-354.68,-331.26,-304.65,-274.23,-239.36,-199.61,-155.18,-107.53,-59.4,-13.74,27.63,64.19,96.25,124.38,149.2,171.23,190.93,208.65,224.66,239.22,252.5,264.67,275.86,286.16,295.68,304.5,312.65,320.26,327.3,333.88,339.99,345.69,351.01,355.94,360.57,364.89,368.88,372.58,376.11,379.35,382.32,385.03,387.66,390.1,392.31,394.29,396.07,397.64,399.34,401.08,402.56,403.79,404.78,405.56,406.14,406.55,406.8,406.94,407,407.01]],"e73x":[194,[-744.98,-744.97,-744.94,-744.88,-744.79,-744.65,-744.48,-744.26,-743.99,-743.66,-743.32,-743.01,-742.67,-742.27,-741.84,-741.35,-740.83,-740.28,-739.67,-739,-738.28,-737.51,-736.67,-735.77,-734.79,-733.73,-732.59,-731.36,-730.02,-728.57,-727,-725.29,-723.43,-721.39,-719.16,-716.71,-714.01,-711.01,-707.67,-703.92,-699.68,-694.87,-689.36,-683.05,-675.86,-667.83,-659.21,-650.5,-642.24,-634.75,-628.14,-622.34,-617.25,-612.76,-608.78,-605.21,-602.01,-599.11,-596.48,-594.08,-591.87,-589.85,-587.99,-586.26,-584.67,-583.19,-581.82,-580.54,-579.35,-578.25,-577.22,-576.25,-575.36,-574.52,-573.74,-573.02,-572.35,-571.71,-571.13,-570.59,-570.1,-569.62,-569.18,-568.78,-568.42,-568.1,-567.82,-567.51,-567.2,-566.93,-566.71,-566.53,-566.39,-566.28,-566.21,-566.16,-566.14,-566.13,-566.12]],"e73y":[0,[797.8,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.02,619.04,619.07,619.13,619.22,619.35,619.52,619.74,620.02,620.35,620.69,620.99,621.34,621.73,622.17,622.66,623.17,623.72,624.33,625,625.72,626.49,627.33,628.23,629.21,630.27,631.41,632.64,633.98,635.42,637,638.71,640.57,642.6,644.83,647.28,649.98,652.98,656.32,660.07,664.3,669.11,674.62,680.92,688.11,696.14,704.76,713.46,721.72,729.2,735.81,741.61,746.69,751.18,755.16,758.73,761.93,764.83,767.46,769.86,772.06,774.08,775.95,777.67,779.26,780.74,782.11,783.38,784.57,785.68,786.71,787.67,788.56,789.4,790.18,790.9,791.57,792.21,792.8,793.33,793.82,794.3,794.74,795.14,795.5,795.82,796.1,796.41,796.72,796.99,797.21,797.39,797.53,797.64,797.71,797.76,797.78,797.79,797.8]],"e72x":[202,[-862.88,-862.89,-862.92,-862.97,-863.04,-863.15,-863.29,-863.47,-863.69,-863.96,-864.23,-864.48,-864.76,-865.08,-865.43,-865.83,-866.25,-866.7,-867.19,-867.74,-868.32,-868.94,-869.62,-870.36,-871.15,-872.01,-872.93,-873.94,-875.02,-876.2,-877.47,-878.86,-880.37,-882.02,-883.83,-885.82,-888.01,-890.44,-893.16,-896.2,-899.64,-903.54,-908.01,-913.12,-918.96,-925.48,-932.47,-939.54,-946.24,-952.31,-957.68,-962.38,-966.51,-970.15,-973.39,-976.28,-978.88,-981.23,-983.37,-985.31,-987.1,-988.74,-990.26,-991.65,-992.95,-994.14,-995.26,-996.29,-997.26,-998.16,-998.99,-999.77,-1000.5,-1001.18,-1001.81,-1002.4,-1002.94,-1003.46,-1003.93,-1004.37,-1004.77,-1005.15,-1005.51,-1005.83,-1006.13,-1006.39,-1006.62,-1006.87,-1007.12,-1007.34,-1007.52,-1007.67,-1007.78,-1007.86,-1007.92,-1007.96,-1007.98,-1007.99]],"e72y":[0,[75.36,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.63,-636.62,-636.56,-636.43,-636.2,-635.84,-635.32,-634.62,-633.74,-632.65,-631.35,-629.99,-628.78,-627.4,-625.84,-624.09,-622.14,-620.09,-617.89,-615.47,-612.8,-609.95,-606.89,-603.55,-599.93,-596.06,-591.84,-587.3,-582.38,-577.06,-571.29,-565.04,-558.22,-550.82,-542.72,-533.84,-524.09,-513.33,-501.39,-488.08,-473.15,-456.28,-437.12,-415.21,-390.11,-361.48,-329.49,-295.17,-260.51,-227.63,-197.84,-171.51,-148.43,-128.17,-110.3,-94.43,-80.24,-67.49,-55.95,-45.47,-35.91,-27.15,-19.09,-11.67,-4.82,1.54,7.41,12.89,17.95,22.7,27.09,31.2,35.03,38.58,41.91,45.03,47.9,50.56,53.1,55.44,57.58,59.53,61.42,63.18,64.77,66.2,67.48,68.61,69.83,71.08,72.15,73.04,73.75,74.31,74.73,75.02,75.21,75.31,75.35,75.36]],"c69x":[0,[-39.04,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.7,48.68,48.66,48.62,48.58,48.52,48.45,48.37,48.28,48.17,48.05,47.92,47.76,47.6,47.41,47.21,46.99,46.75,46.49,46.21,45.9,45.57,45.21,44.82,44.4,43.95,43.46,42.93,42.36,41.75,41.08,40.36,39.59,38.74,37.82,36.81,35.71,34.5,33.16,31.69,30.04,28.19,26.11,23.74,21.05,17.97,14.47,10.57,6.41,2.23,-1.74,-5.34,-8.53,-11.33,-13.8,-15.98,-17.92,-19.65,-21.22,-22.63,-23.92,-25.1,-26.17,-27.17,-28.08,-28.93,-29.71,-30.44,-31.12,-31.75,-32.33,-32.88,-33.39,-33.87,-34.31,-34.72,-35.11,-35.47,-35.81,-36.12,-36.42,-36.69,-36.94,-37.17,-37.39,-37.59,-37.77,-37.94,-38.1,-38.24,-38.37,-38.48,-38.58,-38.68,-38.76,-38.83,-38.88,-38.93,-38.97,-39,-39.02,-39.04]],"c69y":[200,[456.94,456.93,456.91,456.87,456.82,456.75,456.66,456.56,456.43,456.29,456.12,455.94,455.73,455.5,455.24,454.96,454.65,454.31,453.94,453.53,453.1,452.62,452.11,451.56,450.96,450.32,449.62,448.87,448.06,447.18,446.24,445.22,444.11,442.91,441.61,440.19,438.64,436.95,435.09,433.03,430.76,428.22,425.38,422.18,418.54,414.39,409.65,404.27,398.27,391.88,385.44,379.34,373.8,368.89,364.58,360.78,357.43,354.45,351.78,349.37,347.19,345.21,343.4,341.74,340.22,338.81,337.51,336.3,335.18,334.14,333.17,332.27,331.43,330.64,329.91,329.23,328.59,327.99,327.44,326.92,326.44,325.99,325.57,325.18,324.82,324.49,324.18,323.9,323.64,323.4,323.18,322.99,322.81,322.65,322.51,322.39,322.28,322.19,322.11,322.05,322.01,321.97,321.96,321.95]]};
+const FPS=25;
+function V(k,f){const e=K[k],i0=e[0],v=e[1];let x=f-i0;if(x<=0)return v[0];if(x>=v.length-1)return v[v.length-1];const i=Math.floor(x);return v[i]+(v[i+1]-v[i])*(x-i);}
+const P12=f=>Math.floor(f*12/25+1e-6)*25/12, P15=f=>Math.floor(f*15/25+1e-6)*25/15;
+// rotations keep their Cavalry rhythm past frame 500
+function rotA(f){let k=0;while(f>500){f-=33;k++;}return V('asR',f)+27*k;}
+function rotS(f){let k=0;while(f>500){f-=52;k++;}return V('stR',f)-30*k;}
+
+/* ---------------- controller (driven by the page: SCN.sc4) ----------------
+   Waits on frame 0 while SC03 zooms into the asterisk (the asterisk follows that zoom exactly), then plays.
+   Part 1 has settled by frame 80: the hint shows and a gesture is taken at once — the timeline goes to the change
+   (frame 186) and the shapes carry on from where they are (CARRY). Part 2 is complete by 345. */
+const READY1=80, REST1=156, END=345;
+const S={F:0,R:0,state:'wait',pending:false};
+let ROTOFF=0;
+function setHint(t){SCN.setHint(t||'',!!t);}
+const JUMP=186, CARRY={off:{},f0:JUMP,dur:40}, CK=['stX','stY','stS','stOp','asY','asS','hrY','hrOp','hrS','hrR'];
+function startPart2(){
+  const a=P12(S.F),b=P12(JUMP);CARRY.off={};for(const k of CK)CARRY.off[k]=V(k,a)-V(k,b);
+  S.F=JUMP;S.state='play2';setHint('');
+}
+function Vc(k,f){const v=V(k,f),c=CARRY.off[k];if(!c)return v;
+  const t=Math.min(1,Math.max(0,(S.F-CARRY.f0)/CARRY.dur)),e=t*t*(3-2*t);return v+c*(1-e);}
+function go(){
+  if((S.state==='play1'||S.state==='hold1')&&S.F>=READY1)startPart2();      // ignored until part 1 has settled
+}
+SCN.sc4={begin(){S.F=0;S.R=0;S.state='play1';ROTOFF=(SCN.astRot||0)-V('asR',0);},go};
+const mouse={x:-1e4,y:-1e4,s:0,tx:-1e4,ty:-1e4};
+addEventListener('pointermove',e=>{mouse.tx=e.clientX;mouse.ty=e.clientY;});
+addEventListener('pointerleave',()=>{mouse.tx=-1e4;mouse.ty=-1e4;});
+
+/* ---------------- layout: comp 1920×1080, cover ---------------- */
+let W=0,H=0,k=1,ox=0,oy=0;
+const wrap=document.getElementById('s4w');
+const cS=document.getElementById('s4S'),cT=document.getElementById('s4T'),c27=document.getElementById('s4N'),cG=document.getElementById('s4G');
+const xS=cS.getContext('2d'),xT=cT.getContext('2d'),x27=c27.getContext('2d'),xG=cG.getContext('2d');
+const DPR=Math.min(2,window.devicePixelRatio||1);
+function resize(){
+  W=innerWidth;H=innerHeight;k=FITK(W,H);ox=W/2;oy=H/2;
+  for(const [c,d] of [[cS,1],[cT,DPR],[c27,DPR],[cG,1]]){c.width=Math.round(W*d);c.height=Math.round(H*d);c._d=d;}
+  makeGrain();resizeGL();
+  // background picture tall enough for the screen
+  BEXT=Math.max(540,Math.ceil(H/2/k/8)*8+64);for(const c of [bc,bc0,gc]){c.width=1920/BQ;c.height=Math.round(2*BEXT/BQ);}
+}
+// comp (+y up) → device px of a canvas
+function M(ctx,d,x,y,rot,sx,sy){ // rot in degrees (Cavalry: anticlockwise, +y up)
+  const r=rot*Math.PI/180,c=Math.cos(r),s=Math.sin(r),K_=k*d;
+  ctx.setTransform(K_*sx*c,-K_*sx*s,K_*sy*s,K_*sy*c,(ox+x*k)*d,(oy-y*k)*d);
+}
+// fill a path with a gaussian blur (σ ≈ amount/2 comp px), drawn far off-canvas so only its shadow lands
+const OFF=20000, BL=+(new URLSearchParams(location.search).get("bl")||1), TB=+(new URLSearchParams(location.search).get("tb")||2);   // Cavalry Fast Blur amount → gaussian σ (comp px)
+function blurFill(ctx,d,amount,color,alpha,build,setT){
+  ctx.save();ctx.globalAlpha=alpha;
+  const b=2*amount*BL*k*d;
+  if(b<.6){setT(0);ctx.beginPath();build();ctx.fillStyle=color;ctx.fill();ctx.restore();return;}
+  setT(OFF);ctx.shadowColor=color;ctx.shadowBlur=b;ctx.shadowOffsetX=OFF;ctx.beginPath();build();ctx.fillStyle='#000';ctx.fill();
+  ctx.restore();
+}
+
+/* ---------------- shapes ---------------- */
+const RX=x=>PORT.on?x*PORT.ax:x, RY=y=>PORT.on?y*PORT.ay:y;   // portrait re-composition
+function drawShapes(F,R){
+  const ctx=xS,d=cS._d;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cS.width,cS.height);
+  // Half circle red 1 (12 fps)
+  {const f=P12(F),op=Vc('hrOp',f)/100,s=Vc('hrS',f);
+   if(op>0.002&&s>0.001)blurFill(ctx,d,17.9*s,'#F7B272',op,()=>{
+     ctx.moveTo(-114.133,0);ctx.bezierCurveTo(-114.133,64.617,-63.034,117,0,117);
+     ctx.bezierCurveTo(63.034,117,114.133,64.617,114.133,0);ctx.bezierCurveTo(3.057,0,-43.303,0,-114.133,0);ctx.closePath();
+   },o=>{M(ctx,d,RX(59.074),RY(Vc('hrY',f)),Vc('hrR',f),s,s);ctx.transform(1,0,0,1,0,0);if(o){const t=ctx.getTransform();ctx.setTransform(t.a,t.b,t.c,t.d,t.e-o,t.f);}});}
+  // Astrix 1 (12 fps): three strokes, width 1.8, ×scale
+  {const f=P12(F),rf=P12(R);let s=Vc('asS',f),rot=rotA(rf)+ROTOFF,ax=RX(-623.95),ay=RY(Vc('asY',f));
+   if(SCN.p4<1){const z=SCN.zoom;if(z){ax=z.A[0];ay=z.A[1];s=SCN.headS||s;rot=SCN.astRot||0;}}
+   const segs=[[0,7,0,-7],[-6.0622,-3.5,6.0622,3.5],[-6.0621,3.5,6.0622,-3.5]];
+   blurFill(ctx,d,0.489*s,'#E57249',1,()=>{
+     for(const [a,b,c,e] of segs){const dx=c-a,dy=e-b,l=Math.hypot(dx,dy),nx=-dy/l*0.9,ny=dx/l*0.9;
+       ctx.moveTo(a+nx,-(b+ny));ctx.lineTo(c+nx,-(e+ny));ctx.lineTo(c-nx,-(e-ny));ctx.lineTo(a-nx,-(b-ny));ctx.closePath();}
+   },o=>{M(ctx,d,ax,ay,rot,s,s);if(o){const t=ctx.getTransform();ctx.setTransform(t.a,t.b,t.c,t.d,t.e-o,t.f);}});}
+  // Star (12 fps): 12 points, outer 283.109 / inner 129
+  {const f=P12(F),rf=P12(R),s=Vc('stS',f);
+   if(s>0.001)blurFill(ctx,d,17.311*s,'#EDD8C1',Vc('stOp',f)/100,()=>{
+     for(let i=0;i<24;i++){const a=Math.PI/2+i*Math.PI/12,r=i%2?129:283.109;i?ctx.lineTo(r*Math.cos(a),-r*Math.sin(a)):ctx.moveTo(r*Math.cos(a),-r*Math.sin(a));}ctx.closePath();
+   },o=>{M(ctx,d,RX(Vc('stX',f)),RY(Vc('stY',f)),rotS(rf),s,s);if(o){const t=ctx.getTransform();ctx.setTransform(t.a,t.b,t.c,t.d,t.e-o,t.f);}});}
+}
+
+/* ---------------- text ----------------
+   The glyphs are Cavalry's own (Acumin Pro, exported from the comp as outlines at rest), so shapes, sizes and
+   spacing are exact. Animation moves them as Cavalry does: the layer slides in x, word spacing closes, and the
+   Sub-Mesh (per word / per character) offsets and fades each word, staggered. */
+const G={"l1":[[266.25,558.936,0,"M6.8400002 0L11.952 0L11.952 24.264L40.32 24.264L40.32 0L45.504002 0L45.504002 50.256001L40.32 50.256001L40.32 28.800001L11.952 28.800001L11.952 50.256001L6.8400002 50.256001L6.8400002 0Z"],[318.378,558.936,0,"M33.984001 17.351997C34.056 18.288002 34.056 19.296001 34.056 20.375999C34.056 27.575996 30.384003 37.079998 18.936005 37.079998C8.2080002 37.079998 2.9519997 28.296001 2.9519997 17.784C2.9519997 8.4960022 7.3440018 -0.86399841 18.575996 -0.86399841C27.936005 -0.86399841 31.751999 4.8959999 33.264 9.6480026L28.367996 9.6480026C27.143997 6.8400002 25.056 3.3839989 18.720001 3.3839989C12.096001 3.3839989 7.8479996 8.9280014 7.8479996 17.351997L33.984001 17.351997ZM8.0639992 21.096001C8.7840004 28.152 11.879997 32.976002 18.863998 32.976002C25.559998 32.976002 29.015999 27.720001 29.087997 21.096001L8.0639992 21.096001Z"],[355.242,558.936,0,"M5.6880035 0L10.512001 0L10.512001 18.288002C10.512001 27.144001 15.407997 31.752001 22.895996 32.112L22.895996 37.079998C16.992004 36.864002 12.528 33.624001 10.512001 28.440001C10.512001 32.543999 10.440002 35.136002 10.295998 36.216003L5.6159973 36.216003C5.6159973 34.703999 5.6880035 31.968 5.6880035 26.351997L5.6880035 0Z"],[378.93,558.936,0,"M33.983994 17.351997C34.056 18.288002 34.056 19.296001 34.056 20.375999C34.056 27.575996 30.384003 37.079998 18.936005 37.079998C8.2080002 37.079998 2.9520035 28.296001 2.9520035 17.784C2.9520035 8.4960022 7.3440018 -0.86399841 18.576004 -0.86399841C27.936005 -0.86399841 31.751999 4.8959999 33.263992 9.6480026L28.367996 9.6480026C27.143997 6.8400002 25.056 3.3839989 18.720001 3.3839989C12.096001 3.3839989 7.8479996 8.9280014 7.8479996 17.351997L33.983994 17.351997ZM8.064003 21.096001C8.7839966 28.152 11.879997 32.976002 18.863998 32.976002C25.559998 32.976002 29.016006 27.720001 29.087997 21.096001L8.064003 21.096001Z"],[434.298,558.936,1,"M5.6880035 0L10.511993 0L10.511993 36.216003L5.6880035 36.216003L5.6880035 0ZM10.511993 45.576L10.511993 52.992001L5.6880035 52.992001L5.6880035 45.576L10.511993 45.576Z"],[450.138,558.936,1,"M2.2319946 10.152C3.1679993 3.6720009 7.776001 -0.86399841 16.559998 -0.86399841C24.839996 -0.86399841 30.024002 3.4560013 30.024002 9.9360008C30.024002 15.335999 27.647995 18.863998 17.063995 21.383999C10.152008 23.040001 8.5679932 24.552002 8.5679932 27.575996C8.5679932 30.24 10.223999 33.048 15.983994 33.048C21.815994 33.048 23.975998 29.52 24.552002 26.784L29.304001 26.784C28.727997 31.896 24.839996 37.079998 16.128006 37.079998C7.4880066 37.079998 3.6719971 32.256001 3.6719971 27.216C3.6719971 22.391998 5.904007 19.368 15.768005 16.992001C23.328003 15.192001 24.984009 13.391998 24.984009 9.5760002C24.984009 5.8320007 22.608002 3.1679993 16.703995 3.1679993C11.376007 3.1679993 8.2080078 5.8320007 7.0559998 10.152L2.2319946 10.152Z"],[501.546,558.936,2,"M0.57600403 32.040001L7.128006 32.040001L7.128006 7.9920006C7.128006 2.0880013 9.647995 -0.50400162 14.759995 -0.50400162C16.416 -0.50400162 18.287994 -0.36000061 19.656006 0.14400101L19.656006 4.0320015C18.576004 3.7439995 17.207993 3.6720009 16.199997 3.6720009C12.815994 3.6720009 11.951996 5.7599983 11.951996 9.5760002L11.951996 32.040001L20.304001 32.040001L20.304001 36.216003L11.951996 36.216003L11.951996 47.232002L7.128006 47.232002L7.128006 36.216003L0.57600403 36.216003L0.57600403 32.040001Z"],[522.786,558.936,2,"M19.511993 37.079998C8.8559875 37.079998 2.9519958 28.584002 2.9519958 18.071999C2.9519958 7.2000008 9.071991 -0.86399841 19.152008 -0.86399841C30.096008 -0.86399841 35.855988 7.9199982 35.855988 18.216C35.855988 29.592001 29.376007 37.079998 19.511993 37.079998ZM19.29599 32.832001C26.783997 32.832001 30.81601 26.496002 30.81601 18.071999C30.81601 9.3600006 26.712006 3.3839989 19.440002 3.3839989C12.312012 3.3839989 7.9200134 9.7919998 7.9200134 18.144001C7.9200134 26.639999 11.664001 32.832001 19.29599 32.832001Z"],[580.026,558.936,3,"M31.463989 25.487999C31.463989 33.551998 26.712006 37.079998 18.216003 37.079998C7.9920044 37.079998 5.256012 31.104 4.8240051 26.711998L9.5759888 26.711998C10.29599 29.592001 11.303986 33.048 18.071991 33.048C25.631989 33.048 26.712006 28.656 26.712006 25.199997L26.712006 21.743999L20.160004 21.743999C9.3599854 21.743999 3.0960083 18.144001 3.0960083 10.080002C3.0960083 4.6080017 6.6960144 -0.86399841 15.191986 -0.86399841C22.463989 -0.86399841 25.488007 2.6640015 26.783997 5.1839981C26.855988 2.5200005 27.071991 0.86399841 27.360016 0L31.967987 0C31.752014 1.0800018 31.463989 4.1040001 31.463989 7.3440018L31.463989 25.487999ZM26.783997 16.848C26.783997 9.5760002 25.488007 3.1679993 15.839996 3.1679993C11.015991 3.1679993 8.0639954 6.1199989 8.0639954 10.368C8.0639954 16.056 12.600006 18.071999 20.231995 18.071999L26.783997 18.071999L26.783997 16.848Z"],[635.754,558.936,4,"M0.86401367 36.216003L14.615997 -1.512001C12.167999 -8.3519974 10.440002 -10.655998 5.5440063 -10.655998C4.4639893 -10.655998 3.3840027 -10.584 2.3760071 -10.440002L2.3760071 -14.903999C3.6719971 -15.047997 4.7520142 -15.120003 5.9760132 -15.120003C12.959991 -15.120003 15.552002 -12.599998 19.368011 -1.8720016L32.687988 36.216003L27.791992 36.216003C21.23999 16.848 18.503998 8.4960022 17.208008 4.1759987L17.135986 4.1759987C15.984009 7.9920006 12.81601 17.064003 6.1199951 36.216003L0.86401367 36.216003Z"],[669.594,558.936,4,"M33.984009 17.351997C34.056 18.288002 34.056 19.296001 34.056 20.375999C34.056 27.575996 30.384003 37.079998 18.936005 37.079998C8.2080078 37.079998 2.9519958 28.296001 2.9519958 17.784C2.9519958 8.4960022 7.3439941 -0.86399841 18.575989 -0.86399841C27.936005 -0.86399841 31.752014 4.8959999 33.264008 9.6480026L28.368011 9.6480026C27.144012 6.8400002 25.056 3.3839989 18.720001 3.3839989C12.096008 3.3839989 7.8479919 8.9280014 7.8479919 17.351997L33.984009 17.351997ZM8.0639954 21.096001C8.7839966 28.152 11.880005 32.976002 18.864014 32.976002C25.559998 32.976002 29.015991 27.720001 29.088013 21.096001L8.0639954 21.096001Z"],[706.458,558.936,4,"M31.463989 25.487999C31.463989 33.551998 26.712006 37.079998 18.216003 37.079998C7.9920044 37.079998 5.256012 31.104 4.8240051 26.711998L9.5759888 26.711998C10.29599 29.592001 11.304016 33.048 18.071991 33.048C25.631989 33.048 26.712006 28.656 26.712006 25.199997L26.712006 21.743999L20.160004 21.743999C9.3599854 21.743999 3.0960083 18.144001 3.0960083 10.080002C3.0960083 4.6080017 6.6960144 -0.86399841 15.191986 -0.86399841C22.463989 -0.86399841 25.488007 2.6640015 26.783997 5.1839981C26.855988 2.5200005 27.071991 0.86399841 27.359985 0L31.967987 0C31.752014 1.0800018 31.463989 4.1040001 31.463989 7.3440018L31.463989 25.487999ZM26.783997 16.848C26.783997 9.5760002 25.488007 3.1679993 15.839996 3.1679993C11.015991 3.1679993 8.0639954 6.1199989 8.0639954 10.368C8.0639954 16.056 12.600006 18.071999 20.231995 18.071999L26.783997 18.071999L26.783997 16.848Z"],[743.682,558.936,4,"M5.6879883 0L10.511993 0L10.511993 18.288002C10.511993 27.144001 15.40799 31.752001 22.895996 32.112L22.895996 37.079998C16.992004 36.864002 12.528015 33.624001 10.511993 28.440001C10.511993 32.543999 10.440002 35.136002 10.29599 36.216003L5.6159973 36.216003C5.6159973 34.703999 5.6879883 31.968 5.6879883 26.351997L5.6879883 0Z"],[786.45,558.936,5,"M2.2319946 10.152C3.1680298 3.6720009 7.776001 -0.86399841 16.559998 -0.86399841C24.840027 -0.86399841 30.023987 3.4560013 30.023987 9.9360008C30.023987 15.335999 27.64801 18.863998 17.064026 21.383999C10.151978 23.040001 8.5679932 24.552002 8.5679932 27.575996C8.5679932 30.24 10.223999 33.048 15.984009 33.048C21.815979 33.048 23.976013 29.52 24.552002 26.784L29.304016 26.784C28.728027 31.896 24.840027 37.079998 16.127991 37.079998C7.4879761 37.079998 3.6719971 32.256001 3.6719971 27.216C3.6719971 22.391998 5.9039917 19.368 15.768005 16.992001C23.328003 15.192001 24.984009 13.391998 24.984009 9.5760002C24.984009 5.8320007 22.608032 3.1679993 16.703979 3.1679993C11.375977 3.1679993 8.2080078 5.8320007 7.0560303 10.152L2.2319946 10.152Z"],[818.778,558.936,5,"M5.6879883 52.992001L5.6879883 0L10.512024 0L10.512024 20.015999C10.512024 28.296001 14.039978 32.688 20.952026 32.688C26.640015 32.688 29.59198 28.944 29.59198 22.176003L29.59198 0L34.416016 0L34.416016 23.112C34.416016 34.200001 27.575989 37.079998 22.176025 37.079998C15.911987 37.079998 12.455994 33.984001 10.512024 30.456001L10.512024 52.992001L5.6879883 52.992001Z"],[858.378,558.936,5,"M31.463989 25.487999C31.463989 33.551998 26.711975 37.079998 18.216003 37.079998C7.9920044 37.079998 5.2559814 31.104 4.8239746 26.711998L9.5759888 26.711998C10.296021 29.592001 11.304016 33.048 18.072021 33.048C25.632019 33.048 26.711975 28.656 26.711975 25.199997L26.711975 21.743999L20.159973 21.743999C9.3599854 21.743999 3.0960083 18.144001 3.0960083 10.080002C3.0960083 4.6080017 6.6959839 -0.86399841 15.192017 -0.86399841C22.463989 -0.86399841 25.487976 2.6640015 26.783997 5.1839981C26.856018 2.5200005 27.072021 0.86399841 27.359985 0L31.968018 0C31.752014 1.0800018 31.463989 4.1040001 31.463989 7.3440018L31.463989 25.487999ZM26.783997 16.848C26.783997 9.5760002 25.487976 3.1679993 15.840027 3.1679993C11.015991 3.1679993 8.0640259 6.1199989 8.0640259 10.368C8.0640259 16.056 12.599976 18.071999 20.231995 18.071999L26.783997 18.071999L26.783997 16.848Z"],[895.602,558.936,5,"M10.512024 -14.400002L10.512024 4.9679985C12.23999 1.7999992 15.40802 -0.86399841 21.528015 -0.86399841C30.312012 -0.86399841 37.296021 6.0480003 37.296021 19.079998C37.296021 30.024 31.320007 37.079998 22.823975 37.079998C16.416016 37.079998 12.599976 34.128002 10.512024 30.096001C10.512024 32.760002 10.440002 34.920002 10.296021 36.216003L5.6160278 36.216003C5.6879883 33.48 5.6879883 30.312 5.6879883 27.360001L5.6879883 -14.400002L10.512024 -14.400002ZM32.255981 18.863998C32.255981 9.3600006 28.367981 3.3839989 21.23999 3.3839989C12.888 3.3839989 10.223999 9.0719986 10.223999 18.216C10.223999 27.575996 13.536011 32.760002 21.744019 32.760002C28.440002 32.760002 32.255981 26.928001 32.255981 18.863998Z"],[936.282,558.936,5,"M33.984009 17.351997C34.055969 18.288002 34.055969 19.296001 34.055969 20.375999C34.055969 27.575996 30.383972 37.079998 18.935974 37.079998C8.2080078 37.079998 2.9520264 28.296001 2.9520264 17.784C2.9520264 8.4960022 7.3439941 -0.86399841 18.575989 -0.86399841C27.935974 -0.86399841 31.752014 4.8959999 33.263977 9.6480026L28.367981 9.6480026C27.143982 6.8400002 25.055969 3.3839989 18.719971 3.3839989C12.096008 3.3839989 7.8480225 8.9280014 7.8480225 17.351997L33.984009 17.351997ZM8.0640259 21.096001C8.7839966 28.152 11.880005 32.976002 18.864014 32.976002C25.559998 32.976002 29.015991 27.720001 29.088013 21.096001L8.0640259 21.096001Z"],[973.578,558.936,5,"M29.807983 52.992001L29.807983 32.040001C28.799988 34.200001 25.919983 37.079998 19.007996 37.079998C9.0720215 37.079998 2.9520264 28.872 2.9520264 17.711998C2.9520264 6.7679977 8.6400146 -0.86399841 18 -0.86399841C24.119995 -0.86399841 28.007996 1.512001 29.807983 5.6879997C29.807983 4.0320015 29.880005 0.93600082 30.096008 0L34.703979 0C34.632019 3.5999985 34.632019 6.9119987 34.632019 10.368L34.632019 52.992001L29.807983 52.992001ZM7.9920044 17.855999C7.9920044 27.431999 12.455994 32.832001 19.223999 32.832001C28.007996 32.832001 30.023987 27.575996 30.023987 18.863998C30.023987 9.8639984 27.719971 3.3839989 18.64801 3.3839989C12.671997 3.3839989 7.9920044 8.4960022 7.9920044 17.855999Z"],[1032.33,558.936,6,"M5.6879883 12.312C5.6879883 8.2080002 5.6879883 4.1040001 5.6160278 0L10.296021 0C10.367981 1.0079994 10.440002 3.1679993 10.440002 5.3279991C12.312012 1.4399986 15.624023 -0.86399841 21.528015 -0.86399841C31.752014 -0.86399841 37.367981 7.632 37.367981 18.863998C37.367981 29.879999 31.320007 37.079998 22.536011 37.079998C15.624023 37.079998 12.16803 33.911999 10.512024 30.528L10.512024 52.992001L5.6879883 52.992001L5.6879883 12.312ZM32.328003 18.792C32.328003 9.2159996 28.151978 3.3839989 21.23999 3.3839989C12.888 3.3839989 10.223999 9.9360008 10.223999 18C10.223999 27.144001 13.176025 32.832001 21.671997 32.832001C28.223999 32.832001 32.328003 27.288002 32.328003 18.792Z"],[1073.08,558.936,6,"M0.86401367 36.216003L14.616028 -1.512001C12.16803 -8.3519974 10.440002 -10.655998 5.5440063 -10.655998C4.4639893 -10.655998 3.3839722 -10.584 2.3759766 -10.440002L2.3759766 -14.903999C3.6719971 -15.047997 4.7520142 -15.120003 5.9760132 -15.120003C12.960022 -15.120003 15.552002 -12.599998 19.367981 -1.8720016L32.687988 36.216003L27.791992 36.216003C21.23999 16.848 18.504028 8.4960022 17.208008 4.1759987L17.135986 4.1759987C15.984009 7.9920006 12.815979 17.064003 6.1199951 36.216003L0.86401367 36.216003Z"]],"id":[[1133.25,558.936,0,"M4.6080003 0L14.976 0L14.976 37.296001L4.6080003 37.296001L4.6080003 0ZM14.976 43.344002L14.976 52.560001L4.6080003 52.560001L4.6080003 43.344002L14.976 43.344002Z"],[1152.83,558.936,0,"M28.512001 52.560001L28.512001 34.559998C27.720001 36.216003 24.84 38.159996 19.440002 38.159996C8.855999 38.159996 2.5200005 29.808001 2.5200005 18.360001C2.5200005 6.6959991 8.4960003 -0.86399841 17.928001 -0.86399841C23.472 -0.86399841 26.711998 0.93600082 28.512001 3.8880005C28.584 3.0239983 28.800003 1.1520004 29.015999 0L38.880001 0C38.807999 3.3839989 38.807999 6.8400002 38.807999 10.223999L38.807999 52.560001L28.512001 52.560001ZM13.104 18.575996C13.104 25.632 15.84 29.879999 21.239998 29.879999C28.007999 29.879999 28.944 25.056 28.944 18.648003C28.944 13.32 28.079998 7.4160004 21.024002 7.4160004C15.911999 7.4160004 13.104 11.304001 13.104 18.575996Z"],[1196.18,558.936,0,"M37.440002 16.416C37.584 17.496002 37.584 18.288002 37.584 19.584C37.584 28.872 33.192001 38.159996 20.447998 38.159996C8.423996 38.159996 2.447998 29.808001 2.447998 18.071999C2.447998 8.2799988 7.776001 -0.86399841 20.087997 -0.86399841C31.751999 -0.86399841 35.856003 6.6240005 37.151993 11.16L26.856003 11.16C25.848 8.9280014 24.624001 7.2000008 20.304001 7.2000008C15.192001 7.2000008 12.816002 11.736 12.816002 16.416L37.440002 16.416ZM13.031998 22.751999C13.464005 27.360001 15.480003 30.743999 20.375999 30.743999C25.416 30.743999 27.143997 27.071999 27.216003 22.751999L13.031998 22.751999Z"],[1236.14,558.936,0,"M35.568008 25.272003C35.568008 34.200001 30.095993 38.087997 20.160004 38.159996C8.7839966 38.159996 4.6800003 32.832001 4.1760025 26.208L13.968002 26.208C14.400002 28.944 15.407997 30.743999 19.727997 30.743999C24.552002 30.743999 25.488007 28.152 25.488007 25.487999L25.488007 23.256001L20.160004 23.256001C9.2160034 23.256001 2.447998 19.296001 2.447998 10.799999C2.447998 5.0400009 6.1920013 -0.86399841 15.192001 -0.86399841C21.816002 -0.86399841 24.335999 1.5839996 25.703995 3.6720009C25.703995 2.7360001 25.919998 0.72000122 26.207993 0L36.072006 0C35.856003 0.86399841 35.568008 6.0480003 35.568008 9.6480026L35.568008 25.272003ZM25.488007 15.984001C25.488007 11.088001 24.695999 6.4799995 18.143997 6.4799995C14.400002 6.4799995 12.744003 8.7840004 12.744003 11.447998C12.744003 15.048 15.048004 16.992001 21.311996 16.992001L25.488007 16.992001L25.488007 15.984001Z"],[1275.74,558.936,0,"M2.0879974 11.232002C2.9519958 4.6080017 7.5599976 -0.86399841 18.936005 -0.86399841C30.240005 -0.86399841 34.992004 4.7519989 34.992004 10.944C34.992004 16.416 33.192001 20.664001 20.736008 23.543999C14.688004 24.984001 13.535995 25.848 13.535995 27.720001C13.535995 29.375999 14.688004 30.887999 18.072006 30.887999C22.895996 30.887999 23.832001 28.296001 24.192001 26.928001L33.983994 26.928001C33.695999 31.968 29.807999 38.159996 18.503998 38.159996C7.2720032 38.159996 3.4559937 32.327999 3.4559937 26.855999C3.4559937 21.599998 5.3999939 17.855999 17.568008 14.832001C22.895996 13.535999 24.479996 12.599998 24.479996 10.223999C24.479996 7.9199982 23.112 6.552002 19.296005 6.552002C15.479996 6.552002 13.031998 8.2080002 12.240005 11.232002L2.0879974 11.232002Z"]],"l2":[[149.25,558.936,0,"M31.464001 25.487999C31.464001 33.551998 26.712 37.079998 18.216 37.079998C7.9920001 37.079998 5.256 31.104 4.8240004 26.711998L9.5760002 26.711998C10.296 29.592001 11.304001 33.048 18.071999 33.048C25.632 33.048 26.712 28.656 26.712 25.199997L26.712 21.743999L20.16 21.743999C9.3599997 21.743999 3.0960002 18.144001 3.0960002 10.080002C3.0960002 4.6080017 6.6960001 -0.86399841 15.191999 -0.86399841C22.464001 -0.86399841 25.488001 2.6640015 26.784 5.1839981C26.855999 2.5200005 27.071999 0.86399841 27.360001 0L31.968 0C31.752001 1.0800018 31.464001 4.1040001 31.464001 7.3440018L31.464001 25.487999ZM26.784 16.848C26.784 9.5760002 25.488001 3.1679993 15.84 3.1679993C11.016 3.1679993 8.0640001 6.1199989 8.0640001 10.368C8.0640001 16.056 12.599999 18.071999 20.231998 18.071999L26.784 18.071999L26.784 16.848Z"],[186.474,558.936,0,"M5.6879997 0L10.512001 0L10.512001 18.792C10.512001 26.424004 13.391998 32.688 21.167999 32.688C27.143997 32.688 29.592003 28.727999 29.592003 22.751999L29.592003 0L34.416 0L34.416 23.400002C34.416 33.264 28.872002 37.079998 22.248001 37.079998C14.975998 37.079998 12.024002 33.192001 10.512001 29.736C10.584 30.816 10.439999 35.136002 10.296001 36.216003L5.6160011 36.216003C5.6879997 33.407997 5.6879997 30.24 5.6879997 27.071999L5.6879997 0Z"],[226.506,558.936,0,"M29.807999 52.992001L29.807999 32.040001C28.800003 34.200001 25.919998 37.079998 19.007996 37.079998C9.0719986 37.079998 2.9520035 28.872 2.9520035 17.711998C2.9520035 6.7679977 8.6399994 -0.86399841 18 -0.86399841C24.120003 -0.86399841 28.007996 1.512001 29.807999 5.6879997C29.807999 4.0320015 29.879997 0.93600082 30.096001 0L34.703995 0C34.632004 3.5999985 34.632004 6.9119987 34.632004 10.368L34.632004 52.992001L29.807999 52.992001ZM7.9919968 17.855999C7.9919968 27.431999 12.456001 32.832001 19.223999 32.832001C28.007996 32.832001 30.024002 27.575996 30.024002 18.863998C30.024002 9.8639984 27.720001 3.3839989 18.648003 3.3839989C12.671997 3.3839989 7.9919968 8.4960022 7.9919968 17.855999Z"],[285.258,558.936,1,"M0.57600403 32.040001L7.128006 32.040001L7.128006 7.9920006C7.128006 2.0880013 9.647995 -0.50400162 14.759995 -0.50400162C16.416 -0.50400162 18.287994 -0.36000061 19.656006 0.14400101L19.656006 4.0320015C18.576004 3.7439995 17.208008 3.6720009 16.199997 3.6720009C12.815994 3.6720009 11.951996 5.7599983 11.951996 9.5760002L11.951996 32.040001L20.304001 32.040001L20.304001 36.216003L11.951996 36.216003L11.951996 47.232002L7.128006 47.232002L7.128006 36.216003L0.57600403 36.216003L0.57600403 32.040001Z"],[306.498,558.936,1,"M19.511993 37.079998C8.8560028 37.079998 2.9519958 28.584002 2.9519958 18.071999C2.9519958 7.2000008 9.0720062 -0.86399841 19.151993 -0.86399841C30.095993 -0.86399841 35.856003 7.9199982 35.856003 18.216C35.856003 29.592001 29.375992 37.079998 19.511993 37.079998ZM19.296005 32.832001C26.783997 32.832001 30.815994 26.496002 30.815994 18.071999C30.815994 9.3600006 26.712006 3.3839989 19.440002 3.3839989C12.311996 3.3839989 7.9199982 9.7919998 7.9199982 18.144001C7.9199982 26.639999 11.664001 32.832001 19.296005 32.832001Z"],[363.738,558.936,2,"M2.0160065 36.216003L12.600006 0L18.143997 0C22.535995 14.903999 26.279999 27 27 30.743999L27.071991 30.743999C27.791992 27.144001 31.968002 13.031998 35.639999 0L40.895996 0L52.272003 36.216003L47.231995 36.216003C41.040009 14.832001 39.455994 9.3600006 38.520004 5.4720001L38.447998 5.4720001C37.800003 8.4960022 35.928009 14.688 29.735992 36.216003L24.768005 36.216003C19.367996 18.071999 16.199997 7.7039986 15.623993 4.6080017L15.552002 4.6080017C14.904007 8.0639992 12.095993 18.288002 7.128006 36.216003L2.0160065 36.216003Z"],[417.378,558.936,2,"M5.6879883 52.992001L5.6879883 0L10.511993 0L10.511993 20.015999C10.511993 28.296001 14.040009 32.688 20.951996 32.688C26.640015 32.688 29.59201 28.944 29.59201 22.176003L29.59201 0L34.416016 0L34.416016 23.112C34.416016 34.200001 27.575989 37.079998 22.175995 37.079998C15.911987 37.079998 12.455994 33.984001 10.511993 30.456001L10.511993 52.992001L5.6879883 52.992001Z"],[456.978,558.936,2,"M31.463989 25.487999C31.463989 33.551998 26.712006 37.079998 18.216003 37.079998C7.9920044 37.079998 5.256012 31.104 4.8240051 26.711998L9.5759888 26.711998C10.29599 29.592001 11.304016 33.048 18.071991 33.048C25.631989 33.048 26.712006 28.656 26.712006 25.199997L26.712006 21.743999L20.160004 21.743999C9.3599854 21.743999 3.0960083 18.144001 3.0960083 10.080002C3.0960083 4.6080017 6.6960144 -0.86399841 15.191986 -0.86399841C22.463989 -0.86399841 25.488007 2.6640015 26.783997 5.1839981C26.855988 2.5200005 27.071991 0.86399841 27.359985 0L31.967987 0C31.752014 1.0800018 31.463989 4.1040001 31.463989 7.3440018L31.463989 25.487999ZM26.783997 16.848C26.783997 9.5760002 25.488007 3.1679993 15.839996 3.1679993C11.015991 3.1679993 8.0639954 6.1199989 8.0639954 10.368C8.0639954 16.056 12.600006 18.071999 20.231995 18.071999L26.783997 18.071999L26.783997 16.848Z"],[493.77,558.936,2,"M0.57598877 32.040001L7.1279907 32.040001L7.1279907 7.9920006C7.1279907 2.0880013 9.6480103 -0.50400162 14.76001 -0.50400162C16.416016 -0.50400162 18.287994 -0.36000061 19.656006 0.14400101L19.656006 4.0320015C18.575989 3.7439995 17.208008 3.6720009 16.200012 3.6720009C12.81601 3.6720009 11.951996 5.7599983 11.951996 9.5760002L11.951996 32.040001L20.304016 32.040001L20.304016 36.216003L11.951996 36.216003L11.951996 47.232002L7.1279907 47.232002L7.1279907 36.216003L0.57598877 36.216003L0.57598877 32.040001Z"],[534.018,558.936,3,"M5.6879883 0L10.440002 0L10.440002 20.015999C10.440002 27.144001 13.608002 32.688 20.088013 32.688C26.279999 32.688 27.791992 28.152 27.791992 23.112L27.791992 0L32.472015 0L32.472015 20.807999C32.472015 27.575996 35.424011 32.688 41.903992 32.688C48.167999 32.688 49.824005 27.792 49.824005 23.256001L49.824005 0L54.575989 0L54.575989 23.832001C54.575989 33.768002 48.888 37.079998 43.200012 37.079998C36.864014 37.079998 33.335999 33.84 31.463989 30.24C30.096008 34.559998 26.279999 37.079998 21.167999 37.079998C15.335999 37.079998 12.023987 33.624001 10.440002 30.167999C10.511993 32.183998 10.368011 35.063999 10.29599 36.216003L5.6159973 36.216003C5.6879883 33.335999 5.6879883 30.024 5.6879883 26.855999L5.6879883 0Z"],[594.282,558.936,3,"M19.511993 37.079998C8.8559875 37.079998 2.9519958 28.584002 2.9519958 18.071999C2.9519958 7.2000008 9.071991 -0.86399841 19.152008 -0.86399841C30.096008 -0.86399841 35.855988 7.9199982 35.855988 18.216C35.855988 29.592001 29.376007 37.079998 19.511993 37.079998ZM19.29599 32.832001C26.783997 32.832001 30.81601 26.496002 30.81601 18.071999C30.81601 9.3600006 26.712006 3.3839989 19.440002 3.3839989C12.312012 3.3839989 7.9200134 9.7919998 7.9200134 18.144001C7.9200134 26.639999 11.664001 32.832001 19.29599 32.832001Z"],[633.306,558.936,3,"M1.0079956 36.216003L13.824005 0L19.29599 0L32.83197 36.216003L27.864014 36.216003C21.528015 18.792 17.567993 7.9920006 16.776001 4.6800003L16.70401 4.6800003C15.40799 9.2159996 11.59201 20.447998 6.1919861 36.216003L1.0079956 36.216003Z"],[667.146,558.936,3,"M33.984009 17.351997C34.05603 18.288002 34.05603 19.296001 34.05603 20.375999C34.05603 27.575996 30.383972 37.079998 18.935974 37.079998C8.2080078 37.079998 2.9520264 28.296001 2.9520264 17.784C2.9520264 8.4960022 7.3439941 -0.86399841 18.575989 -0.86399841C27.935974 -0.86399841 31.752014 4.8959999 33.263977 9.6480026L28.367981 9.6480026C27.143982 6.8400002 25.05603 3.3839989 18.719971 3.3839989C12.096008 3.3839989 7.8480225 8.9280014 7.8480225 17.351997L33.984009 17.351997ZM8.0640259 21.096001C8.7839966 28.152 11.880005 32.976002 18.864014 32.976002C25.559998 32.976002 29.015991 27.720001 29.088013 21.096001L8.0640259 21.096001Z"],[704.73,558.936,3,"M2.2319946 10.152C3.1680298 3.6720009 7.776001 -0.86399841 16.559998 -0.86399841C24.840027 -0.86399841 30.023987 3.4560013 30.023987 9.9360008C30.023987 15.335999 27.64801 18.863998 17.064026 21.383999C10.151978 23.040001 8.5679932 24.552002 8.5679932 27.575996C8.5679932 30.24 10.223999 33.048 15.984009 33.048C21.815979 33.048 23.976013 29.52 24.552002 26.784L29.304016 26.784C28.728027 31.896 24.840027 37.079998 16.127991 37.079998C7.4879761 37.079998 3.6719971 32.256001 3.6719971 27.216C3.6719971 22.391998 5.9039917 19.368 15.768005 16.992001C23.328003 15.192001 24.984009 13.391998 24.984009 9.5760002C24.984009 5.8320007 22.608032 3.1679993 16.703979 3.1679993C11.375977 3.1679993 8.2080078 5.8320007 7.0560303 10.152L2.2319946 10.152Z"],[756.138,558.936,4,"M33.695984 36.216003L28.872009 36.216003L28.872009 17.496002C28.872009 7.7039986 25.992004 3.5279999 18.575989 3.5279999C11.952026 3.5279999 10.367981 8.3519974 10.367981 13.391998L10.367981 36.216003L5.5440063 36.216003L5.5440063 12.312C5.5440063 1.6559982 11.880005 -0.86399841 17.495972 -0.86399841C23.616028 -0.86399841 27.216003 1.7280006 28.872009 5.9039993C28.872009 3.2400017 28.94397 0.93600082 29.088013 0L33.768005 0C33.768005 1.7280006 33.695984 7.0559998 33.695984 10.584L33.695984 36.216003Z"],[795.018,558.936,4,"M2.2319946 10.152C3.1680298 3.6720009 7.776001 -0.86399841 16.559998 -0.86399841C24.840027 -0.86399841 30.023987 3.4560013 30.023987 9.9360008C30.023987 15.335999 27.64801 18.863998 17.064026 21.383999C10.151978 23.040001 8.5679932 24.552002 8.5679932 27.575996C8.5679932 30.24 10.223999 33.048 15.984009 33.048C21.815979 33.048 23.976013 29.52 24.552002 26.784L29.304016 26.784C28.728027 31.896 24.840027 37.079998 16.127991 37.079998C7.4879761 37.079998 3.6719971 32.256001 3.6719971 27.216C3.6719971 22.391998 5.9039917 19.368 15.768005 16.992001C23.328003 15.192001 24.984009 13.391998 24.984009 9.5760002C24.984009 5.8320007 22.608032 3.1679993 16.703979 3.1679993C11.375977 3.1679993 8.2080078 5.8320007 7.0560303 10.152L2.2319946 10.152Z"],[846.426,558.936,5,"M11.52002 0L11.52002 32.040001L19.151978 32.040001L19.151978 36.216003L11.52002 36.216003L11.52002 40.751999C11.52002 46.584 13.031982 49.248001 17.064026 49.248001C18.072021 49.248001 19.656006 49.176003 20.59198 48.888L20.59198 53.208C19.728027 53.495998 18.072021 53.711998 16.848022 53.711998C8.7839966 53.711998 6.6959839 47.375999 6.6959839 41.040001L6.6959839 36.216003L0.64801025 36.216003L0.64801025 32.040001L6.6959839 32.040001L6.6959839 0L11.52002 0Z"],[865.506,558.936,5,"M19.512024 37.079998C8.8560181 37.079998 2.9520264 28.584002 2.9520264 18.071999C2.9520264 7.2000008 9.0720215 -0.86399841 19.151978 -0.86399841C30.096008 -0.86399841 35.856018 7.9199982 35.856018 18.216C35.856018 29.592001 29.375977 37.079998 19.512024 37.079998ZM19.296021 32.832001C26.783997 32.832001 30.815979 26.496002 30.815979 18.071999C30.815979 9.3600006 26.711975 3.3839989 19.440002 3.3839989C12.312012 3.3839989 7.9199829 9.7919998 7.9199829 18.144001C7.9199829 26.639999 11.664001 32.832001 19.296021 32.832001Z"],[904.242,558.936,5,"M5.6879883 0L10.512024 0L10.512024 18.288002C10.512024 27.144001 15.40802 31.752001 22.895996 32.112L22.895996 37.079998C16.992004 36.864002 12.528015 33.624001 10.512024 28.440001C10.512024 32.543999 10.440002 35.136002 10.296021 36.216003L5.6160278 36.216003C5.6160278 34.703999 5.6879883 31.968 5.6879883 26.351997L5.6879883 0Z"],[929.586,558.936,5,"M2.0159912 36.216003L12.599976 0L18.143982 0C22.536011 14.903999 26.280029 27 27 30.743999L27.072021 30.743999C27.791992 27.144001 31.968018 13.031998 35.640015 0L40.895996 0L52.271973 36.216003L47.231995 36.216003C41.039978 14.832001 39.455994 9.3600006 38.52002 5.4720001L38.447998 5.4720001C37.799988 8.4960022 35.927979 14.688 29.736023 36.216003L24.768005 36.216003C19.367981 18.071999 16.200012 7.7039986 15.624023 4.6080017L15.552002 4.6080017C14.903992 8.0639992 12.096008 18.288002 7.1279907 36.216003L2.0159912 36.216003Z"],[982.506,558.936,5,"M31.463989 25.487999C31.463989 33.551998 26.711975 37.079998 18.216003 37.079998C7.9920044 37.079998 5.2559814 31.104 4.8239746 26.711998L9.5759888 26.711998C10.296021 29.592001 11.304016 33.048 18.072021 33.048C25.632019 33.048 26.711975 28.656 26.711975 25.199997L26.711975 21.743999L20.159973 21.743999C9.3599854 21.743999 3.0960083 18.144001 3.0960083 10.080002C3.0960083 4.6080017 6.6959839 -0.86399841 15.192017 -0.86399841C22.463989 -0.86399841 25.487976 2.6640015 26.783997 5.1839981C26.856018 2.5200005 27.072021 0.86399841 27.359985 0L31.968018 0C31.752014 1.0800018 31.463989 4.1040001 31.463989 7.3440018L31.463989 25.487999ZM26.783997 16.848C26.783997 9.5760002 25.487976 3.1679993 15.840027 3.1679993C11.015991 3.1679993 8.0640259 6.1199989 8.0640259 10.368C8.0640259 16.056 12.599976 18.071999 20.231995 18.071999L26.783997 18.071999L26.783997 16.848Z"],[1019.73,558.936,5,"M5.6879883 0L10.512024 0L10.512024 18.288002C10.512024 27.144001 15.40802 31.752001 22.895996 32.112L22.895996 37.079998C16.992004 36.864002 12.528015 33.624001 10.512024 28.440001C10.512024 32.543999 10.440002 35.136002 10.296021 36.216003L5.6160278 36.216003C5.6160278 34.703999 5.6879883 31.968 5.6879883 26.351997L5.6879883 0Z"],[1043.42,558.936,5,"M29.807983 52.992001L29.807983 32.040001C28.799988 34.200001 25.919983 37.079998 19.007996 37.079998C9.0720215 37.079998 2.9520264 28.872 2.9520264 17.711998C2.9520264 6.7679977 8.6400146 -0.86399841 18 -0.86399841C24.119995 -0.86399841 28.007996 1.512001 29.807983 5.6879997C29.807983 4.0320015 29.880005 0.93600082 30.096008 0L34.703979 0C34.632019 3.5999985 34.632019 6.9119987 34.632019 10.368L34.632019 52.992001L29.807983 52.992001ZM7.9920044 17.855999C7.9920044 27.431999 12.455994 32.832001 19.223999 32.832001C28.007996 32.832001 30.023987 27.575996 30.023987 18.863998C30.023987 9.8639984 27.719971 3.3839989 18.64801 3.3839989C12.671997 3.3839989 7.9920044 8.4960022 7.9920044 17.855999Z"],[1102.17,558.936,6,"M5.6879883 0L10.512024 0L10.512024 36.216003L5.6879883 36.216003L5.6879883 0ZM10.512024 45.576L10.512024 52.992001L5.6879883 52.992001L5.6879883 45.576L10.512024 45.576Z"],[1118.37,558.936,6,"M5.6879883 0L10.512024 0L10.512024 18.792C10.512024 26.424004 13.392029 32.688 21.16803 32.688C27.143982 32.688 29.59198 28.727999 29.59198 22.751999L29.59198 0L34.416016 0L34.416016 23.400002C34.416016 33.264 28.872009 37.079998 22.247986 37.079998C14.976013 37.079998 12.023987 33.192001 10.512024 29.736C10.583984 30.816 10.440002 35.136002 10.296021 36.216003L5.6160278 36.216003C5.6879883 33.407997 5.6879883 30.24 5.6879883 27.071999L5.6879883 0Z"]],"y7":[[1226.24,509.268,0,"M205.97 0L208.98 7.7399902L29.67 7.7399902C38.700001 49.019989 71.809998 84.279999 116.10001 114.38C174.58 153.94 193.93001 172.42999 193.93001 211.56001C193.93001 256.28 165.12 289.82001 113.09 289.82001C58.480003 289.82001 30.530001 254.98999 24.08 207.69L32.25 207.69C39.990002 255.85001 67.510002 282.08002 112.66 282.08002C158.24001 282.08002 184.90001 254.13 184.90001 211.99001C184.90001 171.56999 161.67999 155.23 110.93999 120.39999C49.450001 78.26001 25.370001 36.549988 20.639999 4.2999878L20.639999 0L205.97 0Z"],[1446.83,509.268,1,"M121.26001 289.82001C45.149994 289.82001 25.800003 208.12 25.800003 141.04001C25.800003 75.25 46.01001 -5.1600037 119.54001 -5.1600037C196.50998 -5.1600037 212.85001 77.829987 212.85001 143.62C212.85001 209.84 192.20999 289.82001 121.26001 289.82001ZM120.82999 282.08002C187.48001 282.08002 203.82001 199.95 203.82001 143.62C203.82001 80.410004 188.76999 2.5799866 119.97 2.5799866C52.459991 2.5799866 34.830002 81.699982 34.830002 140.61C34.830002 203.82001 52.459991 282.08002 120.82999 282.08002Z"],[1226.24,849.268,2,"M205.97 0L208.98 7.7399902L29.67 7.7399902C38.700001 49.02002 71.809998 84.280029 116.10001 114.38C174.58 153.94 193.93001 172.42999 193.93001 211.56C193.93001 256.28 165.12 289.82001 113.09 289.82001C58.480003 289.82001 30.530001 254.98999 24.08 207.69L32.25 207.69C39.990002 255.85001 67.510002 282.08002 112.66 282.08002C158.24001 282.08002 184.90001 254.13 184.90001 211.98999C184.90001 171.57001 161.67999 155.22998 110.93999 120.40002C49.450001 78.26001 25.370001 36.549988 20.639999 4.2999878L20.639999 0L205.97 0Z"],[1458.01,849.268,3,"M7.7400055 284.66L7.7400055 276.91998L178.45001 276.91998C125.56 210.70001 67.51001 92.02002 48.160004 0L56.76001 0C78.690002 96.75 131.58002 204.67999 187.91 277.35001L187.91 284.66L7.7400055 284.66Z"]]};
+for(const k in G)G[k].forEach(g=>{g[3]=new Path2D(g[3]);});
+const tmp=document.createElement('canvas'),xTmp=tmp.getContext('2d');
+const vox=document.createElement('canvas'),xVox=vox.getContext('2d');
+function prepTmp(c){if(tmp.width!==c.width||tmp.height!==c.height){tmp.width=c.width;tmp.height=c.height;}xTmp.setTransform(1,0,0,1,0,0);xTmp.clearRect(0,0,tmp.width,tmp.height);}
+// draw glyphs (svg coords of the comp, y down) into the temp canvas; per(w) → {op,dx,dy} with dy in comp px (up)
+function glyphsInto(list,color,dxAll,per){
+  const d=tmp._d;
+  for(const [tx,ty,w,path] of list){const p=per(w);if(p.op<=0.002)continue;
+    xTmp.setTransform(k*d,0,0,k*d,(ox-960*k)*d,(oy-540*k)*d);xTmp.translate(tx+dxAll+p.dx,ty-p.dy);xTmp.scale(1,-1);
+    xTmp.globalAlpha=p.op;xTmp.fillStyle=color;xTmp.fill(path);}
+  xTmp.globalAlpha=1;
+}
+// Voxelize (Cavalry deformer): the glyphs become solid squares of `size` comp px (grid on the comp centre)
+function voxelize(size){
+  if(size<0.5)return;
+  const d=tmp._d,b=Math.max(1,size*k*d);
+  const gx=((ox*d)%b+b)%b-b, gy=((oy*d)%b+b)%b-b;
+  const w=Math.ceil((tmp.width-gx)/b)+1,h=Math.ceil((tmp.height-gy)/b)+1;vox.width=w;vox.height=h;
+  xVox.imageSmoothingEnabled=true;xVox.setTransform(1/b,0,0,1/b,-gx/b,-gy/b);xVox.drawImage(tmp,0,0);xVox.setTransform(1,0,0,1,0,0);
+  const id=xVox.getImageData(0,0,w,h),a=id.data;
+  for(let i=3;i<a.length;i+=4)a[i]=a[i]>110?255:0;
+  xVox.putImageData(id,0,0);
+  xTmp.setTransform(1,0,0,1,0,0);xTmp.clearRect(0,0,tmp.width,tmp.height);xTmp.imageSmoothingEnabled=false;
+  xTmp.drawImage(vox,0,0,w,h,gx,gy,w*b,h*b);xTmp.imageSmoothingEnabled=true;
+}
+// the temp canvas onto ctx, with Fast Blur (σ ≈ amount comp px), opacity and a vertical shift (comp px, up)
+function tmpOnto(ctx,amount,alpha,dy){
+  const d=tmp._d,b=amount*BL*k*d;ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.globalAlpha=alpha;
+  if(b>.3&&typeof ctx.filter==='string')ctx.filter=`blur(${b.toFixed(2)}px)`;
+  ctx.drawImage(tmp,0,-dy*k*d);ctx.restore();
+}
+// portrait: each line breaks after word `cut` and the two halves are centred one under the other (svg units)
+const WX={};
+function wordBox(list){const b={};for(const g of list){const w=g[2];const e=b[w]||(b[w]={a:1e9,z:-1e9});e.a=Math.min(e.a,g[0]);e.z=Math.max(e.z,g[0]+30);}return b;}
+for(const k of ['l1','id','l2','y7'])WX[k]=wordBox(G[k]);
+function reflow(k,cut,lineY,gap,extra){   // returns per-word {dx,dy}
+  const b=WX[k],ids=Object.keys(b).map(Number),A=ids.filter(w=>w<cut),B=ids.filter(w=>w>=cut);
+  const span=ws=>[Math.min(...ws.map(w=>b[w].a)),Math.max(...ws.map(w=>b[w].z))];
+  const out={};const sa=span(A),sb=B.length?span(B.concat(extra?extra.ws:[])):null;
+  for(const w of A)out[w]={dx:960-(sa[0]+sa[1])/2,dy:lineY+gap/2};
+  for(const w of B)out[w]={dx:960-(sb[0]+sb[1])/2,dy:lineY-gap/2};
+  return out;
+}
+let RF=null;
+function portLayout(){
+  if(!PORT.on){RF=null;return;}
+  const b1=WX.l1,bi=WX.id[0];
+  // line 1: "Here is to a" / "year shaped by ideas"
+  const A=[0,1,2,3],B=[4,5,6],sa=[b1[0].a,b1[3].z],sb=[b1[4].a,bi.z+6];
+  const y1=150;   // comp px above the original line
+  RF={l1:{},id:{},l2:{},y7:{}};
+  for(const w of A)RF.l1[w]={dx:960-(sa[0]+sa[1])/2,dy:y1+48};
+  for(const w of B)RF.l1[w]={dx:960-(sb[0]+sb[1])/2,dy:y1-48};
+  RF.id[0]={dx:960-(sb[0]+sb[1])/2,dy:y1-48};
+  // line 2: "and to what moves" / "us forward in", above 2027
+  const b2=WX.l2,ta=[b2[0].a,b2[3].z],tb=[b2[4].a,b2[6].z];
+  const y2=520;
+  for(const w of [0,1,2,3])RF.l2[w]={dx:960-(ta[0]+ta[1])/2,dy:y2+48};
+  for(const w of [4,5,6])RF.l2[w]={dx:960-(tb[0]+tb[1])/2,dy:y2-48};
+  // 2027: centred
+  const b7=WX.y7, c7=(b7[0].a+b7[3].z+200)/2;
+  for(const w of [0,1,2,3])RF.y7[w]={dx:960-c7,dy:60};
+}
+addEventListener('resize',portLayout);portLayout();
+const rf=(k,w,p)=>{if(!RF)return p;const o=RF[k][w];if(!o)return p;return {op:p.op,dx:(p.dx||0)+o.dx,dy:(p.dy||0)+o.dy};};
+function drawText(F){
+  const ctx=xT,d=cT._d;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,cT.width,cT.height);tmp._d=d;
+  // ---- Group: "Here is to a year shaped by" + "ideas" (Text Blocks at 15 fps); group opacity / rise / blur
+  const gop=V('g85op',F)/100,gy=V('g85y',F),gb=V('b101',F);
+  if(gop>0.002){
+    const f=P12(F);                       // all text steps at 12 fps
+    // 7 words, Sub-Mesh stagger 0 → −30 frames (5 per word); word spacing adds between words
+    prepTmp(cT);const op1=V('t21op',f)/100,ws=V('t21ws',f);
+    glyphsInto(G.l1,'#fff',V('t21x',f)-691.969,w=>rf('l1',w,{op:op1*V('sm8op',f-5*w)/100,dx:V('sm8x',f-5*w)+ws*(RF&&w>=4?w-4:w),dy:0}));
+    tmpOnto(ctx,Math.hypot(V('b96',f),gb),gop,gy);
+    prepTmp(cT);const opi=V('t22op',f)/100;
+    glyphsInto(G.id,'#E57249',V('t22x',f)-739.969,w=>rf('id',w,{op:opi*V('sm9op',f)/100,dx:V('sm9x',f),dy:0}));
+    voxelize(V('vx3',f));
+    tmpOnto(ctx,Math.hypot(V('b97',f),gb),gop,gy);
+  }
+  // ---- Group 2: the tree (three triangles, group blur)
+  {const gyT=V('g86y',F),sx=V('g86sx',F),sy=V('g86sy',F),b=V('b102',F)*Math.pow(sx*sy,TB*.5);
+   const tri=[[99.5404,-315.0001,1.66471,1.66471],[99.5402,-189.0000,1.46333,1.47187],[99.5400,-65.5201,1.23781,1.24192]];
+   blurFill(ctx,d,b,'#167F6D',1,()=>{
+     for(const [px,py,ssx,ssy] of tri){
+       for(let i=0;i<3;i++){const a=Math.PI/2+i*2*Math.PI/3,vx=px+109.62*ssx*Math.cos(a),vy=py+105.84*ssy*Math.sin(a);
+         const X=RX(41.5803)+sx*(vx-99.5402),Y=RY(gyT)+sy*(vy-(-146.2119));i?ctx.lineTo(X,-Y):ctx.moveTo(X,-Y);}ctx.closePath();}
+   },o=>{ctx.setTransform(k*d,0,0,k*d,ox*d-o,oy*d);});}
+  // ---- Text Block 2: "and to what moves us forward in" (15 fps): stagger 0 → −20 over 7 words, words rise from below
+  {const f=P12(F),op2=V('t26op',f)/100;
+   if(op2>0.002){prepTmp(cT);
+     glyphsInto(G.l2,'#fff',V('t26x',f)-574.969,w=>{const g=f-w*20/6;return rf('l2',w,{op:op2*V('sm13op',g)/100,dx:0,dy:V('sm13y',g)});});
+     tmpOnto(ctx,V('b106',f),1,0);}}
+}
+function draw27(F){
+  const ctx=x27,d=c27._d;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,c27.width,c27.height);
+  F=P12(F);const op=V('t27op',F)/100;if(op<=0.002)return;
+  prepTmp(c27);tmp._d=d;
+  // 4 characters, Sub-Mesh stagger 0 → −15 (5 frames each), each rises 438 px; the layer rises too
+  glyphsInto(G.y7,'#fff',0,w=>rf('y7',w,{op:1,dx:0,dy:V('sm14y',F-5*w)+V('t27y',F)-5.64}));
+  voxelize(V('vx4',F));
+  tmpOnto(ctx,V('b108',F),op,0);
+}
+
+/* ---------------- grain (Cavalry "Noise": grey + sparse bright specks, Overlay 36 %) ---------------- */
+const GT=[];
+function makeGrain(){
+  GT.length=0;
+  for(let n=0;n<4;n++){const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d'),id=x.createImageData(256,256),a=id.data;
+    for(let i=0;i<a.length;i+=4){let v=100;if(Math.random()<0.155)v=255;a[i]=a[i+1]=a[i+2]=v;a[i+3]=255;}
+    x.putImageData(id,0,0);GT.push(xG.createPattern(c,'repeat'));}
+}
+let gIdx=-1;
+function drawGrain(F){const i=Math.floor(F/4)%4;if(i===gIdx)return;gIdx=i;xG.setTransform(1,0,0,1,0,0);xG.fillStyle=GT[i];xG.fillRect(0,0,cG.width,cG.height);}
+
+/* ---------------- background ----------------
+   "Composition 11" rebuilt from the Cavalry file: five soft shapes on their keyframes, drawn small (1/8) with their
+   blurs, over the cream "BG 2". The WebGL pass pixelates it (Pixelate 52, the grid always straight) and lays the
+   blurred copy on top ("Composition 12": Fast Blur 243.3 at 76 %). The change at 187–313 travels in from the right
+   while the resting state leaves to the left, motion-blurred; the mouse swirls what lies under the grid. */
+const BQ=8, bc=document.createElement('canvas'), bx=bc.getContext('2d'), bc0=document.createElement('canvas'), bx0=bc0.getContext('2d');
+const gc=document.createElement('canvas'), gx=gc.getContext('2d');
+let BEXT=540;for(const c of [bc,bc0,gc]){c.width=1920/BQ;c.height=1080/BQ;}
+const HALF=new Path2D('M-114.133 0C-114.133 64.617 -63.034 117 0 117C63.034 117 114.133 64.617 114.133 0C3.057 0 -43.303 0 -114.133 0Z'); // canvas y (down)
+const BOFF=4000, Q=new URLSearchParams(location.search), BF=+(Q.get('bf')||1), SF=+(Q.get('sf')||1), HF=+(Q.get('hf')||1);
+// draw one shape blurred (σ = sigma comp px) with the shadow trick, in comp coords (+y up)
+function bShape(ctx,x,y,rot,sx,sy,sigma,color,draw){
+  const r=rot*Math.PI/180,c=Math.cos(r),s=Math.sin(r),q=1/BQ;
+  ctx.save();ctx.shadowColor=color;ctx.shadowBlur=2*sigma*BF*q;ctx.shadowOffsetX=BOFF;
+  ctx.setTransform(sx*c*q,-sx*s*q,sy*s*q,sy*c*q,(960+x)*q-BOFF,(BEXT-y)*q);ctx.fillStyle='#000';draw(ctx);ctx.restore();
+}
+const ell=(rx,ry)=>c=>{c.beginPath();c.ellipse(0,0,rx,ry,0,0,Math.PI*2);c.fill();};
+const half=c=>c.fill(HALF);
+// state at frame f (frames before 31 = the settled state); drift = a slow breathing while resting
+// entrance: each shape slides in from the edge it is closest to (0 → 1 over 2.8 s, eased in and out)
+let entT=0;
+const easeOut=x=>{x=Math.min(1,Math.max(0,x));return x*x*(3-2*x);};
+function drawC11(ctx,f,t){
+  f=Math.max(31,f);
+  const en=easeOut(entT/2.8);
+  const d0=(i,a)=>a*Math.sin(t*.35+i*1.9);
+  // push a position out towards its nearest edge of the frame (comp 1920 × 1080) by up to ~1150 px
+  const HW=PORT.on?575:960, HH=PORT.on?PORT.hc:540;
+  const inX=(x,y)=>{const ex=HW-Math.abs(x),ey=HH-Math.abs(y);return ex<ey;};
+  const P=(x0,y0)=>{const x=PORT.on?x0*.7:x0,y=PORT.on?y0*(1+(PORT.ay-1)*.35):y0;if(en>=1)return [x,y];const k=(1-en)*1150;return inX(x,y)?[x+Math.sign(x||1)*k,y]:[x,y+Math.sign(y||1)*k];};
+  ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,bc.width,bc.height);
+  // bottom: Half circle red 2 (#F7B272, blur 37.5)
+  bShape(ctx,...P(V('c69x',f)+d0(0,18),V('c69y',f)+d0(1,12)),461.31,1.771,1.771,37.5*(SF>0?1.771:1),'#F7B272',half);
+  // Group (blur 171.1 on the group, combined with each shape's own blur)
+  gx.setTransform(1,0,0,1,0,0);gx.clearRect(0,0,gc.width,gc.height);
+  const GB=171.1;
+  bShape(gx,...P(V('e72x',f)+d0(2,22),V('e72y',f)+d0(3,16)),0,1.0628,1.0628,Math.hypot(259.8*1.0628*SF,GB),'#FF523D',ell(477,435));
+  bShape(gx,...P(V('e73x',f)+d0(4,22),V('e73y',f)+d0(5,16)),0,1.0628,1.0628,GB,'#F7B272',ell(559,559));
+  bShape(gx,...P(V('e74x',f)+d0(6,22),V('e74y',f)+d0(7,16)),0,1.2718,1.2718,Math.hypot(95.7*1.2718*SF,GB),'#E57249',ell(516,458));
+  gx.globalCompositeOperation='overlay';
+  bShape(gx,...P(45.29+d0(8,22),V('e75y',f)+d0(9,16)),0,1.3464,1.3464,Math.hypot(280.1*1.3464*SF,GB),'#167F6D',ell(672,458));
+  gx.globalCompositeOperation='source-over';
+  ctx.drawImage(gc,0,0);
+  // top: Half circle red (#AA302D, blur 48.8)
+  bShape(ctx,...P(V('c67x',f)+d0(10,18),V('c67y',f)+d0(11,12)),315,4.0154,4.0154,48.8*(SF>0?4.0154:1),'#AA302D',half);
+}
+const bg=document.getElementById('s4bg');const gl=bg.getContext('webgl',{premultipliedAlpha:false,antialias:false});
+const VS=`attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0,1);}`;
+const FS=`precision highp float;varying vec2 v;
+uniform sampler2D uA,uA0;uniform vec2 uRes,uMouse;uniform float uK,uMs,uT,uHF,uHO,uP0;
+const vec3 CREAM=vec3(237.,216.,193.)/255.;
+uniform float uE;
+vec4 tx(sampler2D t,vec2 c){vec2 q=clamp(vec2(c.x/1920.+.5,.5-c.y/(2.*uE)),vec2(.5/240.,.5/(uE/4.)),vec2(1.-.5/240.,1.-.5/(uE/4.)));
+  vec4 s=texture2D(t,q);return vec4(s.rgb*s.a,s.a);}
+// Pixelate: the cell's colour (average of 4 samples inside it) over the cream
+// Cavalry's Pixelate on this comp: each cell takes the cell's colour, but only where the picture is fairly opaque
+// (measured: coverage ramps from ~52 % to full), so thin, very soft areas stay cream
+vec3 px(vec4 s){float A=smoothstep(uP0,uP0+.5,s.a);return mix(CREAM,s.rgb/max(s.a,1e-4),A);}
+vec3 cellA(vec2 c){return px((tx(uA,c+vec2(-13.,-13.))+tx(uA,c+vec2(13.,-13.))+tx(uA,c+vec2(-13.,13.))+tx(uA,c+vec2(13.,13.)))*.25);}
+vec3 cellB(vec2 c){return px((tx(uA0,c+vec2(-13.,-13.))+tx(uA0,c+vec2(13.,-13.))+tx(uA0,c+vec2(-13.,13.))+tx(uA0,c+vec2(13.,13.)))*.25);}
+// "Composition 12": the same picture blurred (σ 243.3), 5 × 5 gaussian taps
+vec4 hazeA(vec2 c){vec4 s=vec4(0.);float w=0.;for(int i=-2;i<=2;i++)for(int j=-2;j<=2;j++){vec2 o=vec2(float(i),float(j));float g=exp(-.5*dot(o,o)*.49);s+=g*tx(uA,c+o*170.*uHF);w+=g;}return s/w;}
+vec4 hazeB(vec2 c){vec4 s=vec4(0.);float w=0.;for(int i=-2;i<=2;i++)for(int j=-2;j<=2;j++){vec2 o=vec2(float(i),float(j));float g=exp(-.5*dot(o,o)*.49);s+=g*tx(uA0,c+o*170.*uHF);w+=g;}return s/w;}
+void main(){
+  vec2 fc=vec2(v.x*uRes.x,(1.-v.y)*uRes.y);
+  vec2 p=vec2((fc.x-uRes.x*.5)/uK,(uRes.y*.5-fc.y)/uK);
+  vec2 cc=(floor(p/52.)+.5)*52.;
+  vec2 m=vec2((uMouse.x-uRes.x*.5)/uK,(uRes.y*.5-uMouse.y)/uK);
+  vec2 dd=cc-m;float w=uMs*exp(-dot(dd,dd)/(2.*260.*260.));
+  vec2 s=cc+vec2(-dd.y,dd.x)*.10*w-dd*.06*w;
+  vec2 dq=p-m;float wq=uMs*exp(-dot(dq,dq)/(2.*260.*260.));
+  vec2 sq=p+vec2(-dq.y,dq.x)*.10*wq-dq*.06*wq;
+  vec3 col;vec4 b;
+  if(uT>0.&&uT<1.){
+    float rb=220.*sin(3.14159*uT), front=mix(1250.,-1250.,uT);
+    float mk=smoothstep(front-420.,front+420.,cc.x), mq=smoothstep(front-420.,front+420.,p.x);
+    vec3 cn=vec3(0.),co=vec3(0.);
+    for(int i=-3;i<=3;i++){vec2 o=vec2(float(i)*rb/3.,0.);cn+=cellA(s+o-vec2(900.*(1.-uT),0.));co+=cellB(s+o+vec2(900.*uT,0.));}
+    col=mix(co/7.,cn/7.,mk);
+    b=mix(hazeB(sq+vec2(900.*uT,0.)),hazeA(sq-vec2(900.*(1.-uT),0.)),mq);
+  }else{col=cellA(s);b=hazeA(sq);}
+  col=col*(1.-.76*uHO*b.a)+.76*uHO*b.rgb;
+  gl_FragColor=vec4(col,1.);}`;
+function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(o));return o;}
+const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
+const bf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+const al=gl.getAttribLocation(pr,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
+const U={};['uA','uA0','uRes','uMouse','uK','uMs','uT','uHF','uHO','uP0','uE'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+function mkTex(unit){const t=gl.createTexture();gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);return t;}
+const tA=mkTex(0),tA0=mkTex(1);
+function up(t,unit,c){gl.activeTexture(gl.TEXTURE0+unit);gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,c);}
+function resizeGL(){bg.width=W;bg.height=H;gl.viewport(0,0,W,H);}
+function drawBG(F){
+  const t=S.R/25, x=Math.max(0,Math.min(1,(F-187)/126)), e=x<=0||x>=1?x:x*x*(3-2*x);
+  drawC11(bx,F,t);up(tA,0,bc);
+  if(e>0&&e<1){drawC11(bx0,186,t);up(tA0,1,bc0);}
+  gl.uniform2f(U.uRes,W,H);gl.uniform1f(U.uK,k);gl.uniform1f(U.uT,e);gl.uniform1f(U.uE,BEXT);gl.uniform1f(U.uHF,HF);gl.uniform1f(U.uHO,+(Q.get('ho')||1));gl.uniform1f(U.uP0,+(Q.get('p0')||.52));
+  gl.uniform2f(U.uMouse,mouse.x,mouse.y);gl.uniform1f(U.uMs,mouse.s);gl.uniform1i(U.uA,0);gl.uniform1i(U.uA0,1);
+  gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+}
+
+/* ---------------- loop (one of the page's renderers) ---------------- */
+let ready=false;
+const eio=x=>{x=Math.min(1,Math.max(0,x));return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;};
+function render(dt){
+  const p4=SCN.p4;
+  // the whole scene comes in as one colour change from SC03's dark red, like SC03's orange → dark red
+  // (linear, ~1.4 s), while the asterisk is still travelling to its place
+  const fadeIn=Math.min(1,Math.max(0,(p4-.2)/.5));    // starts early in the zoom (~0.7 s), done at ~2.4 s
+  wrap.style.opacity=fadeIn.toFixed(3);
+  entT=SCN.entT;                          // the background shapes start coming in while the asterisk is zooming
+  if(SCN.p4<1)ROTOFF=(SCN.astRot||0)-V('asR',0);
+  if(fadeIn<=0||!ready)return;
+  S.F=SCN.F4;S.R=SCN.R4;CARRY.off={};
+  const on=mouse.tx>-1e3;mouse.x+=(mouse.tx-mouse.x)*(on&&mouse.x>-1e3?.12:1);mouse.y+=(mouse.ty-mouse.y)*(on&&mouse.y>-1e3?.12:1);
+  mouse.s+=((on?1:0)-mouse.s)*.05;
+  drawBG(S.F);drawShapes(S.F,S.R);drawText(S.F);drawGrain(S.R);draw27(S.F);
+}
+SCN.renderers.push(render);
+addEventListener('resize',resize);
+resize();ready=true;
+
+})();
+</script>
+<script>
+/* ============================== SC02 + SC03 text (SVG over the canvases) ==============================
+   Text on curves is laid out letter by letter along a line through the middle of the letters, so the gaps between
+   letters look the same on straight parts, round corners and along the wave (no bunching on the inside of a bend).
+   SC02 text moves slower than in Cavalry and steps at 12 fps; the SC03 line steps at 12 fps with its scene. */
+(() => {
+const svg=document.getElementById('txt'), NS='http://www.w3.org/2000/svg';
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const sstep=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t);};
+const eo=x=>1-Math.pow(1-clamp(x),3);
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const POST=25/12, post=f=>Math.floor(f/POST)*POST;
+function fitSvg(){const f=FITK(innerWidth,innerHeight);
+  svg.style.transform=`translate(${-960*f}px,${-540*f}px) scale(${f})`;}
+addEventListener('resize',fitSvg);fitSvg();
+
+// ---------- polyline paths (SVG coords, y down) ----------
+function seg(pts,x0,y0,x1,y1,step){const n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)/step));for(let i=pts.length?1:0;i<=n;i++)pts.push([x0+(x1-x0)*i/n,y0+(y1-y0)*i/n]);}
+function arc(pts,cx,cy,r,a0,a1,step){const n=Math.max(2,Math.ceil(Math.abs(a1-a0)*r/step));for(let i=1;i<=n;i++){const a=a0+(a1-a0)*i/n;pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}}
+function table(pts){const S=[0];for(let i=1;i<pts.length;i++)S.push(S[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));return S;}
+// glyph "up" for travel direction (tx,ty) is (ty,-tx)
+function offset(pts,d){return pts.map((p,i)=>{const a=pts[Math.max(0,i-1)],b=pts[Math.min(pts.length-1,i+1)];
+  const tx=b[0]-a[0],ty=b[1]-a[1],l=Math.hypot(tx,ty)||1;return [p[0]+ty/l*d,p[1]-tx/l*d];});}
+function at(P,S,s){
+  let lo=0,hi=P.length-1;if(s<=0){lo=0;hi=1;}else if(s>=S[hi]){lo=hi-1;}else{while(hi-lo>1){const m=(lo+hi)>>1;if(S[m]<s)lo=m;else hi=m;}}
+  const a=P[lo],b=P[hi],L=Math.max(1e-6,S[hi]-S[lo]),t=(s-S[lo])/L;
+  return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t,tx:(b[0]-a[0])/L,ty:(b[1]-a[1])/L};
+}
+// a path ready for laying letters: the centre line sits h above the baseline (toward the tops of the letters)
+function track(base,h,extra=0){const mid=offset(base,h-extra);return {mid,S:table(mid),h};}
+function place(tr,els,adv,startArc,extra){
+  let s=startArc;const len=tr.S[tr.S.length-1];
+  els.forEach((el,i)=>{const c=s+adv[i]/2+(extra?extra[i]:0);s+=adv[i];
+    if(c<-50||c>len+50){el.setAttribute('visibility','hidden');return;}
+    el.removeAttribute('visibility');
+    const p=at(tr.mid,tr.S,c), ux=p.ty, uy=-p.tx;
+    const x=p.x-ux*tr.h, y=p.y-uy*tr.h, a=Math.atan2(p.ty,p.tx)*180/Math.PI;
+    el.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${a.toFixed(2)})`);});
+}
+function placeB(tr,els,adv,startB,map){
+  let s=startB;const len=tr.S[tr.S.length-1];
+  els.forEach((el,i)=>{const c=map(s+adv[i]/2);s+=adv[i];
+    if(c<-50||c>len+50){el.setAttribute('visibility','hidden');return;}
+    el.removeAttribute('visibility');
+    const p=at(tr.mid,tr.S,c), ux=p.ty, uy=-p.tx;
+    const x=p.x-ux*tr.h, y=p.y-uy*tr.h, a=Math.atan2(p.ty,p.tx)*180/Math.PI;
+    el.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${a.toFixed(2)})`);});
+}
+// rounded rectangle path (comp units, +y up). cw=true: starts at the top-right tangent and runs clockwise
+// (meaningful); cw=false: starts at the bottom-left tangent and runs anticlockwise (opportunities). Not looped:
+// travel before the start / after the end continues straight along the tangent.
+function rrect(W,H,r,cw){
+  const cx=-14.96, cy=-6.32, L=cx-W/2, R=cx+W/2, T=cy+H/2, B=cy-H/2, segs=[];
+  const line=(x0,y0,x1,y1)=>segs.push({l:Math.hypot(x1-x0,y1-y0),f:u=>{const k=u/Math.hypot(x1-x0,y1-y0);return [x0+(x1-x0)*k,y0+(y1-y0)*k,(x1-x0),(y1-y0)];}});
+  const arcS=(ox,oy,a0,a1)=>segs.push({l:Math.abs(a1-a0)*r,f:u=>{const a=a0+(a1-a0)*u/(Math.abs(a1-a0)*r),sg=Math.sign(a1-a0);
+    return [ox+r*Math.cos(a),oy+r*Math.sin(a),-Math.sin(a)*sg,Math.cos(a)*sg];}});
+  const D=Math.PI/180;
+  if(cw){arcS(R-r,T-r,90*D,0);line(R,T-r,R,B+r);arcS(R-r,B+r,0,-90*D);line(R-r,B,L+r,B);arcS(L+r,B+r,-90*D,-180*D);
+         line(L,B+r,L,T-r);arcS(L+r,T-r,180*D,90*D);line(L+r,T,R-r,T);}
+  else  {line(L+r,B,R-r,B);arcS(R-r,B+r,-90*D,0);line(R,B+r,R,T-r);arcS(R-r,T-r,0,90*D);line(R-r,T,L+r,T);
+         arcS(L+r,T-r,90*D,180*D);line(L,T-r,L,B+r);arcS(L+r,B+r,180*D,270*D);}
+  const P=segs.reduce((a,g)=>a+g.l,0);
+  function at(u){
+    if(u<0){const q=segs[0].f(0),l=Math.hypot(q[2],q[3]);return [q[0]+u*q[2]/l,q[1]+u*q[3]/l,q[2]/l,q[3]/l];}
+    if(u>=P){const g=segs[segs.length-1],q=g.f(g.l),l=Math.hypot(q[2],q[3]);return [q[0]+(u-P)*q[2]/l,q[1]+(u-P)*q[3]/l,q[2]/l,q[3]/l];}
+    for(const g of segs){if(u<=g.l){const q=g.f(u),l=Math.hypot(q[2],q[3]);return [q[0],q[1],q[2]/l,q[3]/l];}u-=g.l;}
+  }
+  return {P,at};
+}
+function onRect(els,adv,W,H,r,cw,pt,d){
+  const pth=rrect(W,H,r,cw);let u=pt/100*pth.P;
+  els.forEach((el,i)=>{const c=u+adv[i]/2;u+=adv[i];
+    const q=pth.at(c), ux=-q[3], uy=q[2];             // glyph up = left of the direction of travel
+    const x=960+q[0]+d*ux, y=540-(q[1]+d*uy), a=-Math.atan2(q[3],q[2])*180/Math.PI;
+    if(x<-300||x>2220||y<-300||y>1380){el.setAttribute('visibility','hidden');return;}
+    el.removeAttribute('visibility');
+    el.setAttribute('transform',`translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${a.toFixed(2)})`);});
+}
+function glyphs(parent,str,cls){return [...str].map(ch=>{const t=document.createElementNS(NS,'text');t.setAttribute('class',cls);
+  t.setAttribute('text-anchor','middle');t.textContent=ch===' '?' ':ch;parent.appendChild(t);return t;});}
+const meas=document.createElementNS(NS,'text');meas.setAttribute('x','-3000');meas.setAttribute('y','-3000');svg.appendChild(meas);
+function advances(str,cls,size,ls){meas.setAttribute('class',cls);meas.style.fontSize=size+'px';meas.textContent=str;
+  const out=[];for(let i=0;i<str.length;i++){let w=0;try{w=meas.getSubStringLength(i,1);}catch(e){}out.push(w+ls);}return out;}
+
+// ---------- SC02 paths: up the left side and round onto the top line / along the bottom and up the right side ----------
+const pM=[];seg(pM,270,1240,270,348,8);arc(pM,410,348,140,Math.PI,1.5*Math.PI,8);seg(pM,410,208,2600,208,8);
+const pO=[];seg(pO,-340,985,1350,985,8);arc(pO,1350,685,300,.5*Math.PI,0,8);seg(pO,1650,685,1650,-400,8);
+const gM=glyphs($('tM'),'meaningful','t214'), gO=glyphs($('tO'),'opportunities','t214');
+let fsBig=214, aM=[], aO=[], trM=null, trO=null, cyM=60, cyO=60;
+// ---------- SC02 line ----------
+const words=['wMy','wUn','wPa'].map($), lead=$('wLead');
+let wW=[0,0,0], spW=18, leadW=200;
+// ---------- SC03 line on the wave (all one size) ----------
+const LINE3='May visions keep finding new directions';
+const W3=[], g3=[], w3i=[];
+LINE3.split(' ').forEach((wd,wi,arr)=>{
+  const f=document.createElementNS(NS,'filter');f.setAttribute('id','f3w'+wi);
+  f.setAttribute('x','-20%');f.setAttribute('y','-60%');f.setAttribute('width','140%');f.setAttribute('height','220%');
+  const gb=document.createElementNS(NS,'feGaussianBlur');gb.setAttribute('stdDeviation','0');f.appendChild(gb);svg.querySelector('defs').appendChild(f);
+  const g=document.createElementNS(NS,'g');g.setAttribute('filter','url(#f3w'+wi+')');$('t3').appendChild(g);
+  W3.push({g,gb});
+  glyphs(g,wd+(wi<arr.length-1?' ':''),'t84').forEach(e=>{g3.push(e);w3i.push(wi);});
+});
+let a3=[], tr3=null, tr3b=null, len3=2000;
+const wavePts=(()=>{const P=[];for(let x=-9000;x<=25860;x+=20)P.push([x,0]);return P;})();
+function buildWave(){
+  // same polyline as the shapes' wave, in SVG coords; the line runs 285 below it, under the shapes
+  const A=330,LAM=2800,X0=367-Math.asin(-118/330)*LAM/(2*Math.PI);
+  for(const p of wavePts)p[1]=-A*Math.sin(2*Math.PI*(p[0]-X0)/LAM);
+  const base=offset(wavePts,-285);
+  tr3=track(base,28);
+  tr3b=track(offset(wavePts,-285-112),28);
+}
+function measure(){
+  try{
+    words.concat([lead,$('wSp')]).forEach(w=>w.style.fontSize='72px');
+    words[0].textContent='My';
+    const line=words.map(w=>w.getComputedTextLength()).reduce((a,b)=>a+b,0), sp0=$('wSp').getComputedTextLength();
+    words[0].textContent='May';
+    const fs=(72*Math.min(1.2,655/(line+2*sp0))).toFixed(2)+'px';
+    words.concat([lead,$('wSp')]).forEach(w=>w.style.fontSize=fs);
+    wW=words.map(w=>w.getComputedTextLength());spW=$('wSp').getComputedTextLength();leadW=lead.getComputedTextLength();
+  }catch(e){}
+  // the big words: fitted to the widths they have in Cavalry
+  const wm=advances('meaningful','t214',214,-4).reduce((a,b)=>a+b,0)||1, wo=advances('opportunities','t214',214,-4).reduce((a,b)=>a+b,0)||1;
+  const pk=PORT.on?.72:1, fM=214*948/wm*pk, fO=214*1137/wo*pk;
+  aM=advances('meaningful','t214',fM,-4*fM/214);aO=advances('opportunities','t214',fO,-4*fO/214);
+  gM.forEach(g=>g.style.fontSize=fM.toFixed(2)+'px');gO.forEach(g=>g.style.fontSize=fO.toFixed(2)+'px');
+  trM=track(pM,fM*.33);trO=track(pO,fO*.33);
+  // vertical centre of each big word above its baseline (to sit the words on the Cavalry paths like Cavalry does)
+  try{const tt=document.createElementNS(NS,'text');tt.setAttribute('class','t214');svg.appendChild(tt);
+    tt.style.fontSize=fM+'px';tt.textContent='meaningful';let bb=tt.getBBox();cyM=-(bb.y+bb.height/2);
+    tt.style.fontSize=fO+'px';tt.textContent='opportunities';bb=tt.getBBox();cyO=-(bb.y+bb.height/2);svg.removeChild(tt);}catch(e){}
+  a3=advances(LINE3,'t84',84,1.8);len3=a3.reduce((a,b)=>a+b,0);
+}
+buildWave();
+addEventListener('resize',measure);
+(document.fonts?document.fonts.ready:Promise.resolve()).then(measure);
+measure();
+
+let SC3S=null;
+const fMy=$('fMy').firstElementChild, fLead=$('fLead').firstElementChild, fM=$('fM').firstElementChild, fO=$('fO').firstElementChild, f3=$('f3').firstElementChild;
+const setB=(f,v)=>f.setAttribute('stdDeviation',Math.max(0,v).toFixed(2));
+// arc where a glyph sitting at baseline-x X on the straight part would be (for the settle positions)
+const settleM=h=>892+Math.PI/2*(140+h)+424, cornerO=h=>1690+Math.PI/2*(300-h);
+
+// SC02 text, sampled frame by frame from Cavalry (SC03_CLaude, frames -2…260): word edges of "My unexpected paths",
+// "lead to", Group / blur / Auto Animate / Sub-Mesh values and the path travel of the big words.
+const C2={"sc":[74,[2.17,2.17,2.17,2.1665,2.1553,2.1348,2.103,2.0574,1.9954,1.9139,1.8115,1.6913,1.5629,1.4399,1.333,1.2458,1.1774,1.1255,1.0872,1.0602,1.0427,1.033,1.03]],"g75":[76,[0.0,0.4,1.3,3.0,5.8,10.2,16.9,26.7,39.0,50.2,58.9,65.3,70.2,73.9,76.7,79.0,80.7,82.0,82.9,83.6,84.0,84.3,84.5,84.7,84.9,85.0,85.2,85.3,85.4,85.5,85.6,85.7,85.7,85.8,85.9,85.9,85.9,86.0,86.0,86.0,86.1,86.1,86.1,86.1,86.1,86.1,86.2,86.2,86.2,86.2,86.1,86.1,86.1,86.1,86.1,86.1,86.1,86.1,86.0,86.0,86.0,86.0,86.0,85.9,85.9,85.9,85.9,85.8,85.8,85.8,85.7,85.7,85.7,85.7,85.6,85.6,85.6,85.5,85.5,85.4,85.4,85.4,85.3,85.3,85.3,85.2,85.2,85.2,85.1,85.1,85.1,85.0,85.0,84.9,84.9,84.9,84.8,84.8,84.8,84.7,84.7,84.7,84.6,84.6,84.6,84.5,84.5,84.5,84.4,84.4,84.4,84.3,84.3,84.3,84.3,84.2,84.2,84.2,84.2,84.1,84.1,84.1,84.1,84.1,84.1,84.0,84.0,84.0,84.0,84.0,84.0,84.0,83.6,82.9,81.8,80.5,78.8,76.7,74.3,71.3,67.9,63.9,59.2,53.9,47.8,40.7,32.5,23.0,11.8,-1.4,-17.5,-37.7,-64.6,-103.2,-132.0]],"g75o":[206,[100.0,99.8,99.5,99.1,98.5,97.8,96.9,95.8,94.6,93.2,91.5,89.6,87.3,84.8,81.9,78.6,74.8,70.3,65.2,59.0,51.6,42.3,30.0,12.4,0.0]],"b78":[2,[15.1,14.5,14.0,13.4,12.9,12.3,11.8,11.3,10.7,10.2,9.7,9.2,8.7,8.2,7.7,7.3,6.8,6.4,5.9,5.5,5.1,4.7,4.3,3.9,3.5,3.1,2.8,2.4,2.1,1.8,1.5,1.3,1.0,0.8,0.6,0.4,0.3,0.2,0.1,0.0]],"b79":[37,[24.1,15.4,11.7,9.0,7.0,5.4,4.1,3.1,2.3,1.6,1.1,0.7,0.4,0.2,0.0]],"b80":[76,[23.2,23.1,22.7,22.0,20.8,19.0,17.0,15.2,13.7,12.3,11.1,10.1,9.2,8.4,7.7,7.0,6.4,5.8,5.3,4.9,4.5,4.1,3.7,3.4,3.0,2.7,2.5,2.2,2.0,1.8,1.6,1.4,1.2,1.1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1,0.1,0.2,0.2,0.3,0.4,0.5,0.6,0.8,1.0,1.2,1.4,1.8,2.2,2.8,3.8,7.4,7.6]],"aa":[3,[0.0,10.3,19.1,26.8,33.9,40.3,46.2,51.7,56.7,61.3,65.6,69.5,73.2,76.5,79.6,82.4,85.0,87.3,89.4,91.3,93.0,94.5,95.8,96.9,97.8,98.6,99.2,99.6,99.9,100.0]],"so":[2,[3.0,6.5,10.0,13.6,17.0,20.4,23.8,27.1,30.3,33.5,36.6,39.6,42.5,45.4,48.2,51.0,53.6,56.2,58.7,61.2,63.6,65.9,68.1,70.3,72.4,74.4,76.3,78.2,80.0,81.8,83.4,85.0,86.5,87.9,89.3,90.5,91.7,92.8,93.9,94.8,95.7,96.5,97.2,97.9,98.4,98.9,99.3,99.6,99.8,100.0]],"pm":[67,[-8.0,-7.4,-5.8,-3.3,-0.3,3.2,6.7,10.4,13.9,17.4,20.8,24.0,27.1,30.0,32.8,35.5,38.1,40.5,42.8,45.0,47.1,49.2,51.1,52.9,54.6,56.3,57.9,59.4,60.9,62.2,63.5,64.8,66.0,67.1,68.2,69.3,70.2,71.2,72.1,72.9,73.7,74.5,75.2,75.9,76.5,77.1,77.7,78.2,78.7,79.2,79.7,80.1,80.4,80.8,81.1,81.4,81.7,81.9,82.1,82.3,82.5,82.6,82.7,82.8,82.9,83.0,83.0,83.0,83.0,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.2,83.2,83.2,83.2,83.2,83.2,83.2,83.2,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.1,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.0,83.1,83.2,83.3,83.4,83.5,83.7,83.9,84.1,84.3,84.6,84.9,85.2,85.6,86.0,86.5,87.0,87.5,88.1,88.7,89.5,90.3,91.1,92.1,93.1,94.3,95.6,97.1,98.8,100.6,102.8,105.2,107.9,110.4,112.1,112.6]],"po":[76,[28.4,28.2,27.5,26.6,25.4,24.0,22.6,21.2,19.8,18.5,17.2,15.9,14.7,13.5,12.4,11.3,10.3,9.3,8.4,7.5,6.7,5.9,5.1,4.4,3.7,3.0,2.4,1.8,1.2,0.7,0.2,-0.3,-0.8,-1.3,-1.7,-2.1,-2.5,-2.9,-3.2,-3.5,-3.9,-4.2,-4.4,-4.7,-4.9,-5.2,-5.4,-5.6,-5.8,-6.0,-6.1,-6.3,-6.4,-6.5,-6.7,-6.8,-6.9,-6.9,-7.0,-7.1,-7.1,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.1,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.2,-7.3,-7.3,-7.4,-7.5,-7.6,-7.8,-7.9,-8.1,-8.3,-8.5,-8.7,-9.0,-9.3,-9.6,-9.9,-10.3,-10.7,-11.1,-11.6,-12.1,-12.7,-13.3,-14.0,-14.7,-15.5,-16.4,-17.3,-18.3,-19.5,-20.8,-22.2,-23.7,-25.5,-27.5,-29.9,-32.6,-35.5,-38.2,-39.9,-40.4]],"L":[4,[-961.3,-937.2,-937.2,-921.5,-921.5,-907.8,-907.8,-896.1,-896.1,-886.0,-886.0,-877.5,-877.5,-870.5,-870.5,-864.6,-864.6,-859.4,-859.4,-854.9,-854.9,-851.0,-851.0,-847.6,-847.6,-847.6,-844.6,-844.6,-842.0,-842.0,-839.6,-839.6,-837.5,-837.5,-835.4,-835.4,-833.5,-833.5,-831.5,-831.5,-829.8,-829.8,-828.6,-828.6,-827.7,-827.7,-827.2,-827.2,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.9,-826.5,-825.6,-823.9,-821.1,-816.7,-809.1,-799.2,-787.0,-765.3,-756.6,-713.6,-708.8,-556.6,-553.8,-479.4,-477.7,-455.3,-454.3,-447.5,-447.1,-446.6,-446.4,-446.2,-446.0,-445.9,-445.7,-445.6,-445.5,-445.4,-445.3,-445.2,-445.2,-445.1,-445.1,-445.0,-445.0,-444.9,-444.9,-444.9,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.8,-444.9,-444.9,-444.9,-444.9,-444.9,-445.0,-445.0,-445.0,-445.0,-445.1]],"R":[4,[427.5,376.6,376.6,276.8,276.8,200.8,200.8,145.9,145.9,102.5,102.5,66.9,66.9,37.1,37.1,12.0,7.4,-13.6,-21.6,-39.1,-46.4,-60.9,-67.7,-79.7,-85.9,-85.9,-101.6,-101.6,-115.0,-115.0,-126.4,-126.4,-136.1,-136.1,-144.1,-144.1,-150.7,-150.7,-156.2,-156.2,-158.0,-160.9,-162.1,-164.6,-165.5,-167.6,-168.1,-169.8,-170.0,-171.2,-171.2,-171.9,-171.9,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-172.0,-170.7,-169.8,-168.0,-154.8,-150.4,-107.2,-97.3,63.4,74.7,155.4,161.9,187.9,191.6,200.5,202.8,204.7,206.0,206.9,207.6,208.0,208.3,208.5,208.7,208.9,209.0,209.2,209.3,209.4,209.5,209.6,209.7,209.7,209.8,209.9,209.9,210.0,210.0,210.0,210.1,210.1,210.1,210.1,210.1,210.1,210.1,210.2,210.2,210.2,210.2,210.1,210.1,210.1,210.1,210.1,210.1,210.1,210.1,210.0,210.0,210.0,210.0,210.0,209.9,209.9,209.9,209.9,209.8]],"D":[38,[610.7,590.9,581.6,574.7,569.1,564.4,560.4,556.9,553.8,551.1,548.7,546.5,544.6,542.9,541.3,540.0,538.7,537.7,536.7,535.9,535.2,534.6,534.1,533.6,533.3,533.1,532.9,532.8,532.7,532.7,532.7,532.7,532.7,532.7,532.7,532.7,532.7,532.7,532.7,531.9,528.8,522.4,510.7,489.2,442.8,339.0,277.8,254.9,244.3,239.2,237.3,237.6,239.5,241.7,243.4,244.7,245.7,246.3,246.7,247.0,247.3,247.5,247.6,247.8,247.9,248.0,248.2,248.2,248.3,248.4,248.5,248.5,248.6,248.6,248.7,248.7,248.8,248.8,248.8,248.8,248.9,248.9,248.9,248.9,248.9,248.9,248.9,248.9,248.9,248.9,248.9,248.9,248.8,248.8,248.8,248.8,248.8,248.8,248.7,248.7,248.7,248.7,248.7,248.6,248.6,248.6,248.5]]};
+const cv2=(k,f)=>{const e=C2[k],v=e[1],i=Math.round(f)+2-e[0];return v[Math.max(0,Math.min(v.length-1,i))];};
+const p12=f=>Math.floor(f*12/25+1e-6)*25/12, p10=f=>Math.floor(f*10/25+1e-6)*2.5;
+// In Cavalry the words still creep a few px between frame 141 (settled) and the exit (205), which showed as small
+// steps at 10–12 fps. Here they hold their settled position from 141 to 205, then the exit starts from there and
+// eases onto Cavalry's path.
+function cvH(k,f){if(f<=141)return cv2(k,f);const a=cv2(k,141);if(f<=205)return a;
+  const t=Math.min(1,(f-205)/20),e=t*t*(3-2*t);return cv2(k,f)+(a-cv2(k,205))*(1-e);}
+let t=0;
+function render(dt){
+  t+=dt;
+  const L=SCN.L, a2=SCN.sc2Alpha, amb=SCN.amb;
+  // ---------------- SC02 (timing exactly as in Cavalry) ----------------
+  const vis2=a2*(1-sstep(250,258,L));
+  SCN.txt2Done=true;
+  $('t2').style.opacity=vis2.toFixed(3);
+  if(vis2>0.001&&trM){
+    const f=Math.floor(L), f12=p12(L), f10=p10(L);
+    // group move after frame 142 (exit) on top of the sampled edges
+    const gx=f>142?cvH('g75',f)-cv2('g75',142):0, go=cv2('g75o',f)/100;
+    const Le=cv2('L',Math.min(f,142))+gx, Re=cv2('R',Math.min(f,142))+gx;
+    // words keep their Cavalry spacing, laid out from the right edge ("May" is a little wider than "My")
+    const b2=-172-wW[2], b1=b2-spW-wW[1], b0=b1-spW-wW[0];
+    const s0=Le+826.9, s2=Re+172;
+    let s1=(s0+s2)/2;                                   // entrance: the word spacing closes evenly
+    if(f>=72&&f<=142){const g=cv2('g75',f), Rb=cv2('R',Math.max(0,Math.round(f-2.5)))+172-cv2('g75',Math.round(f-2.5));
+      s1=g+Rb;}                                         // the spread: paths moves first, unexpected 2.5 frames later, May 5
+    const xs=[b0+s0,b1+s1,b2+s2];
+    if(PORT.on){   // two centred lines: "May unexpected" / "paths lead to"; the motion stays Cavalry's, around the new spots
+      const t1=wW[0]+spW+wW[1], t2=wW[2]+spW+leadW;
+      const s0r=cv2('L',141)+826.9, s2r=cv2('R',141)+172, fin=[b0+s0r,b1+(s0r+s2r)/2,b2+s2r];   // one-line rest spots
+      const tgt=[-t1/2,-t1/2+wW[0]+spW,-t2/2];
+      for(let i=0;i<3;i++){xs[i]+=tgt[i]-fin[i];words[i].setAttribute('y',i<2?'512':'604');}
+      lead.setAttribute('y','604');SCN._leadP=(-t2/2+wW[2]+spW)-(fin[2]+wW[2]+spW);
+    }else{for(let i=0;i<3;i++)words[i].setAttribute('y','558');lead.setAttribute('y','558');SCN._leadP=0;}
+    xs.forEach((x,i)=>{
+      words[i].setAttribute('x',(x+960).toFixed(1));
+      // Auto Animate fades the words in one after another (~10 frames apart), Sub-Mesh opacity on top
+      const o=cv2('aa',f12-10*i)/100*cv2('so',f12-2.5*i)/100;
+      words[i].style.opacity=(o*go).toFixed(3);
+    });
+    setB(fMy,cv2('b78',f12)*.5);
+    // "lead to" follows its Cavalry movement (not posterized), shifted so that at rest it sits one word space after
+    // "paths" (Cavalry's own gap was measured on Acumin glyph edges; here the words are set with Archivo advances)
+    const leadFix=(210+spW)-248.6+(SCN._leadP||0);
+    lead.setAttribute('x',(cv2('D',Math.min(f,142))+(f>142?cvH('g75',f)-cv2('g75',142):0)+leadFix+960).toFixed(1));
+    lead.style.opacity=((1-Math.pow(1-clamp((f-36)/56),2))*go).toFixed(3);
+    setB(fLead,cv2('b79',f)*.5);
+    // "meaningful" / "opportunities": Cavalry path travel (10 fps). 1 % of the Cavalry path = 39.1 px (meaningful)
+    // and 40.0 px (opportunities); anchored where they settle (83.1 % → left edge x -127, -7.2 % → x -840)
+    // Cavalry: each word runs on a rounded rectangle (centre -15,-6; 1297.7 / 1330.7 × 713.5, corner 134) whose
+    // scale shrinks 2.17 → 1.03 over frames 74–94; path travel is % of that path (meaningful's path reversed).
+    const sc=cv2('sc',f10), pm=cvH('pm',f10), po=cvH('po',f10);
+    const rx=PORT.on?PORT.ax:1, ry=PORT.on?PORT.ay:1;
+    onRect(gM,aM,1297.72*sc*rx,713.52*sc*ry,134*sc,true,pm,29-cyM);
+    onRect(gO,aO,1330.72*sc*rx,713.52*sc*ry,134*sc,false,po,-15.2-cyO);
+    const bb=cv2('b80',f10)*.5;
+    $('tM').style.opacity=(1-sstep(226,256,f10)).toFixed(3);
+    $('tO').style.opacity=(1-sstep(222,256,f10)).toFixed(3);
+    setB(fM,bb);setB(fO,bb);
+  }
+  // ---------------- SC03 (12 fps, held with the shapes) ----------------
+  const z=SCN.zoom||{k:1,H:[0,0],A:[0,0]}, cam=SCN.cam||{x:0,s:1};
+  const vis3=a2*sstep(296,306,SCN.Lq!==undefined?SCN.Lq:L)*(1-sstep(0,.35,SCN.p4));
+  $('t3g').style.opacity=vis3.toFixed(3);
+  if(vis3>0.001&&tr3){
+    const k=z.k;
+    const tx=960+z.A[0]-k*(960+z.H[0]), ty=540-z.A[1]-k*(540-z.H[1]);
+    $('t3z').setAttribute('transform',`translate(${tx.toFixed(2)} ${ty.toFixed(2)}) scale(${k.toFixed(4)})`);
+    $('t3c').setAttribute('transform',`translate(${(960+cam.x).toFixed(2)} ${(540-(SCN.offY||0)).toFixed(2)}) scale(${cam.s.toFixed(4)})`);
+    // behind the head asterisk, moving with the string; arc on the wave ≈ arc on the line under it
+    const Lh=SCN.Lq!==undefined?SCN.Lq:L, ah=SCN.ambq||0;
+    // the line travels with the string but slower, at a constant rate, so it keeps slipping back along the wave
+    const tl=Math.max(0,(Lh-300)/25+ah), lag=22*tl;
+    const wk=W3.map((w,wi)=>{const d=Lh-(300+3*wi);
+      w.gb.setAttribute('stdDeviation',(9.3*.5*clamp(1-d/18)).toFixed(2));
+      w.g.style.opacity=eo(d/30).toFixed(3);
+      return 155*(1-eo(d/26));});
+    if(PORT.on&&tr3b){   // "May visions keep" / "finding new directions", one under the other, both following the wave
+      if(!SC3S){SC3S={A:[],B:[]};g3.forEach((e,i)=>(w3i[i]<3?SC3S.A:SC3S.B).push(i));}
+      const pick=(ix,arr)=>ix.map(i=>arr[i]), aA=pick(SC3S.A,a3), aB=pick(SC3S.B,a3);
+      const lA=aA.reduce((a,b)=>a+b,0), lB=aB.reduce((a,b)=>a+b,0), st=SCN.arc-lA-60-lag*.5;
+      place(tr3,pick(SC3S.A,g3),aA,st,SC3S.A.map(i=>wk[w3i[i]]));
+      place(tr3b,pick(SC3S.B,g3),aB,st+(lA-lB)/2,SC3S.B.map(i=>wk[w3i[i]]));
+    }else place(tr3,g3,a3,SCN.arc-len3-300-lag,w3i.map(wi=>wk[wi]));
+    setB(f3,.4);
+  }
+}
+SCN.renderers.push(render);
+})();
+</script>
+</body></html>
